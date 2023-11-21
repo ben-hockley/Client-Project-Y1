@@ -3,6 +3,30 @@
 <h1>Sup brutha this is the create account page</h1>
 {% endblock%}
 
-<script>
+{% block mainBody%}
+<form name = "createAccount" onsubmit = "return validateForm()">
+    <label for="firstName">First Name:</label></br>
+    <input type="text" id = "firstName" name = "firstName" required></br>
+    <label for="lastName">Last Name:</label></br>
+    <input type="text" id = "lastName" name = "lastName" required></br>
+    <label for="username">Create a username:</label></br>
+    <input type="text" id = "username" name = "username" required></br>
+    <label for="password1">Create a password:</label></br>
+    <input type="password" id = "password1" name = "password1" required></br>
+    <!-- <label for="password2">Re-enter the password:</label></br>
+    <input type="password" id = "password2" name = "password2"></br> -->
+    <input type="submit">
+</form>
 
+<script>
+    // https://www.w3schools.com/js/js_validation.asp
+    function validateForm() {
+        // let p1 = document.forms["createAccount"]["password1"]
+        // let p2 = document.forms["createAccount"]["password2"]
+        // if (p1 != p2) {
+        //     alert("Passwords don't match")
+        //     return False
+        // }
+    }
 </script>
+{% endblock%}
