@@ -4,7 +4,7 @@
 {% endblock%}
 
 {% block mainBody%}
-<form name = "createAccount" onsubmit = "return validateForm()">
+<form name = "createAccount" onsubmit = "return validateForm()" action = "/submitNewAccount" method = "get">
     <label for="firstName">First Name:</label></br>
     <input type="text" id = "firstName" name = "firstName" required></br>
     <label for="lastName">Last Name:</label></br>
