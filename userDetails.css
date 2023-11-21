@@ -8,9 +8,14 @@
 .titleBox{
     width:100%;
     height:20%;
-    border: 3px solid #0076d6 ;
+    border: 1px solid #0076d6 ;
     background-color: #e22922;
     text-align: center;
     color:#ffd500;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.quizHistoryBox{
+    background-color: white;
+    color:#0076d6;
+    border:1px solid black;
 }
