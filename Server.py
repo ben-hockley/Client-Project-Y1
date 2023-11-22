@@ -19,7 +19,7 @@ def returnHome():
 
 def submitNewAccount(firstName,lastName,userName,password):
     try:
-        conn = sqlite3.connect('Quiz.db')
+        conn = sqlite3.connect('quizDatabase.db')
         cur = conn.cursor()
         cur.execute(\
         "INSERT INTO User ('Username', 'FirstName','SurName','Password','Admin') \
@@ -42,7 +42,7 @@ def usernameExist():
         userName = request.form.get("username")
         password = request.form.get("password")
         try:
-            conn = sqlite3.connect('Quiz.db')
+            conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
             cur.execute(\
             "SELECT Username FROM User WHERE Username = ?",([userName]))
