@@ -17,6 +17,35 @@ def returnHome():
     if request.method == 'GET':
         return render_template('Main_Page.html')
 
+@app.route("/accountDetails", methods=['GET'])
+def returnAccountDetails():
+    if request.method == 'GET':
+        return render_template('Account_Details.html')
+
+@app.route("/updateInfo", methods=['GET'])
+def updateInfo():
+    global user
+    print(user)
+    if user == None:
+        return "None"
+    try:
+        conn = sqlite3.connect('quizDatabase.db')
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT FirstName, SurName, Username FROM User WHERE Username = ?",([user]))
+        details = cur.fetchall()
+        newList = json.dumps(details[0])
+        conn.close()
+        return newList
+    except Exception as e:
+        conn.rollback()
+        details = "None"
+        print(e)
+    conn.close()
+    print(details)
+    return details
+
+
 def submitNewAccount(firstName,lastName,userName,password):
     try:
         conn = sqlite3.connect('quizDatabase.db')
@@ -31,7 +60,6 @@ def submitNewAccount(firstName,lastName,userName,password):
         conn.rollback()
     finally:
         conn.close()
-        print(message)
         return message
 
 @app.route("/usernameExist", methods = ['POST'])

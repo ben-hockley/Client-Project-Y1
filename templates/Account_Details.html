@@ -1,4 +1,48 @@
-{%extends 'mainTemplate.html'%}
+{% extends 'mainTemplate.html'%}
 {% block mainBlock%}
 <h1>Account details</h1>
+{% endblock%}
+
+{% block mainBody%}
+<button href="edit_details.html" title="Edit Details">Edit details</button>
+<section onload="getDetails()" title="details">
+    <p>First name:</p>
+    <p id="firstName" label="first name">Undefined</p>
+    <p>Last name:</p>
+    <p id="lastName" label="last name">Undefined</p>
+    <p>Username:</p>
+    <p id="username" label="username">Undefined</p>
+</section>
+
+<script>
+    // document.getElementById("firstName").addEventListener("click", loadDirectory);
+    document.addEventListener("DOMContentLoaded", getDetails())
+
+    function getDetails() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET",'/updateInfo',true);
+        xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState === 4) {
+                if (xhttp.status === 200) {
+                    var text = xhttp.responseText;
+                    if (text === "None") {
+                        document.getElementById("firstName").innerHTML = "Please sign in";
+                    } else {
+                        jsonTuple = JSON.parse(text)
+                        let firstname = jsonTuple[0]
+                        let lastname = jsonTuple[1]
+                        let username = jsonTuple[2]
+                    document.getElementById("firstName").innerHTML = firstname;
+                    document.getElementById("lastName").innerHTML = lastname;
+                    document.getElementById("username").innerHTML = username;
+                }
+                } else {
+                    console.error(xhttp.statusText);
+                }
+            }
+        };
+        xhttp.send();
+    }
+</script>
 {% endblock%}
