@@ -38,7 +38,7 @@ def logonFunction():
             print(e)
             message = "Database error"
         print(message)
-        return redirect("/login")
+        return redirect("login")
         
 if __name__ == "__main__":
     app.run(debug=True)
