@@ -18,12 +18,12 @@
 
         <section class="loginBox">
             <h1>LOG IN REQUIRED</h1>
-            <form id="adminLogin">
+            <form id="adminLogin" method="post" action="/logonFunction">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
-                <button type="button">Login</button>
+                <button type="submit">Login</button>
             </form><br>
             <label for="Create Account">Don't have an account? You can create one here.</label>
             <button type="button" href="Create Account.html">Create Account</button>
