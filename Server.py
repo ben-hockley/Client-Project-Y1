@@ -19,13 +19,14 @@ def returnHome():
 
 @app.route("/accountDetails", methods=['GET'])
 def returnAccountDetails():
+    global user
+    print(user)
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
 @app.route("/updateInfo", methods=['GET'])
 def updateInfo():
-    global user
-    print(user)
+    global User
     if user == None:
         return "None"
     try:

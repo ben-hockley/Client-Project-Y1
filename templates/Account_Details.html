@@ -4,19 +4,90 @@
 {% endblock%}
 
 {% block mainBody%}
-<button href="edit_details.html" title="Edit Details">Edit details</button>
 <section onload="getDetails()" title="details">
     <p>First name:</p>
-    <p id="firstName" label="first name">Undefined</p>
+    <section id="firstNameData" label="first name">
+    <p id="firstName">Undefined</p>
+    </section>
     <p>Last name:</p>
-    <p id="lastName" label="last name">Undefined</p>
+    <section id="lastNameData" label="last name">
+    <p id="lastName">Undefined</p>
+    </section>
     <p>Username:</p>
-    <p id="username" label="username">Undefined</p>
+    <section id="usernameData" label="username">
+    <p id="username">Undefined</p>
+    </section>
 </section>
 
 <script>
-    // document.getElementById("firstName").addEventListener("click", loadDirectory);
     document.addEventListener("DOMContentLoaded", getDetails())
+    document.getElementById("firstNameData").addEventListener("click", editFirstName);
+    document.getElementById("lastNameData").addEventListener("click", editLastName);
+    document.getElementById("usernameData").addEventListener("click", editUsername);
+
+    function editFirstName() {
+        if(document.getElementById("firstForm")) {
+            console.log("Form already open")
+        }
+        else {
+        document.getElementById("firstName").innerHTML = "Enter new first name:"
+        const firstForm = document.createElement("form");
+        const newFirst = document.createElement("input");
+        const button = document.createElement("button");
+        firstForm.id = "firstForm";
+        newFirst.setAttribute("type","text");
+        button.innerHTML = "Change first name";
+        button.id = "firstButton";
+        firstForm.appendChild(newFirst);
+        firstForm.appendChild(button);
+        document.getElementById("firstNameData").appendChild(firstForm);
+        document.getElementById("firstButton").addEventListener("click",updateFirstName());
+        }
+    }
+
+    function editLastName() {
+        if(document.getElementById("lastForm")) {
+            console.log("Form already open")
+        }
+        else {
+        document.getElementById("lastName").innerHTML = "Enter new last name:"
+        const firstForm = document.createElement("form");
+        const newFirst = document.createElement("input");
+        const button = document.createElement("button");
+        firstForm.id = "lastForm";
+        newFirst.setAttribute("type","text");
+        button.innerHTML = "Change last name";
+        button.id = "lastButton";
+        firstForm.appendChild(newFirst);
+        firstForm.appendChild(button);
+        document.getElementById("lastNameData").appendChild(firstForm);
+        document.getElementById("lastButton").addEventListener("click",updateFirstName());
+        }
+    }
+
+    function editUsername() {
+        if(document.getElementById("userForm")) {
+            console.log("Form already open")
+        }
+        else {
+        document.getElementById("username").innerHTML = "Enter new username:"
+        const firstForm = document.createElement("form");
+        const newFirst = document.createElement("input");
+        const button = document.createElement("button");
+        firstForm.id = "userForm";
+        newFirst.setAttribute("type","text");
+        button.innerHTML = "Change username";
+        button.id = "userButton";
+        firstForm.appendChild(newFirst);
+        firstForm.appendChild(button);
+        document.getElementById("usernameData").appendChild(firstForm);
+        document.getElementById("userButton").addEventListener("click",updateFirstName());
+        }
+    }
+
+    function updateFirstName() {
+        var userInput = document.getElementById("firstForm");
+    }
 
     function getDetails() {
         var xhttp = new XMLHttpRequest();
