@@ -9,6 +9,11 @@
             {% endblock%}
     </head>
     <body>
+    <p>
+        {%if data%}
+        {{data}}
+        {%endif%}
+    </p>
     {% block mainBody%}
     {% endblock%}
     </body>

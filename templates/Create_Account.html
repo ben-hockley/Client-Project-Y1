@@ -4,7 +4,7 @@
 {% endblock%}
 
 {% block mainBody%}
-<form name = "createAccount" onsubmit = "return validateForm()" action = "/submitNewAccount" method = "post">
+<form name = "createAccount" action = "/usernameExist" method = "post">
     <label for="firstName">First Name:</label></br>
     <input type="text" id = "firstName" name = "firstName" required></br>
     <label for="lastName">Last Name:</label></br>
@@ -18,15 +18,4 @@
     <input type="submit">
 </form>
 
-<script>
-    // https://www.w3schools.com/js/js_validation.asp
-    function validateForm() {
-        // let p1 = document.forms["createAccount"]["password1"]
-        // let p2 = document.forms["createAccount"]["password2"]
-        // if (p1 != p2) {
-        //     alert("Passwords don't match")
-        //     return False
-        // }
-    }
-</script>
 {% endblock%}
