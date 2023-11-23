@@ -7,6 +7,19 @@ app = Flask(__name__)
 
 user = None
 
+@app.route("/userEnd", methods=['GET', 'POST'])
+def userEnd():
+    if request.method == 'GET':
+        return render_template('User End.html')
+    if request.method == 'PULL':
+        try:
+            conn = sqlite3.connect('quizDatabase.db')
+            cur = conn.cursor()
+            cur.execute('SELECT ')
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
     if request.method == 'GET':

@@ -1,0 +1,12 @@
+body {
+  background-color: #68bbff; /* For browsers that do not support gradients */
+  background-image: linear-gradient(to bottom right, #68bbff, #02467d);
+}
+
+.Quiz {
+  background-color: white;
+  margin: 25%;
+  margin-top: 5%;
+  border-radius: 25px;
+  box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+}
