@@ -4,7 +4,7 @@
 {% endblock%}
 
 {% block mainBody%}
-<section onload="getDetails()" title="details">
+<section title="details">
     <p>First name:</p>
     <section id="firstNameData" label="first name">
     <p id="firstName">Undefined</p>
@@ -61,7 +61,7 @@
         firstForm.appendChild(newFirst);
         firstForm.appendChild(button);
         document.getElementById("lastNameData").appendChild(firstForm);
-        document.getElementById("lastButton").addEventListener("click",updateFirstName());
+        document.getElementById("lastButton").addEventListener("click",updateLastName());
         }
     }
 
@@ -76,17 +76,23 @@
         const button = document.createElement("button");
         firstForm.id = "userForm";
         newFirst.setAttribute("type","text");
+        button.setAttribute("type","submit");
         button.innerHTML = "Change username";
         button.id = "userButton";
         firstForm.appendChild(newFirst);
         firstForm.appendChild(button);
         document.getElementById("usernameData").appendChild(firstForm);
-        document.getElementById("userButton").addEventListener("click",updateFirstName());
+        document.getElementById("userForm").addEventListener("submit",updateUsername());
         }
     }
 
     function updateFirstName() {
         var userInput = document.getElementById("firstForm");
+    }
+
+    function updateUsername() {
+        var userInput = document.getElementById("userForm").value;
+        window.alert(userInput)
     }
 
     function getDetails() {

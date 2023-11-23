@@ -63,6 +63,45 @@ def submitNewAccount(firstName,lastName,userName,password):
         conn.close()
         return message
 
+@app.route("/usernameCheck")
+def usernameCheck(username):
+    """
+    Function to check if the entered username exists within the database.
+    Returns True if entered username doesn't exist, and False otherwise
+    """
+    try:
+        conn = sqlite3.connect('quizDatabase.db')
+        cur = conn.cursor()
+        cur.execute(\
+        "SELECT Username FROM User WHERE Username = ?",([username]))
+        isExist = cur.fetchall()
+        cur.close()
+        if isExist == []:
+            return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
+# def usernameExistChecker(username):
+#     """
+#     Function to check if the entered username exists within the database.
+#     Returns True if entered username doesn't exist, and False otherwise
+#     """
+#     try:
+#         conn = sqlite3.connect('quizDatabase.db')
+#         cur = conn.cursor()
+#         cur.execute(\
+#         "SELECT Username FROM User WHERE Username = ?",([username]))
+#         isExist = cur.fetchall()
+#         cur.close()
+#         if isExist == []:
+#             return True
+#         else:
+#             return False
+#     except Exception as e:
+#         return False
+
 @app.route("/usernameExist", methods = ['POST'])
 def usernameExist():
     if request.method == 'POST':
@@ -70,25 +109,16 @@ def usernameExist():
         lastName = request.form.get("lastName").title()
         userName = request.form.get("username")
         password = request.form.get("password")
-        try:
-            conn = sqlite3.connect('quizDatabase.db')
-            cur = conn.cursor()
-            cur.execute(\
-            "SELECT Username FROM User WHERE Username = ?",([userName]))
-            isExist = cur.fetchall()
-            cur.close()
-            if isExist == []:
-                if submitNewAccount(firstName,lastName,userName,password) == True:
-                    message = "Welcome to your account, " + firstName
-                    global user
-                    user = userName
-                    return render_template('Account_Details.html', data = message)
-                else:
-                    message = "Error inserting " + firstName
+        if usernameCheck(userName) == True:
+            if submitNewAccount(firstName,lastName,userName,password) == True:
+                message = "Welcome to your account, " + firstName
+                global user
+                user = userName
+                return render_template('Account_Details.html', data = message)
             else:
-                message = "Username '" + userName + "' already exists."
-        except Exception as e:
-            message = "Error during check"
+                message = "Error inserting " + firstName
+        else:
+            message = "Username '" + userName + "' already exists."
         return render_template('Create_Account.html', data = message)
 
 
