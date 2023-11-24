@@ -26,6 +26,10 @@ def returnAccountDetails():
 
 @app.route("/updateInfo", methods=['GET'])
 def updateInfo():
+    """
+    Function fetches all the user data from the database, returns it in a JSON list
+    If not found, returns None
+    """
     global User
     if user == None:
         return "None"
@@ -48,6 +52,10 @@ def updateInfo():
 
 
 def submitNewAccount(firstName,lastName,userName,password):
+    """
+    Function to create a new entry in the User table.
+    Takes all the data as parameters, and returns True if the insert was a success
+    """
     try:
         conn = sqlite3.connect('quizDatabase.db')
         cur = conn.cursor()
@@ -87,6 +95,11 @@ def usernameCheck(username):
 
 @app.route("/usernameExist", methods = ['POST'])
 def usernameExist():
+    """
+    Route which gets the form submission from the HTML page,
+    checks if the username exists already, and inserts the information to the database if not
+    Returns either the Account_Details.html page if successful, or Create_Account.html if unsuccessful
+    """
     if request.method == 'POST':
         firstName = request.form.get("firstName").title()
         lastName = request.form.get("lastName").title()

@@ -20,33 +20,15 @@
 </section>
 
 <script>
+    // Completing an AJAX request on page load
     document.addEventListener("DOMContentLoaded", getDetails())
+    // Setting event listeners for each variable
     document.getElementById("firstNameData").addEventListener("click", editFirstName);
     document.getElementById("lastNameData").addEventListener("click", editLastName);
     document.getElementById("usernameData").addEventListener("click", editUsername);
 
     function editFirstName() {
-        if(document.getElementById("firstForm")) {
-            console.log("Form already open")
-        }
-        else {
-        document.getElementById("firstName").innerHTML = "Enter new first name:"
-        const firstForm = document.createElement("form");
-        const newFirst = document.createElement("input");
-        const button = document.createElement("button");
-        firstForm.id = "firstForm";
-        newFirst.setAttribute("type","text");
-        button.innerHTML = "Change first name";
-        button.id = "firstButton";
-        firstForm.appendChild(newFirst);
-        firstForm.appendChild(button);
-        document.getElementById("firstNameData").appendChild(firstForm);
-        document.getElementById("firstForm").setAttribute("action","/updateFirstname")
-        document.getElementById("firstForm").setAttribute("method","post")
-        }
-    }
-
-    function editFirstName() {
+        // Executes when the first name is clicked, creating a new form
         if(document.getElementById("firstForm")) {
             console.log("Form already open")
         }
@@ -74,6 +56,7 @@
     }
 
     function editUsername() {
+        // Executes when the username is clicked, creating a new form
         if(document.getElementById("userForm")) {
             console.log("Form already open")
         }
@@ -101,6 +84,7 @@
     }
 
     function editLastName() {
+        // Executes when the last name is clicked, creating a new form
         if(document.getElementById("lastForm")) {
             console.log("Form already open")
         }
@@ -128,6 +112,7 @@
     }
 
     function getDetails() {
+        // Fills in the details in the HTML page with database info
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET",'/updateInfo',true);
         xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
