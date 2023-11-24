@@ -56,14 +56,10 @@ def userEnd():
     if request.method == 'GET':
         return render_template('User End.html', data=getQuestion(QuizID))
     if request.method == 'POST':
-        Points=4
+        Points = request.form.get("POINTS")
+        print(Points)
         msg=""
         try:
-            keys = request.form.keys()
-            Points = []
-            for i in keys:
-                Points.append(i)
-            print(Points)
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
             cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))

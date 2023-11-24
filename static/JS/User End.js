@@ -51,7 +51,7 @@ function Setup(){
         Submit.setAttribute("onclick", "Submit()")
         Submit.textContent="Submit score";
         const point = document.getElementById("POINTS")
-        point.textContent=points;
+        point.value=points;
         answerSection.appendChild(Submit);
     }
 }
