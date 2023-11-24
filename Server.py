@@ -11,14 +11,48 @@ user = None
 def userEnd():
     if request.method == 'GET':
         return render_template('User End.html')
-    if request.method == 'PULL':
+    if request.method == 'POST':
+        data=[]
+        msg=""
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
-            cur.execute('SELECT ')
+            cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID=50')
+            data = cur.fetchall()
             conn.commit()
+            msg="sent"
         except Exception as e:
             conn.rollback()
+            msg="failed to send"
+        questions=[]
+        for i in data:
+            questionID=""
+            questionName=""
+            trueAnswer=[]
+            falseAnswer=[]
+            quizName=""
+            found = False
+            for j in questions:
+                if j[3] == i[4]:
+                    questionID=i[4]
+                    found = True
+                    break
+            if found:
+                for j in questions:
+                    if j[3]==questionID:
+                        if i[3]=="T":
+                            j[1].append(i[0])
+                        else:
+                            j[2].append(i[0])
+            else:
+                questionName=i[1]
+                if i[3] == "T":
+                    trueAnswer.append(i[0])
+                else:
+                    falseAnswer.append(i[0])
+                question=(questionName, trueAnswer, falseAnswer, i[4], data[3])
+                questions.append(question)
+        return render_template('User End.html', data=questions)    
 
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():

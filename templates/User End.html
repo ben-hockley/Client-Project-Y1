@@ -3,12 +3,18 @@
         <link rel="stylesheet" href="static/CSS/User End.css">
     </header>
     <body>
-        <form class="Quiz" method="PULL">
-            <section class="Question">
-                <p>{{data}}</p>
+        <form class="Quiz" method="post" action="/userEnd">
+            <section class="QuestionSection">
+                <section>
+                    <span id="QuestionNumber">Q1</span><br>
+                    <span id="Question">2+2?</span>
+                </section>
             </section>
-            <section class="Answers">
-
+            <section class="AnswerSection">
+                <button type="submit" id="Answer1">{{data}}</button>
+                <button type="submit" id="Answer2">2</button>
+                <button type="submit" id="Answer3">3</button>
+                <button type="submit" id="Answer4">4</button>
             </section>
         </form>
     </body>
