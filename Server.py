@@ -23,6 +23,7 @@ def logonFunction():
             cur.execute(\
             "SELECT Password FROM User WHERE Username = ?",([username]))
             isExist = cur.fetchall()
+
             cur.close()
             if isExist != []:
                 if isExist[0][0] == password:
@@ -31,14 +32,18 @@ def logonFunction():
                     return render_template("Main Page.html")
                 else:
                     message = "Username and password don't match"
+                    print(message)
+                    return redirect('login')
             else:
                 message = "User not found"
+                print(message)
+                return redirect('login')
         except Exception as e:
             cur.close()
             print(e)
             message = "Database error"
         print(message)
-        return redirect("login")
+        return redirect('login')
         
 if __name__ == "__main__":
     app.run(debug=True)

@@ -42,3 +42,6 @@
     border-radius: 3px;
     cursor: pointer;
 }
+span {
+    color: red;
+}
