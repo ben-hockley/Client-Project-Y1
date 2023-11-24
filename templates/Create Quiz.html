@@ -1,0 +1,18 @@
+<DOCTYPE html>
+<html>
+    <header>
+        <link rel="stylesheet" href="static/CSS/Create Quiz.css">
+    </header>
+    <body>
+        <form class="MakeQuiz" method="POST" onsubmit="return False">
+            <section id="CreateSect">
+                <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
+            </section>
+            <br>
+            <section id="SubmitSect">
+                <button class="BtnSub" id="Nothing" type="submit">Submit</button>
+            </section>
+        </form>
+    </body>
+    <script src="static/JS/Create Quiz.js"></script>
+</html>
