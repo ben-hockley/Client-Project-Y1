@@ -67,7 +67,7 @@ def submitNewAccount(firstName,lastName,userName,password):
 def usernameCheck(username):
     """
     Function to check if the entered username exists within the database.
-    Returns True if entered username doesn't exist, and False otherwise
+    Returns True if entered username does exist, and False otherwise
     """
     try:
         conn = sqlite3.connect('quizDatabase.db')
@@ -75,32 +75,15 @@ def usernameCheck(username):
         cur.execute(\
         "SELECT Username FROM User WHERE Username = ?",([username]))
         isExist = cur.fetchall()
-        cur.close()
+        conn.close()
         if isExist == []:
-            return True
-        else:
             return False
+        else:
+            return True
     except Exception as e:
-        return False
+        conn.close()
+        return e
 
-# def usernameExistChecker(username):
-#     """
-#     Function to check if the entered username exists within the database.
-#     Returns True if entered username doesn't exist, and False otherwise
-#     """
-#     try:
-#         conn = sqlite3.connect('quizDatabase.db')
-#         cur = conn.cursor()
-#         cur.execute(\
-#         "SELECT Username FROM User WHERE Username = ?",([username]))
-#         isExist = cur.fetchall()
-#         cur.close()
-#         if isExist == []:
-#             return True
-#         else:
-#             return False
-#     except Exception as e:
-#         return False
 
 @app.route("/usernameExist", methods = ['POST'])
 def usernameExist():
@@ -109,7 +92,7 @@ def usernameExist():
         lastName = request.form.get("lastName").title()
         userName = request.form.get("username")
         password = request.form.get("password")
-        if usernameCheck(userName) == True:
+        if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password) == True:
                 message = "Welcome to your account, " + firstName
                 global user
@@ -120,6 +103,86 @@ def usernameExist():
         else:
             message = "Username '" + userName + "' already exists."
         return render_template('Create_Account.html', data = message)
+
+@app.route("/updateUsername", methods=['POST'])
+def updateUsername():
+    """
+    Function which will update the new username entered by a user
+    """
+    if request.method == 'POST':
+        global user
+        username = request.form.get("newUsername")
+        print(username)
+        if usernameCheck(username) == False:
+            try:
+                conn = sqlite3.connect('quizDatabase.db')
+                cur = conn.cursor()
+                cur.execute(\
+                "UPDATE User SET ('Username') = ? WHERE Username = ?", (username,user))
+                conn.commit()
+                message = "Successfully updated username"
+                user = username
+            except Exception as e:
+                print(e)
+                message = "Error during update"
+                conn.rollback()
+            finally:
+                print(message)
+                conn.close()
+        else:
+            message = "New username '" + username + "' already exists."
+        return render_template("Account_Details.html", data = message)
+
+@app.route("/updateFirstname", methods=['POST'])
+def updateFirstname():
+    """
+    Function which will update the new first name entered by a user
+    """
+    if request.method == 'POST':
+        global user
+        firstname = request.form.get("newFirstname")
+        print(firstname)
+        try:
+            conn = sqlite3.connect('quizDatabase.db')
+            cur = conn.cursor()
+            cur.execute(\
+            "UPDATE User SET ('FirstName') = ? WHERE Username = ?", (firstname,user))
+            conn.commit()
+            message = "Successfully updated first name"
+        except Exception as e:
+            print(e)
+            message = "Error during update"
+            conn.rollback()
+        finally:
+            print(message)
+            conn.close()
+        return render_template("Account_Details.html", data = message)
+                
+@app.route("/updateLastname", methods=['POST'])
+def updateLastname():
+    """
+    Function which will update the new last name entered by a user
+    """
+    if request.method == 'POST':
+        global user
+        lastname = request.form.get("newLastname")
+        print(lastname)
+        try:
+            conn = sqlite3.connect('quizDatabase.db')
+            cur = conn.cursor()
+            cur.execute(\
+            "UPDATE User SET ('SurName') = ? WHERE Username = ?", (lastname,user))
+            conn.commit()
+            message = "Successfully updated last name"
+        except Exception as e:
+            print(e)
+            message = "Error during update"
+            conn.rollback()
+        finally:
+            print(message)
+            conn.close()
+        return render_template("Account_Details.html", data = message)
+
 
 
 
