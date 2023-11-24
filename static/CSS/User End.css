@@ -20,6 +20,7 @@ body {
 .Quiz {
   margin: 25%;
   margin-top: 5%;
+  margin-bottom: 0;
   align-items: center;
   justify-content: center;
 }
@@ -29,9 +30,21 @@ body {
   align-items: center;
   justify-content: space-evenly;
   display: flex;
+
+  font-size: 45px;
+  font-family: 'Lucida Handwriting Std', sans-serif;
+  color: black;
+  border-radius: 25px;
 }
 .AnswerSection button{
   background-color: white;
   border-radius: 25px;
-  box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+}
+#DATA {
+  visibility: hidden;
+  display: flex;
+}
+#POINTS{
+  visibility: hidden;
+  display: flex;
 }

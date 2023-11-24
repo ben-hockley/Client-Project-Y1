@@ -3,19 +3,20 @@
         <link rel="stylesheet" href="static/CSS/User End.css">
     </header>
     <body>
-        <form class="Quiz" method="post" action="/userEnd">
+        <p id="DATA">{{data}}</p> 
+        <form class="Quiz" method="get" action="/userEnd">
             <section class="QuestionSection">
                 <section>
-                    <span id="QuestionNumber">Q1</span><br>
-                    <span id="Question">2+2?</span>
+                    <span id="QuestionNumber">Quiz Empty</span><br>
+                    <span id="Question", name="Question"></span>
                 </section>
             </section>
-            <section class="AnswerSection">
-                <button type="submit" id="Answer1">{{data}}</button>
-                <button type="submit" id="Answer2">2</button>
-                <button type="submit" id="Answer3">3</button>
-                <button type="submit" id="Answer4">4</button>
+        </form>
+        <form action="/userEnd" method="post" class="Quiz">
+            <section id="AnswerSection" class="AnswerSection">
+                <input id="POINTS"name="POINTS" value="5" type=""></input>
             </section>
         </form>
     </body>
+    <script src="/static/JS/User End.js"></script>
 </html>
