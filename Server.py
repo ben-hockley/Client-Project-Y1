@@ -153,7 +153,7 @@ def updateFirstname():
     """
     if request.method == 'POST':
         global user
-        firstname = request.form.get("newFirstname")
+        firstname = request.form.get("newFirstname").title()
         print(firstname)
         try:
             conn = sqlite3.connect('quizDatabase.db')
@@ -178,7 +178,7 @@ def updateLastname():
     """
     if request.method == 'POST':
         global user
-        lastname = request.form.get("newLastname")
+        lastname = request.form.get("newLastname").title()
         print(lastname)
         try:
             conn = sqlite3.connect('quizDatabase.db')
