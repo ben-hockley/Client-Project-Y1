@@ -1,0 +1,21 @@
+{%extends 'mainTemplate.html'%}
+{% block mainBlock%}
+<h1>Create Account</h1>
+{% endblock%}
+
+{% block mainBody%}
+<form name = "createAccount" action = "/usernameExist" method = "post">
+    <label for="firstName">First Name:</label></br>
+    <input type="text" id = "firstName" name = "firstName" required></br>
+    <label for="lastName">Last Name:</label></br>
+    <input type="text" id = "lastName" name = "lastName" required></br>
+    <label for="username">Create a username:</label></br>
+    <input type="text" id = "username" name = "username" required></br>
+    <label for="password">Create a password:</label></br>
+    <input type="password" id = "password" name = "password" required></br>
+    <!-- <label for="password2">Re-enter the password:</label></br>
+    <input type="password" id = "password2" name = "password2"></br> -->
+    <input type="submit">
+</form>
+
+{% endblock%}
