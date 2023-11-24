@@ -125,7 +125,8 @@ def updateUsername():
     if request.method == 'POST':
         global user
         username = request.form.get("newUsername")
-        print(username)
+        if username == '':
+            return render_template("Account_Details.html")
         if usernameCheck(username) == False:
             try:
                 conn = sqlite3.connect('quizDatabase.db')
@@ -154,7 +155,8 @@ def updateFirstname():
     if request.method == 'POST':
         global user
         firstname = request.form.get("newFirstname").title()
-        print(firstname)
+        if firstname == '':
+            return render_template("Account_Details.html")
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
@@ -179,7 +181,8 @@ def updateLastname():
     if request.method == 'POST':
         global user
         lastname = request.form.get("newLastname").title()
-        print(lastname)
+        if lastname == '':
+            return render_template("Account_Details.html")
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
