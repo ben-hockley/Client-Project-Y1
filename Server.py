@@ -6,6 +6,97 @@ import sqlite3
 app = Flask(__name__)
 
 user = None
+DATABASE = "quizDatabase.db"
+
+@app.route("/createQuiz", methods=['GET', 'POST'])
+def returnFirst():
+    if request.method == 'GET':
+        return render_template('Create Quiz.html')
+    if request.method =='POST':
+        QuizName = request.form.get('QuizName')
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT QuizID FROM Quiz WHERE QuizName = "{QuizName}"')
+        conn.commit()
+        Exists = cur.fetchall()
+        conn.close()
+        if Exists == []:
+            keys = request.form.keys()
+            print(keys)
+            Elements = []
+            for i in keys:
+                Elements.append(i)
+            Elements.remove("QuizName")
+            Numbers = []
+            for i in Elements:
+                IsIn = False
+                for j in Numbers:
+                    if i[0]==j:
+                        IsIn=True
+                        break
+                if IsIn==False:
+                    Numbers.append(i[0])
+            Identity = []
+            Quiz = []
+            for i in Numbers:
+                for j  in Elements:
+                    if j[0] == i:
+                        Identity.append(j)
+                Quiz.append(Identity)
+                Identity= []
+            points = 0
+            for i in Quiz:
+                points+=1
+            msg = ""
+            Last_Quiz=""   
+            try:
+                conn = sqlite3.connect(DATABASE)
+                cur = conn.cursor()
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID") VALUES (?, ?)', (QuizName, "21"))
+                conn.commit()
+                Last_Quiz = cur.lastrowid
+                conn.close()
+            except Exception as e:
+                conn.rollback()
+            for question in Quiz:
+                questionName = request.form.get(question[0])
+                question.remove(question[0])
+                Last_Question=""
+                try:
+                    conn = sqlite3.connect(DATABASE)
+                    cur = conn.cursor()
+                    cur.execute('INSERT INTO Questions ("Question", "QuizID", Points) VALUES (?, ?, ?)', (questionName, Last_Quiz, points))
+                    conn.commit()
+                    Last_Question = cur.lastrowid
+                    conn.close()
+                except Exception as e:
+                    conn.rollback()
+                for i in range(len(question)):
+                    answerName=request.form.get(question[i-1])
+                    if (question[i-1])[-3:-1] != "Is":
+                        questionay = (question[i])
+                        if questionay[-3:-1] == "Is":
+                            try:
+                                conn = sqlite3.connect(DATABASE)
+                                cur = conn.cursor()
+                                cur.execute('INSERT INTO Answers ("Answer", "QuestionID", "IsTrue") VALUES (?, ?, ?)', (answerName, Last_Question, "T"))
+                                conn.commit()
+                                conn.close()
+                            except Exception as e:
+                                conn.rollback()
+                        else:
+                            try:
+                                conn = sqlite3.connect(DATABASE)
+                                cur = conn.cursor()
+                                cur.execute('INSERT INTO Answers ("Answer", "QuestionID", "IsTrue") VALUES (?, ?, ?)', (answerName, Last_Question, "F"))
+                                conn.commit()
+                                conn.close()
+                            except Exception as e:
+                                conn.rollback()
+            return render_template('Main Page.html')
+        else:
+            return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
+
 
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
