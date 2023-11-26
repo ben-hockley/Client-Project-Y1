@@ -1,5 +1,10 @@
 body {
-    background-image: url("static/img/homePageBanner.jpg");
+    background-image: url("/static/img/homePageBanner.jpg");
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 #accountLink {
     background-color: #028844;
@@ -15,18 +20,22 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 70px;
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 0;
+    margin-top: 15px;
+    margin-bottom: 80px;
+    color: white;
 }
 .inputBoxs {
     display: flex;
+    flex-wrap: wrap;
     margin-left: 25%;
     margin-right: 25%;
+    background-color: white;
 }
 .quizPathBox {
+    flex: 1;
     margin: 100px auto;
-    margin-top: 5%;
-    width: 300px;
+    margin-top: 0;
+    width: fit-content;
     padding: 20px;
     border: 1px white solid;
     border-radius: 5px;
@@ -34,24 +43,23 @@ body {
     float: left;
     margin-bottom: 0px;
 }
-.quizPathBox h1 {
-    margin-top: 0;
-}
 .quizPathBox input {
-    width: 92%;
+    width: 260px;
     height: 30px;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     margin: 0;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 3px;
     font-size: 150%;
     text-align: center;
     letter-spacing: 10px;
 }
 .quizPathBox button {
-    width: 100%;
+    width: 268px;
     height: 50px;
     padding: 10px;
+    margin: auto;
     margin-top: 20px;
     background-color: #0076D6;
     color: white;
@@ -64,10 +72,14 @@ body {
 button[disabled]{
   background-color: #acacac;
 }
+.createQuizButtonSection{
+    background-color: white;
+}
 .createQuizButton{
     display: inline;
     margin: 26.5%;
     margin-top: 10px;
+
 }
 .createQuizButton button {
     width: 47%;

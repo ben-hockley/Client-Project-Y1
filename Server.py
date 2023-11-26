@@ -14,10 +14,12 @@ def returnCreateAccount():
     if request.method == 'GET':
         return render_template('Create_Account.html')
 
-@app.route("/mainPage", methods=['GET'])
-def returnHome():
-    if request.method == 'GET':
-        return render_template('Main_Page.html')
+#taken this out as alternative was made for testing different route with better naming
+
+# @app.route("/mainPage", methods=['GET'])
+# def returnHome():
+#     if request.method == 'GET':
+#         return render_template('Main_Page.html')
 
 @app.route("/accountDetails", methods=['GET'])
 def returnAccountDetails():
@@ -71,12 +73,16 @@ def usernameExist():
 
 
 
-@app.route("/login", methods=['GET'])
-def returnLogin():
-    if request.method == 'GET':
-        return render_template('Log on.html')
+@app.route("/")
+def redirectLogin():
+    return redirect('/login')
 
-@app.route("/home", methods=['POST'])
+@app.route("/login")
+def returnLogin(): 
+    return render_template('Log on.html')
+
+
+@app.route("/loginFunction", methods=['POST'])
 def logonFunction():
     if request.method == 'POST':
         username = request.form.get("username")
@@ -93,21 +99,26 @@ def logonFunction():
                 if isExist[0][0] == password:
                     global user
                     user = username
-                    return render_template("Main Page.html")
+                    print(user)
+                    return redirect("/home")
                 else:
                     message = "Username and password don't match"
                     print(message)
-                    return redirect('login')
+                    return redirect('/login')
             else:
                 message = "User not found"
                 print(message)
-                return redirect('login')
+                return redirect('/login')
         except Exception as e:
             cur.close()
             print(e)
             message = "Database error"
         print(message)
-        return redirect('login')
+        return redirect('/login')
+
+@app.route("/home")
+def returnHome():
+        return render_template("Main Page.html")
         
 if __name__ == "__main__":
     app.run(debug=True)
