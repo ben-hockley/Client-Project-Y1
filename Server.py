@@ -5,6 +5,8 @@ import sqlite3
 
 app = Flask(__name__)
 
+ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
+
 user = None
 
 @app.route("/createAccount", methods=['GET'])
@@ -16,6 +18,11 @@ def returnCreateAccount():
 def returnHome():
     if request.method == 'GET':
         return render_template('Main_Page.html')
+
+@app.route("/accountDetails", methods=['GET'])
+def returnAccountDetails():
+    if request.method == 'GET':
+        return render_template('Account_Details.html')
 
 def submitNewAccount(firstName,lastName,userName,password):
     try:
@@ -69,7 +76,7 @@ def returnLogin():
     if request.method == 'GET':
         return render_template('Log on.html')
 
-@app.route("/logonFunction", methods=['POST'])
+@app.route("/home", methods=['POST'])
 def logonFunction():
     if request.method == 'POST':
         username = request.form.get("username")

@@ -1,26 +1,35 @@
 {%extends 'mainTemplate.html'%}
 
+{% block linkBlock%}
+
+{% endblock%}
+
 {% block mainBlock%}
-<h1>Main page</h1>
+<form action="/accountDetails" method="GET">
+<button id="accountLink" type="submit">Account Details</button>
+</form>
+<h1 class="headerText">Welcome.</h1>
 {% endblock%}
 
 {% block mainBody%}
+
 <div class="inputBoxs">
 <section class="quizPathBox">
     <form id="hostForm" method="post" action="/hostEnd">
-        <input type="text" id="hostCode" name="hostCode" required placeholder="# # # #">
-        <button type="button">HOST</button>
+        <input type="text" id="hostCode" name="hostCode" required placeholder="####">
+        <button id="hostButton" type="button" disabled>HOST</button>
     </form>
 </section>
 <section class="quizPathBox">
-    <form id="joinForm" method="post" action="userEnd">
-        <input type="text" id="joinCode" name="joinCode" required placeholder="# # # #">
-        <button type="button">JOIN</button>
+    <form id="joinForm" method="post" action="/userEnd">
+        <input type="text" id="joinCode" name="joinCode" required placeholder="####">
+        <button id="joinButton" type="button" disabled>JOIN</button>
     </form>
 </section>
 </div>
 <div class="createQuizButton">
 <a href="/createQuiz"><button type="button">CREATE QUIZ</button></a>
 </div>
+<script src="static/JS/Main Page.js"></script>
 {% endblock%}
 
