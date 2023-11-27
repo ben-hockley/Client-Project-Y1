@@ -9,7 +9,27 @@ app = Flask(__name__)
 ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
 user = None
+UserID = 21
 DATABASE = "quizDatabase.db"
+
+@app.route("/hostEnd", methods=['GET','POST'])
+def hostEnd():
+    if request.method =='GET':
+        return render_template('Host End.html', data=[])
+    if request.method =='POST':
+        QuizName = request.form.get("QuizName")
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
+        conn.commit()
+        DATA = cur.fetchall()
+
+        if DATA!=[]:
+            cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
+            conn.commit()
+            DATA = cur.fetchall()
+            print(DATA)
+        return render_template('Host End.html', data=DATA)
 
 @app.route("/createQuiz", methods=['GET', 'POST'])
 def returnFirst():

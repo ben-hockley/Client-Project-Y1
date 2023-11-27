@@ -1,0 +1,24 @@
+<html>
+    <header>
+        <link rel="stylesheet" href="static/CSS/Host End.css">
+    </header>
+    <body>
+        <section class="Select">
+            <section class = "SelectSection">
+                <span type="button" id = "TEXT">Enter Quiz Name</span>
+            </section>
+            <br>
+            <form action = "/hostEnd" method="POST" class = "Inputs" id="Inputs">
+                <input id="QuizName" name="QuizName" type="text">
+                <button id="SubmitButton" type="submit">→</button>
+            </form>
+        </section>
+        <section class="QuizList">
+            <p id="DATA">{{data}}</p> 
+            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+        </section>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>  
+    <script src="/static/JS/Host End.js"></script>
+</html>
