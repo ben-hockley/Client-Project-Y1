@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <header>
+    <link rel="stylesheet" href="static/CSS/Log on.css">
+    </header>
+    <head>
+        <title>L&G Quiz</title>
+        <script src="static/JS/Log on.js"></script>
+    </head>
+
+    <body>
+        <nav class="navbar-legal-and-general">
+            <a class="navbar-logo" href="Main Page.html">
+              Legal & General
+              <img src="static/img/L&G_Logo.svg" width="30" height="30" alt="Legal & General Logo">
+            </a>
+          </nav>
+
+        <section class="loginBox">
+            <h1>LOG IN REQUIRED</h1>
+            <form id="loginForm" method="post" action="/logonFunction">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Login</button>
+            </form><br>
+            <span id="errorMessage"></span><br>
+            <label for="createAccount">Don't have an account? You can create one here.</label>
+            <button id="createAccount" type="button" href="Create Account.html">Create Account</button>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <header>
+
+    </header>
+    <head>
+            {% block mainBlock%}
+            <h1>Template page</h1>
+            {% endblock%}
+    </head>
+    <body>
+    <p>
+        {%if data%}
+        {{data}}
+        {%endif%}
+    </p>
+    {% block mainBody%}
+    {% endblock%}
+    </body>
+    <footer>
+
+    </footer>
+</html>
