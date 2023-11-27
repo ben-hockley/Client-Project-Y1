@@ -2,6 +2,7 @@ import os
 from flask import Flask, redirect, request,render_template
 import json
 import sqlite3
+import hashlib
 
 app = Flask(__name__)
 
@@ -183,6 +184,16 @@ def usernameCheck(username):
         conn.close()
         return e
 
+def hashPassword(username, password):
+    """
+    Function which receives username and password as a parameter and returns a hash of password
+    """
+    # Hashing the password, adding the username as salt
+    # https://www.geeksforgeeks.org/how-to-hash-passwords-in-python/
+    database_password = password + username
+    hashed = hashlib.md5(database_password.encode())
+    password = hashed.hexdigest()
+    return password
 
 @app.route("/usernameExist", methods = ['POST'])
 def usernameExist():
@@ -196,6 +207,8 @@ def usernameExist():
         lastName = request.form.get("lastName").title()
         userName = request.form.get("username")
         password = request.form.get("password")
+        # Hashing password
+        password = hashPassword(userName,password)
         if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password) == True:
                 message = "Welcome to your account, " + firstName
@@ -303,6 +316,8 @@ def logonFunction():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
+        # Hashing password
+        password = hashPassword(username, password)
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
