@@ -333,6 +333,10 @@ def logonFunction():
         
 QUIZLISTDATABASE = 'QuizList.db'
 
+@app.route("/listQuizzes")
+def printQuiz():
+    return render_template("ListQuizzes.html")
+
 @app.route("/QuizHistory/AddDefualtQuiz", methods = ['GET'])
 
 def quizAddDefaultDetails():
