@@ -1,6 +1,6 @@
 {% extends 'mainTemplate.html'%}
 {% block linkBlock%}
-<link rel="stylesheet" href="/static/CSS/AccountDetails.css">
+<link rel="stylesheet" href="/static/CSS/Account___Details.css">
 {% endblock%}
 {% block mainBlock%}
 <h1>Account details</h1>
@@ -21,5 +21,8 @@
     <p id="username">Undefined</p>
     </section>
 </section>
+<form action = "/login">
+    <button type="submit">Log out</button>
+</form>
 <script src="/static/JS/Account_Details.js"></script>
 {% endblock%}
