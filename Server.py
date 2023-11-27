@@ -5,6 +5,7 @@ import sqlite3
 
 app = Flask(__name__)
 
+user = None
 UserID = 21
 DATABASE = "quizDatabase.db"
 
@@ -114,7 +115,6 @@ def returnFirst():
                             except Exception as e:
                                 conn.rollback()
             return render_template('Main Page.html')
-            print("HLLO WORLD!!!!!")
         else:
             return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
 
