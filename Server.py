@@ -14,18 +14,6 @@ def returnCreateAccount():
     if request.method == 'GET':
         return render_template('Create_Account.html')
 
-#taken this out as alternative was made for testing different route with better naming
-
-# @app.route("/mainPage", methods=['GET'])
-# def returnHome():
-#     if request.method == 'GET':
-#         return render_template('Main_Page.html')
-
-@app.route("/accountDetails", methods=['GET'])
-def returnAccountDetails():
-    if request.method == 'GET':
-        return render_template('Account_Details.html')
-
 def submitNewAccount(firstName,lastName,userName,password):
     try:
         conn = sqlite3.connect('quizDatabase.db')
@@ -99,8 +87,8 @@ def logonFunction():
                 if isExist[0][0] == password:
                     global user
                     user = username
-                    print(user)
-                    return redirect("/home")
+                    print('Signed in as', user)
+                    return redirect("/home/" + user)
                 else:
                     message = "Username and password don't match"
                     print(message)
@@ -116,9 +104,32 @@ def logonFunction():
         print(message)
         return redirect('/login')
 
-@app.route("/home")
-def returnHome():
-        return render_template("Main Page.html")
+@app.route("/home/<user>")
+def returnHome(user):
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("SELECT FirstName, SurName FROM User WHERE Username = ?", (user,))
+        account = cur.fetchone()
+        cur.close()
+        print('Welcome,', account[0], account[1] )
+
+        if account:
+            firstName, surname = account[0], account[1]
+        else:
+            firstName, surname = user, ""
+            print('Error finding User')
+
+        return render_template("Main Page.html", user=user, firstName=firstName, surname=surname)
+    except Exception as e:
+        print(e)
+        print("Error accessing database")
+        return redirect('/login')
+
+@app.route("/accountDetails", methods=['GET'])
+def returnAccountDetails():
+    if request.method == 'GET':
+        return render_template('Account_Details.html')
         
 if __name__ == "__main__":
     app.run(debug=True)

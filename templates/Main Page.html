@@ -1,4 +1,5 @@
 {%extends 'mainTemplate.html'%}
+<link rel="stylesheet" href="/static/CSS/Main Page.css">
 
 {% block linkBlock%}
 
@@ -6,9 +7,10 @@
 
 {% block mainBlock%}
 <form action="/accountDetails" method="GET">
-<button id="accountLink" type="submit">Account Details</button>
+<p><button id="accountLink" type="submit">Account Details</button></p>
 </form>
-<h1 class="headerText">Welcome.</h1>
+<br>
+<h1 class="headerText">Welcome, {{ firstName }}!</h1>
 {% endblock%}
 
 {% block mainBody%}
@@ -32,6 +34,6 @@
 <a href="/createQuiz"><button type="button">CREATE QUIZ</button></a>
 </div>
 </section>
-<script src="static/JS/Main Page.js"></script>
+<script src="/static/JS/Main Page.js"></script>
 {% endblock%}
 

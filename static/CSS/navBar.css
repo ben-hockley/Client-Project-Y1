@@ -1,16 +1,27 @@
 .navbar-legal-and-general {
     background-color: #333;
     width: 100%;
-    height: 55px;
+    height: 50px;
     margin-top: none;
 
+}
+.userDisplay {
+    float: left;
+    color: white;
+    margin-left: 1%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+}
+.navbar-legal-and-general .logoText {
+    color: white;
+    float: right;
 }
 .navbar-logo {
     float: right;
     color: white;
     text-decoration: none;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
     margin-right: 10px;
     
 }
