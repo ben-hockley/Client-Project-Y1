@@ -19,6 +19,63 @@
     <p id="username">Undefined</p>
     </section>
 </section>
+<style>
+    body {
+        background-color: aliceblue;
+        /* display:flex;
+        -ms-flex-align: center; */
+    }
+    p, label {
+        font-size: large;
+        width:fit-content;
+        font-weight: bold;
+    }
+    #firstName #lastName #username {
+        background-color: aliceblue;
+        color:black;
+        width:fit-content;
+        font-family:'Times New Roman', Times, serif;
+        display: flex;
+        float: left;
+    }
+    #firstName:hover, #lastName:hover, #username:hover {
+        color: #8989fe;
+    }
+    input[type=text] {
+        width: 20%;
+        padding: 10px 20px;
+        background-color: #8989fe;
+        color:aliceblue;
+        border:none;
+    }
+    /* https://www.w3schools.com/css/css_form.asp */
+    /* Got help from this site */
+    button {
+        width:fit-content;
+        padding: 10px 5px;
+        border:none;
+        background-color: #91f191;
+{% extends 'mainTemplate.html'%}
+{% block mainBlock%}
+<link rel="stylesheet" href="static/CSS/Account_Details.css">
+<h1>Account details</h1>
+{% endblock%}
+
+{% block mainBody%}
+<section title="details">
+    <p>First name:</p>
+    <section id="firstNameData" label="first name">
+    <p id="firstName">Undefined</p>
+    </section>
+    <p>Last name:</p>
+    <section id="lastNameData" label="last name">
+    <p id="lastName">Undefined</p>
+    </section>
+    <p>Username:</p>
+    <section id="usernameData" label="username">
+    <p id="username">Undefined</p>
+    </section>
+</section>
 <section>
     <a href="http://127.0.0.1:5000/QuizHistory/AddQuiz">View Quiz History</a>
 </section>
@@ -59,6 +116,10 @@
         border:none;
         background-color: #91f191;
 
+    }
+</style>
+<script src="static/JS/Account_Details.js"></script>
+{% endblock%}
     }
 </style>
 <script src="static/JS/Account_Details.js"></script>
