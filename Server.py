@@ -2,8 +2,11 @@ import os
 from flask import Flask, redirect, request,render_template
 import json
 import sqlite3
+import hashlib
 
 app = Flask(__name__)
+
+ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
 user = None
 UserID = 21
@@ -123,17 +126,13 @@ def returnCreateAccount():
     if request.method == 'GET':
         return render_template('Create_Account.html')
 
-@app.route("/mainPage", methods=['GET'])
-def returnHome():
-    if request.method == 'GET':
-        return render_template('Main_Page.html')
-
 @app.route("/accountDetails", methods=['GET'])
 def returnAccountDetails():
     global user
     print(user)
     if request.method == 'GET':
         return render_template('Account_Details.html')
+
 
 @app.route("/updateInfo", methods=['GET'])
 def updateInfo():
@@ -203,6 +202,16 @@ def usernameCheck(username):
         conn.close()
         return e
 
+def hashPassword(username, password):
+    """
+    Function which receives username and password as a parameter and returns a hash of password
+    """
+    # Hashing the password, adding the username as salt
+    # https://www.geeksforgeeks.org/how-to-hash-passwords-in-python/
+    database_password = password + username
+    hashed = hashlib.md5(database_password.encode())
+    password = hashed.hexdigest()
+    return password
 
 @app.route("/usernameExist", methods = ['POST'])
 def usernameExist():
@@ -216,6 +225,8 @@ def usernameExist():
         lastName = request.form.get("lastName").title()
         userName = request.form.get("username")
         password = request.form.get("password")
+        # Hashing password
+        password = hashPassword(userName,password)
         if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password) == True:
                 message = "Welcome to your account, " + firstName
@@ -313,16 +324,22 @@ def updateLastname():
 
 
 
-@app.route("/login", methods=['GET'])
-def returnLogin():
-    if request.method == 'GET':
-        return render_template('Log on.html')
+@app.route("/")
+def redirectLogin():
+    return redirect('/login')
 
-@app.route("/logonFunction", methods=['POST'])
+@app.route("/login")
+def returnLogin(): 
+    return render_template('Log on.html')
+
+
+@app.route("/loginFunction", methods=['POST'])
 def logonFunction():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
+        # Hashing password
+        password = hashPassword(username, password)
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
@@ -335,21 +352,46 @@ def logonFunction():
                 if isExist[0][0] == password:
                     global user
                     user = username
-                    return render_template("Main Page.html")
+                    print('Signed in as', user)
+                    return redirect("/home/" + user)
                 else:
                     message = "Username and password don't match"
                     print(message)
-                    return redirect('login')
+                    return redirect('/login')
             else:
                 message = "User not found"
                 print(message)
-                return redirect('login')
+                return redirect('/login')
         except Exception as e:
             cur.close()
             print(e)
             message = "Database error"
         print(message)
-        return redirect('login')
+        return redirect('/login')
+
+@app.route("/home/<user>")
+def returnHome(user):
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("SELECT FirstName, SurName FROM User WHERE Username = ?", (user,))
+        account = cur.fetchone()
+        cur.close()
+        print('Welcome,', account[0], account[1] )
+
+        if account:
+            firstName, surname = account[0], account[1]
+        else:
+            firstName, surname = user, ""
+            print('Error finding User')
+
+        return render_template("Main Page.html", user=user, firstName=firstName, surname=surname)
+    except Exception as e:
+        print(e)
+        print("Error accessing database")
+        return redirect('/login')
+
+
         
 if __name__ == "__main__":
     app.run(debug=True)
