@@ -39,9 +39,9 @@ def returnFirst():
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz WHERE QuizName = "{QuizName}"')
         conn.commit()
-        Data = cur.fetchall()
+        Exists = cur.fetchall()
         conn.close()
-        if Data == []:
+        if Exists == []:
             keys = request.form.keys()
             print(keys)
             Elements = []
