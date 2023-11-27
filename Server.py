@@ -121,6 +121,68 @@ def returnFirst():
             return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
 
 
+def getQuestion(QuizID):
+    data=[]
+    try:
+        conn = sqlite3.connect('quizDatabase.db')
+        cur = conn.cursor()
+        cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID='+QuizID)
+        data = cur.fetchall()
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+    questions=[]
+    for i in data:
+        questionID=""
+        questionName=""
+        trueAnswer=[]
+        falseAnswer=[]
+        quizName=""
+        found = False
+        for j in questions:
+            if j[3] == i[4]:
+                questionID=i[4]
+                found = True
+                break
+        if found:
+            for j in questions:
+                if j[3]==questionID:
+                    if i[3]=="T":
+                        j[1].append(i[0])
+                    else:
+                        j[2].append(i[0])
+        else:
+            questionName=i[1]
+            if i[3] == "T":
+                trueAnswer.append(i[0])
+            else:
+                falseAnswer.append(i[0])
+            question=(questionName, trueAnswer, falseAnswer, i[4], i[2])
+            questions.append(question)
+    return questions
+
+
+
+@app.route("/userEnd", methods=['GET', 'POST'])
+def userEnd():
+    QuizID="50"
+    UserID="21"
+    if request.method == 'GET':
+        return render_template('User End.html', data=getQuestion(QuizID))
+    if request.method == 'POST':
+        Points = request.form.get("POINTS")
+        print(Points)
+        msg=""
+        try:
+            conn = sqlite3.connect('quizDatabase.db')
+            cur = conn.cursor()
+            cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
+            data = cur.fetchall()
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+        return render_template('Main Page.html')
+
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
     if request.method == 'GET':
