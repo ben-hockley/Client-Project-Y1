@@ -9,7 +9,6 @@ user = None
 UserID = 21
 DATABASE = "quizDatabase.db"
 
-
 @app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
     if request.method =='GET':
