@@ -1,6 +1,8 @@
 {% extends 'mainTemplate.html'%}
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/AccountDetails.css">
+{% endblock%}
 {% block mainBlock%}
-<link rel="stylesheet" href="static/CSS/Account_Details.css">
 <h1>Account details</h1>
 {% endblock%}
 
@@ -19,44 +21,5 @@
     <p id="username">Undefined</p>
     </section>
 </section>
-<style>
-    body {
-        background-color: aliceblue;
-        /* display:flex;
-        -ms-flex-align: center; */
-    }
-    p, label {
-        font-size: large;
-        width:fit-content;
-        font-weight: bold;
-    }
-    #firstName #lastName #username {
-        background-color: aliceblue;
-        color:black;
-        width:fit-content;
-        font-family:'Times New Roman', Times, serif;
-        display: flex;
-        float: left;
-    }
-    #firstName:hover, #lastName:hover, #username:hover {
-        color: #8989fe;
-    }
-    input[type=text] {
-        width: 20%;
-        padding: 10px 20px;
-        background-color: #8989fe;
-        color:aliceblue;
-        border:none;
-    }
-    /* https://www.w3schools.com/css/css_form.asp */
-    /* Got help from this site */
-    button {
-        width:fit-content;
-        padding: 10px 5px;
-        border:none;
-        background-color: #91f191;
-
-    }
-</style>
-<script src="static/JS/Account_Details.js"></script>
+<script src="/static/JS/Account_Details.js"></script>
 {% endblock%}

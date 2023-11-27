@@ -301,9 +301,6 @@ def updateLastname():
             conn.close()
         return render_template("Account_Details.html", data = message)
 
-
-
-
 @app.route("/")
 def redirectLogin():
     return redirect('/login')
