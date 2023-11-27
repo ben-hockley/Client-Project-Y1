@@ -113,6 +113,7 @@ def returnAccountDetails():
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
+
 @app.route("/updateInfo", methods=['GET'])
 def updateInfo():
     """
@@ -370,10 +371,7 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
-@app.route("/accountDetails", methods=['GET'])
-def returnAccountDetails():
-    if request.method == 'GET':
-        return render_template('Account_Details.html')
+
         
 if __name__ == "__main__":
     app.run(debug=True)
