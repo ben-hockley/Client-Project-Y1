@@ -432,6 +432,7 @@ def logonFunction():
         return redirect('/login')
 
 @app.route("/home/<user>")
+
 def returnHome(user):
     try:
         conn = sqlite3.connect("quizDatabase.db")
@@ -453,7 +454,41 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
+QUIZLISTDATABASE = 'quizDatabase.db'
 
+@app.route("/listQuizzes")
+def printQuiz():
+    return render_template("ListQuizzes.html")
+
+
+def jls_extract_def():
+    return 'quizName'
+
+
+
+
+@app.route("/QuizHistory/<user>", methods = ['GET','POST'])
+
+def quizSearch(user):
+    if request.method =='GET':
+        return render_template('quizSearch.html')
+    if request.method =='POST':
+        try:
+            quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
+            conn = sqlite3.connect(QUIZLISTDATABASE)
+            cur = conn.cursor()
+            cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
+            userID = cur.fetchall()
+            cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
+            QuizHistory = cur.fetchall()
+            print(QuizHistory)
+		# accepts both list[] or tuple() list mutable tuple not-mutable
+        except:
+            print('there was an error', data)
+            conn.close()
+        finally:
+            conn.close()
+            return str(data)
         
 if __name__ == "__main__":
     app.run(debug=True)
