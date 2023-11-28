@@ -11,6 +11,8 @@ function editFirstName() {
         console.log("Form already open")
     }
     else {
+    let user = window.location.pathname.split("/").pop()
+    let newRoute = "/updateFirstname/" + user;
     const labelForm = document.createElement("label")
     labelForm.innerHTML = "Enter new first name:";
     labelForm.setAttribute("for","newFirstname");
@@ -28,7 +30,7 @@ function editFirstName() {
     firstForm.appendChild(newFirst);
     firstForm.appendChild(button);
     document.getElementById("firstNameData").appendChild(firstForm);
-    document.getElementById("firstForm").setAttribute("action","/updateFirstname")
+    document.getElementById("firstForm").setAttribute("action",newRoute)
     document.getElementById("firstForm").setAttribute("method","post")
     }
 }
@@ -39,6 +41,8 @@ function editUsername() {
         console.log("Form already open")
     }
     else {
+    let user = window.location.pathname.split("/").pop()
+    let newRoute = "/updateUsername/" + user;
     const labelForm = document.createElement("label")
     labelForm.innerHTML = "Enter new username:";
     labelForm.setAttribute("for","newUsername");
@@ -56,7 +60,7 @@ function editUsername() {
     firstForm.appendChild(newFirst);
     firstForm.appendChild(button);
     document.getElementById("usernameData").appendChild(firstForm);
-    document.getElementById("userForm").setAttribute("action","/updateUsername")
+    document.getElementById("userForm").setAttribute("action",newRoute)
     document.getElementById("userForm").setAttribute("method","post")
     }
 }
@@ -67,6 +71,8 @@ function editLastName() {
         console.log("Form already open")
     }
     else {
+    let user = window.location.pathname.split("/").pop()
+    let newRoute = "/updateLastname/" + user;
     const labelForm = document.createElement("label")
     labelForm.innerHTML = "Enter new last name:";
     labelForm.setAttribute("for","newLastname");
@@ -84,15 +90,22 @@ function editLastName() {
     firstForm.appendChild(newFirst);
     firstForm.appendChild(button);
     document.getElementById("lastNameData").appendChild(firstForm);
-    document.getElementById("lastForm").setAttribute("action","/updateLastname")
+    document.getElementById("lastForm").setAttribute("action","/updateLastname/" + user)
     document.getElementById("lastForm").setAttribute("method","post")
     }
 }
 
+
+
 function getDetails() {
     // Fills in the details in the HTML page with database info
+    // https://stackoverflow.com/questions/4758103/last-segment-of-url-with-javascript
+    let user = window.location.pathname.split("/").pop()
+    let newRoute = "/updateInfo/" + user;
+    console.log('hi')
+    console.log(newRoute);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET",'/updateInfo',true);
+    xhttp.open("GET",'/updateInfo/' + user,true);
     xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState === 4) {
