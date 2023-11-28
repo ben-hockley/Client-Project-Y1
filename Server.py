@@ -1,5 +1,5 @@
 import os
-from flask import Flask, redirect, request,render_template
+from flask import Flask, redirect, request, render_template, url_for
 import json
 import sqlite3
 import hashlib
@@ -165,10 +165,10 @@ def getQuestion(QuizID):
 
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
-    QuizID="50"
+    QuizID = request.args.get('QuizID')
     UserID="21"
-    if request.method == 'GET':
-        return render_template('User End.html', data=getQuestion(QuizID))
+    # if request.method == 'GET':
+    return render_template('User End.html', data=getQuestion(QuizID))
     if request.method == 'POST':
         Points = request.form.get("POINTS")
         print(Points)
@@ -453,8 +453,43 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
+@app.route("/joinQuizFunction", methods=["POST"])
+def findQuizKey():
+    """
+    Function that gets the Key from the input and checks to see if it relates to a Quiz Table
+    """
+    if request.method == "POST":
+        #Take the Input from the form
+        joinKey = request.form.get("joinCode")
+        print(joinKey)
 
-        
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM Quiz WHERE QuizKey = ?",(joinKey,))
+            conn.commit()
+            Quiz = cur.fetchall()
+            cur.close()
+            
+            QuizID = Quiz[0][0]
+            QuizName = Quiz[0][1]
+
+            print(QuizID)
+            print(QuizName)
+            
+            if QuizID:
+                return redirect(url_for('userEnd', QuizID=QuizID))
+
+            else:
+                errormessage = "Quiz not found"
+                print(errormessage)
+                return redirect('/')
+
+        except Exception as e:
+            print(e)
+            print("Error accessing Database")
+            return redirect('/')
+
 if __name__ == "__main__":
     app.run(debug=True)
 
