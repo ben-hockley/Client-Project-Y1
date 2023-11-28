@@ -3,6 +3,7 @@ from flask import Flask, redirect, request,render_template
 import json
 import sqlite3
 import hashlib
+import random
 
 app = Flask(__name__)
 
@@ -72,10 +73,19 @@ def returnFirst():
                 points+=1
             msg = ""
             Last_Quiz=""   
+            ValueList = []
+            JoinKey = ""
+            for i in range(65, 91):
+                ValueList.append(chr(i))
+                ValueList.append(chr(i + 32))
+            for i in range(10):
+                ValueList.append(str(i))
+            for i in range(4):
+                JoinKey = JoinKey + str(ValueList[random.randint(0, len(ValueList))])
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID") VALUES (?, ?)', (QuizName, "21"))
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "JoinKey") VALUES (?, ?, ?)', (QuizName, "21", JoinKey))
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
