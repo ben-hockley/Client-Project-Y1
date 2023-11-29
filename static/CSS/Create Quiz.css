@@ -1,9 +1,15 @@
 body {
   background-image: url("/static/img/CreateQuizBanner.png");
-  padding: 0%;  
+  padding: 0;
+  margin: 0;  
   background-repeat: no-repeat;
   background-size: contain;
   background-position: top;
+}
+
+body h1{
+  display: flex;
+  visibility: hidden;
 }
 
 .banner {
@@ -17,7 +23,6 @@ body {
   padding-left: 10px;
   position: absolute;
   bottom: 40%;
-  margin-left: -1%;
   margin-bottom: 5%;
 }
 
@@ -65,7 +70,8 @@ body {
 .MakeQuiz {
     background-color: white;
     margin: 25%;
-    margin-top: 30%;
+    margin-bottom: 5%;
+    margin-top: 20%;
     border-radius: 25px;
     box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
 }
@@ -109,4 +115,14 @@ body {
 }
 #Fancy:hover{
   background-color: #005f2f;
+}
+
+#Nothing{
+  background-color: #999999;
+  padding: 5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }

@@ -3,13 +3,11 @@
 {% block linkBlock%}
     <link rel="stylesheet" href="static/CSS/Create Quiz.css">
 {% endblock%}
-{% block head%}
+{% block mainBody%}
     <section class="banner" id="Mid-Centre">
-        <h1>Create Quiz</h1>
+        <h2>Create Quiz</h2>
         <p>Make your own Quizes to test your staff</p>
     </section>
-{% endblock%}
-{% block mainBody%}
     <form class="MakeQuiz" method="POST" onsubmit="return False">
         <section id="CreateSect">
             <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
