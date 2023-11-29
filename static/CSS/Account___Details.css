@@ -4,9 +4,9 @@ body {
     -ms-flex-align: center; */
 }
 p, label {
-    font-size: large;
+    /* font-size: large; */
     width:fit-content;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 #firstName #lastName #username {
     background-color: aliceblue;

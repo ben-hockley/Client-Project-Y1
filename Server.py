@@ -162,6 +162,30 @@ def getQuestion(QuizID):
     return questions
 
 
+@app.route("/moodChecker/<user>",methods=['GET','POST'])
+def updateMood(user):
+    """
+    Function takes in the user's input from the slider and updates the database,
+    before returning the home page
+    """
+    if request.method == 'GET':
+        return render_template("moodChecker.html",user=user)
+    if request.method == 'POST':
+        mood = int(request.form.get("slider"))
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            UPDATE User SET Mood = ? WHERE Username = ?", (mood, user)\
+            )
+            conn.commit()
+        except Exception as e:
+            print(e)
+            print("error during update")
+            conn.rollback()
+            return redirect("/moodChecker/" + user)
+        conn.close()
+        return redirect("/home/" + user)
 
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
