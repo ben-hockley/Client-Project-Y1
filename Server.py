@@ -188,21 +188,18 @@ def returnCreateAccount():
     if request.method == 'GET':
         return render_template('Create_Account.html')
 
-@app.route("/accountDetails", methods=['GET'])
-def returnAccountDetails():
-    global user
-    print(user)
+@app.route("/accountDetails/<user>", methods=['GET'])
+def returnAccountDetails(user):
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
 
-@app.route("/updateInfo", methods=['GET'])
-def updateInfo():
+@app.route("/updateInfo/<user>", methods=['GET'])
+def updateInfo(user):
     """
     Function fetches all the user data from the database, returns it in a JSON list
     If not found, returns None
     """
-    global User
     if user == None:
         return "None"
     try:
@@ -292,25 +289,23 @@ def usernameExist():
         if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password) == True:
                 message = "Welcome to your account, " + firstName
-                global user
                 user = userName
-                return render_template('Account_Details.html', data = message)
+                return redirect("/accountDetails/" + user)
             else:
                 message = "Error inserting " + firstName
         else:
             message = "Username '" + userName + "' already exists."
-        return render_template('Create_Account.html', data = message)
+        return redirect("/createAccount")
 
-@app.route("/updateUsername", methods=['POST'])
-def updateUsername():
+@app.route("/updateUsername/<user>", methods=['POST'])
+def updateUsername(user):
     """
     Function which will update the new username entered by a user
     """
     if request.method == 'POST':
-        global user
         username = request.form.get("newUsername")
         if username == '':
-            return render_template("Account_Details.html")
+            return redirect("/accountDetails/" + user)
         if usernameCheck(username) == False:
             try:
                 conn = sqlite3.connect('quizDatabase.db')
@@ -329,18 +324,17 @@ def updateUsername():
                 conn.close()
         else:
             message = "New username '" + username + "' already exists."
-        return render_template("Account_Details.html", data = message)
+        return redirect("/accountDetails/" + user)
 
-@app.route("/updateFirstname", methods=['POST'])
-def updateFirstname():
+@app.route("/updateFirstname/<user>", methods=['POST'])
+def updateFirstname(user):
     """
     Function which will update the new first name entered by a user
     """
     if request.method == 'POST':
-        global user
         firstname = request.form.get("newFirstname").title()
         if firstname == '':
-            return render_template("Account_Details.html")
+            return redirect("/accountDetails/" + user)
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
@@ -355,18 +349,17 @@ def updateFirstname():
         finally:
             print(message)
             conn.close()
-        return render_template("Account_Details.html", data = message)
+        return redirect("/accountDetails/" + user)
                 
-@app.route("/updateLastname", methods=['POST'])
-def updateLastname():
+@app.route("/updateLastname/<user>", methods=['POST'])
+def updateLastname(user):
     """
     Function which will update the new last name entered by a user
     """
     if request.method == 'POST':
-        global user
         lastname = request.form.get("newLastname").title()
         if lastname == '':
-            return render_template("Account_Details.html")
+            return redirect("/accountDetails/" + user)
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
@@ -381,7 +374,7 @@ def updateLastname():
         finally:
             print(message)
             conn.close()
-        return render_template("Account_Details.html", data = message)
+        return redirect("/accountDetails/" + user)
 
 @app.route("/")
 def redirectLogin():
