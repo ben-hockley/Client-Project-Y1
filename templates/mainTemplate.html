@@ -5,7 +5,7 @@
         {% block linkBlock%}
         {% endblock%}
         <nav class="navbar-legal-and-general">
-            <p class="userDisplay">{{ firstName }} {{ surname }}</p>
+            <p class="userDisplay" id="userDisplay">{{ firstName }} {{ surname }} {{ mood }}</p>
             <a class="navbar-logo" id="navbar-logo" href="Main Page.html">
               <img src="/static/img/L&G_Logo.svg" width="50" height="50" alt="Legal & General Logo">
             </a>
@@ -25,6 +25,34 @@
     </p>
     {% block mainBody%}
     {% endblock%}
+    <script>
+        document.addEventListener("DOMContentLoaded", getDetails())
+        function getDetails() {
+    // Fills in the details in the HTML page with database info
+            user = window.location.pathname.split("/").pop()
+            newRoute = "/updateInfo/" + user
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET",newRoute,true);
+            xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState === 4) {
+                    if (xhttp.status === 200) {
+                        var text = xhttp.responseText;
+                        if (text === "None") {
+                            document.getElementById("userDisplay").innerHTML = "";
+                        } else {
+                            jsonTuple = JSON.parse(text);
+                            let userDetails = jsonTuple[0] + " " + jsonTuple[1] + " " + jsonTuple[3];
+                            document.getElementById("userDisplay").innerHTML = userDetails;
+                        }
+                    } else {
+                        console.error(xhttp.statusText);
+                    }
+                }
+            };
+            xhttp.send();
+        }
+    </script>
     </body>
     <footer>
 

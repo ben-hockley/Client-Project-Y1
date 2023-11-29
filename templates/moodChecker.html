@@ -7,7 +7,7 @@
 {% endblock%}
 {% block mainBody%}
 <div class="slider">
-    <p class="material-icons" id="emoji">
+    <p class="material-icons" id="emoji" style="font-size: 50px;">
         &#128528;
     </p>
     <form action="/moodChecker/{{user}}" id="moodForm" method="post">
@@ -16,9 +16,9 @@
     </form>
 </div>
 <script>
-    var slider = document.getElementById("slider")
-    var emoji = document.getElementById("emoji")
-    let emojiList = ["&#128549","&#128577","&#128528","&#128578","&#128512"]
+    var slider = document.getElementById("slider");
+    var emoji = document.getElementById("emoji");
+    let emojiList = ["&#128549","&#128577","&#128528","&#128578","&#128512"];
     slider.oninput=function() {
         emoji.innerHTML = emojiList[slider.value];
     }
