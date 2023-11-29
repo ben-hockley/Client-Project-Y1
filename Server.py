@@ -483,8 +483,9 @@ def quizSearch(user):
             print(userID)
             cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
             QuizHistory = cur.fetchall()
+            quiz_history = json.dumps(QuizHistory)
             QuizzesPlayed = str(len(QuizHistory))
-            return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory)
+            return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory),quiz_history
         except:
             print('there was an error')
         conn.close()

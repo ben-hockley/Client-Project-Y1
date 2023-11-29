@@ -1,9 +1,13 @@
 {% extends 'mainTemplate.html'%}
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/Quiz History.css">
+{% endblock%}
 {% block mainBlock%}
 {% endblock%}
 {% block mainBody%}
-<h1>Welcome back {{user}} ; You have played {{QuizzesPlayed}} Quizzes so far!</h1>
+<h1 class="welcomeMessage">Welcome back {{user}} ; You have played {{QuizzesPlayed}} Quizzes so far!</h1>
 <ul>
-    <li>{{QuizHistory}}</li>
+    <li>{{QuizHistory[0]}}</li>
+    <li>{{QuizHistory[1]}}</li>
 </ul>
 {% endblock%}

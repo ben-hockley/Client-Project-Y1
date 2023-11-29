@@ -1,0 +1,12 @@
+.welcomeMessage{
+    color:blue;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+ul{
+    color:red;
+    font-family: Arial, Helvetica, sans-serif;
+}
+li{
+    outline:1px solid purple;
+}
