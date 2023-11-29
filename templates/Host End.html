@@ -1,9 +1,11 @@
-<html>
-    <header>
+{%extends 'mainTemplate.html'%}
+{% block linkBlock%}
         <link rel="stylesheet" href="static/CSS/Host End.css">
-    </header>
-    <body>
-        <section class="Select">
+{% endblock%}
+{% block mainBlock%}
+{% endblock%}
+{% block mainBody%}
+    <section class="Select">
             <section class = "SelectSection">
                 <span type="button" id = "TEXT">Enter Quiz Name</span>
             </section>
@@ -18,7 +20,6 @@
             <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
         </section>
-    </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>  
     <script src="/static/JS/Host End.js"></script>
-</html>
+{% endblock%}

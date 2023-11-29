@@ -43,7 +43,7 @@ function FindUserMaxSore(OldData){
 function MakeChart(data){
     var xValues = [];
     var yValues = [];
-    var barColors = "white";
+    var barColors = "RoyalBlue";
     data.forEach(element => {
         xValues.push(element[0]);
         yValues.push(element[1]);

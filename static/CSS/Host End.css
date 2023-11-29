@@ -1,7 +1,3 @@
-body {
-    background-color: #68bbff; /* For browsers that do not support gradients */
-    background-image: linear-gradient(to bottom right, #68bbff, #02467d);
-}
 .SelectSection{
   text-align: center;
   width: auto;
