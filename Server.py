@@ -11,7 +11,6 @@ ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
 user = None
 UserID = 21
-DATABASE = "quizDatabase.db"
 
 @app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
@@ -19,6 +18,7 @@ def hostEnd():
         return render_template('Host End.html', data=[])
     if request.method =='POST':
         QuizName = request.form.get("QuizName")
+
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
@@ -130,7 +130,6 @@ def returnFirst():
         else:
             return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
 
-
 def getQuestion(QuizID):
     data=[]
     try:
@@ -171,8 +170,6 @@ def getQuestion(QuizID):
             questions.append(question)
     return questions
 
-
-
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
     QuizID="50"
@@ -205,7 +202,6 @@ def returnAccountDetails():
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
-
 @app.route("/updateInfo", methods=['GET'])
 def updateInfo():
     """
@@ -231,7 +227,6 @@ def updateInfo():
     conn.close()
     print(details)
     return details
-
 
 def submitNewAccount(firstName,lastName,userName,password):
     """
@@ -393,9 +388,6 @@ def updateLastname():
             conn.close()
         return render_template("Account_Details.html", data = message)
 
-
-
-
 @app.route("/")
 def redirectLogin():
     return redirect('/login')
@@ -403,7 +395,6 @@ def redirectLogin():
 @app.route("/login")
 def returnLogin(): 
     return render_template('Log on.html')
-
 
 @app.route("/loginFunction", methods=['POST'])
 def logonFunction():
@@ -462,8 +453,6 @@ def returnHome(user):
         print(e)
         print("Error accessing database")
         return redirect('/login')
-
-
         
 if __name__ == "__main__":
     app.run(debug=True)
