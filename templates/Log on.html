@@ -1,35 +1,28 @@
-<!DOCTYPE html>
-<html>
-    <header>
-    <link rel="stylesheet" href="static/CSS/Log on.css">
-    </header>
-    <head>
-        <title>L&G Quiz</title>
-        <script src="static/JS/Log on.js"></script>
-    </head>
+{%extends 'mainTemplate.html'%}
 
-    <body>
-        <nav class="navbar-legal-and-general">
-            <a class="navbar-logo" href="Main Page.html">
-              Legal & General
-              <img src="static/img/L&G_Logo.svg" width="30" height="30" alt="Legal & General Logo">
-            </a>
-          </nav>
+{% block linkBlock%}
+<link rel="stylesheet" href="static/CSS/Log on.css">
+{% endblock%}
 
-        <section class="loginBox">
-            <h1>LOG IN REQUIRED</h1>
-            <form id="loginForm" method="post" action="/loginFunction">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Login</button>
-            </form><br>
-            <span id="errorMessage"></span><br>
-            <label for="createAccount">Don't have an account? You can create one here.</label>
-            <form action="/createAccount">
-            <button id="createAccount" type="submit">Create Account</button>
-            </form>
-        </section>
-    </body>
-</html>
+{% block mainBlock%}
+<title>Log in - L&g Quiz</title>
+{% endblock%}
+
+{% block mainBody%}
+<section class="loginBox">
+    <h1>LOG IN REQUIRED</h1>
+    <form id="loginForm" method="post" action="/loginFunction">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+    </form><br>
+    <span id="errorMessage"></span><br>
+    <label for="createAccount">Don't have an account? You can create one here.</label>
+    <form action="/createAccount">
+    <button id="createAccount" type="submit">Create Account</button>
+    </form>
+</section>
+<script src="/static/JS/Log on.js"></script>
+{% endblock%}
