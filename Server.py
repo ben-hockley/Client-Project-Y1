@@ -3,7 +3,6 @@ from flask import Flask, redirect, request,render_template
 import json
 import sqlite3
 import hashlib
-import random
 
 app = Flask(__name__)
 
@@ -11,6 +10,7 @@ ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
 user = None
 UserID = 21
+DATABASE = "quizDatabase.db"
 
 @app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
@@ -18,7 +18,6 @@ def hostEnd():
         return render_template('Host End.html', data=[])
     if request.method =='POST':
         QuizName = request.form.get("QuizName")
-
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
@@ -73,19 +72,10 @@ def returnFirst():
                 points+=1
             msg = ""
             Last_Quiz=""   
-            CharList = []
-            QuizKey = ""
-            for i in range(65, 91):
-                CharList.append(chr(i))
-                CharList.append(chr(i + 32))
-            for i in range(10):
-                CharList.append(str(i))
-            for i in range(4):
-                QuizKey+=str(CharList[random.randint(0, len(CharList))])
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, "21", QuizKey))
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID") VALUES (?, ?)', (QuizName, "21"))
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
@@ -130,6 +120,7 @@ def returnFirst():
         else:
             return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
 
+
 def getQuestion(QuizID):
     data=[]
     try:
@@ -170,6 +161,8 @@ def getQuestion(QuizID):
             questions.append(question)
     return questions
 
+
+
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
     QuizID="50"
@@ -195,20 +188,18 @@ def returnCreateAccount():
     if request.method == 'GET':
         return render_template('Create_Account.html')
 
-@app.route("/accountDetails", methods=['GET'])
-def returnAccountDetails():
-    global user
-    print(user)
+@app.route("/accountDetails/<user>", methods=['GET'])
+def returnAccountDetails(user):
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
-@app.route("/updateInfo", methods=['GET'])
-def updateInfo():
+
+@app.route("/updateInfo/<user>", methods=['GET'])
+def updateInfo(user):
     """
     Function fetches all the user data from the database, returns it in a JSON list
     If not found, returns None
     """
-    global User
     if user == None:
         return "None"
     try:
@@ -227,6 +218,7 @@ def updateInfo():
     conn.close()
     print(details)
     return details
+
 
 def submitNewAccount(firstName,lastName,userName,password):
     """
@@ -297,25 +289,23 @@ def usernameExist():
         if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password) == True:
                 message = "Welcome to your account, " + firstName
-                global user
                 user = userName
-                return render_template('Account_Details.html', data = message)
+                return redirect("/accountDetails/" + user)
             else:
                 message = "Error inserting " + firstName
         else:
             message = "Username '" + userName + "' already exists."
-        return render_template('Create_Account.html', data = message)
+        return redirect("/createAccount")
 
-@app.route("/updateUsername", methods=['POST'])
-def updateUsername():
+@app.route("/updateUsername/<user>", methods=['POST'])
+def updateUsername(user):
     """
     Function which will update the new username entered by a user
     """
     if request.method == 'POST':
-        global user
         username = request.form.get("newUsername")
         if username == '':
-            return render_template("Account_Details.html")
+            return redirect("/accountDetails/" + user)
         if usernameCheck(username) == False:
             try:
                 conn = sqlite3.connect('quizDatabase.db')
@@ -334,18 +324,17 @@ def updateUsername():
                 conn.close()
         else:
             message = "New username '" + username + "' already exists."
-        return render_template("Account_Details.html", data = message)
+        return redirect("/accountDetails/" + user)
 
-@app.route("/updateFirstname", methods=['POST'])
-def updateFirstname():
+@app.route("/updateFirstname/<user>", methods=['POST'])
+def updateFirstname(user):
     """
     Function which will update the new first name entered by a user
     """
     if request.method == 'POST':
-        global user
         firstname = request.form.get("newFirstname").title()
         if firstname == '':
-            return render_template("Account_Details.html")
+            return redirect("/accountDetails/" + user)
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
@@ -360,18 +349,17 @@ def updateFirstname():
         finally:
             print(message)
             conn.close()
-        return render_template("Account_Details.html", data = message)
+        return redirect("/accountDetails/" + user)
                 
-@app.route("/updateLastname", methods=['POST'])
-def updateLastname():
+@app.route("/updateLastname/<user>", methods=['POST'])
+def updateLastname(user):
     """
     Function which will update the new last name entered by a user
     """
     if request.method == 'POST':
-        global user
         lastname = request.form.get("newLastname").title()
         if lastname == '':
-            return render_template("Account_Details.html")
+            return redirect("/accountDetails/" + user)
         try:
             conn = sqlite3.connect('quizDatabase.db')
             cur = conn.cursor()
@@ -386,7 +374,10 @@ def updateLastname():
         finally:
             print(message)
             conn.close()
-        return render_template("Account_Details.html", data = message)
+        return redirect("/accountDetails/" + user)
+
+
+
 
 @app.route("/")
 def redirectLogin():
@@ -395,6 +386,7 @@ def redirectLogin():
 @app.route("/login")
 def returnLogin(): 
     return render_template('Log on.html')
+
 
 @app.route("/loginFunction", methods=['POST'])
 def logonFunction():
@@ -453,6 +445,8 @@ def returnHome(user):
         print(e)
         print("Error accessing database")
         return redirect('/login')
+
+
         
 if __name__ == "__main__":
     app.run(debug=True)
