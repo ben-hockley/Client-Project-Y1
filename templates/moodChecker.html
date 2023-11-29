@@ -1,6 +1,11 @@
 {% extends 'mainTemplate.html'%}
 {% block linkBlock%}
-<style></style>
+<style>
+    body {
+        margin:0;
+        padding:0;
+    }
+</style>
 {% endblock%}
 {% block mainBlock%}
 <h1>Mood Checker</h1>
@@ -12,7 +17,7 @@
     </p>
     <form action="/moodChecker/{{user}}" id="moodForm" method="post">
         <input type="range" min="0" max="4" value="2" id="slider" name="slider">
-        <button type="submit"></button>
+        <button type="submit">Update your mood</button>
     </form>
 </div>
 <script>

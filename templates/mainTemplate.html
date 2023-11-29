@@ -9,7 +9,7 @@
             <a class="navbar-logo" id="navbar-logo" href="Main Page.html">
               <img src="/static/img/L&G_Logo.svg" width="50" height="50" alt="Legal & General Logo">
             </a>
-            <p class="logoText">Legal & General</p>
+            <p class="logoText" id="logoText">Legal & General</p>
         </nav>
     </header>
     <head>
@@ -27,6 +27,12 @@
     {% endblock%}
     <script>
         document.addEventListener("DOMContentLoaded", getDetails())
+        document.getElementById("logoText").addEventListener("click", function() {
+            user = window.location.pathname.split("/").pop();
+            newRoute = "/home/" + user;
+            window.location = newRoute;
+        });
+
         function getDetails() {
     // Fills in the details in the HTML page with database info
             user = window.location.pathname.split("/").pop()
