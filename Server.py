@@ -189,7 +189,7 @@ def updateMood(user):
     if request.method == 'GET':
         return render_template("moodChecker.html",user=user)
     if request.method == 'POST':
-        mood = int(request.form.get("slider"))
+        mood = int(request.form.get("moodSlider"))
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
