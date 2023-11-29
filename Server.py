@@ -471,24 +471,24 @@ def jls_extract_def():
 
 def quizSearch(user):
     if request.method =='GET':
-        return render_template('quizSearch.html')
+        return render_template('QuizSearch.html',user=user)
     if request.method =='POST':
         try:
             quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
             conn = sqlite3.connect(QUIZLISTDATABASE)
             cur = conn.cursor()
+            print(user)
             cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
-            userID = cur.fetchall()
+            userID = cur.fetchone()[0]
+            print(userID)
             cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
             QuizHistory = cur.fetchall()
-            print(QuizHistory)
-		# accepts both list[] or tuple() list mutable tuple not-mutable
+            QuizzesPlayed = str(len(QuizHistory))
+            return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory)
         except:
-            print('there was an error', data)
-            conn.close()
-        finally:
-            conn.close()
-            return str(data)
+            print('there was an error')
+        conn.close()
+        return "error"
         
 if __name__ == "__main__":
     app.run(debug=True)
