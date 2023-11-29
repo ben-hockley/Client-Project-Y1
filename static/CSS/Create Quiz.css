@@ -1,8 +1,24 @@
 body {
-    background-color: #68bbff; /* For browsers that do not support gradients */
-    background-image: linear-gradient(to bottom right, #68bbff, #02467d);
+  padding: 0%;  
+}
 
-  }
+#bannerImage {
+  width: 100%;
+  display: flex;
+}
+.banner {
+  position:relative;
+  text-align: left;
+  color: black;
+  font-size: large;
+}
+#Mid-Centre {
+  background-color: rgba(128, 128, 128, 0.5);
+  padding-right: 10px;
+  padding-left: 10px;
+  position: absolute;
+  bottom: 40%;
+}
 #CreateSect {
     margin: 20px;
     margin-bottom: 0;
@@ -46,7 +62,7 @@ body {
 .MakeQuiz {
     background-color: white;
     margin: 25%;
-    margin-top: 5%;
+    margin-top: -20%;
     border-radius: 25px;
     box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
 }
@@ -79,85 +95,14 @@ body {
     background:#0066b9;
 }
 
-
-/* https://codepen.io/t_afif/pen/bGooZmq */
-#Nothing {
-    --border: 5px;    /* the border width */
-    --slant: 0.7em;   /* control the slanted corners */
-    --color: #838383; /* the color */
-    padding: 0.4em 1.2em;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--color);
-    background: 
-       linear-gradient(to bottom left,var(--color)  50%,#0000 50.1%) top right,
-       linear-gradient(to top   right,var(--color)  50%,#0000 50.1%) bottom left;
-    background-size: calc(var(--slant) + 1.3*var(--border)) calc(var(--slant) + 1.3*var(--border));
-    background-repeat: no-repeat;
-    box-shadow:
-      0 0 0 200px inset var(--s,#0000),
-      0 0 0 var(--border) inset var(--color);
-    clip-path: 
-        polygon(0 0, calc(100% - var(--slant)) 0, 100% var(--slant),
-                100% 100%, var(--slant) 100%,0 calc(100% - var(--slant))
-               );
-    transition: color var(--t,0.3s), background-size 0.3s;
-  }
- #Nothing:focus-visible {
-    outline-offset: calc(-1*var(--border));
-    outline: var(--border) solid #000c;
-    clip-path: none;
-    background-size: 0 0;
-  }
-#Nothing:hover, button:active{
-    background-size: 100% 100%;
-    color: #fff;
-    --t: 0.2s 0.1s;
-  }
-#Nothing :active {
-    --s: #0005;
-    transition: none;
-  }
-
-
-
-#fancy {
-    --border: 5px;    /* the border width */
-    --slant: 0.7em;   /* control the slanted corners */
-    --color: #0076d6; /* the color */
-    padding: 0.4em 1.2em;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--color);
-    background: 
-       linear-gradient(to bottom left,var(--color)  50%,#0000 50.1%) top right,
-       linear-gradient(to top   right,var(--color)  50%,#0000 50.1%) bottom left;
-    background-size: calc(var(--slant) + 1.3*var(--border)) calc(var(--slant) + 1.3*var(--border));
-    background-repeat: no-repeat;
-    box-shadow:
-      0 0 0 200px inset var(--s,#0000),
-      0 0 0 var(--border) inset var(--color);
-    clip-path: 
-        polygon(0 0, calc(100% - var(--slant)) 0, 100% var(--slant),
-                100% 100%, var(--slant) 100%,0 calc(100% - var(--slant))
-               );
-    transition: color var(--t,0.3s), background-size 0.3s;
-  }
- #fancy:focus-visible {
-    outline-offset: calc(-1*var(--border));
-    outline: var(--border) solid #000c;
-    clip-path: none;
-    background-size: 0 0;
-  }
- #fancy:hover, button:active{
-    background-size: 100% 100%;
-    color: #fff;
-    --t: 0.2s 0.1s;
-  }
-#fancy :active {
-    --s: #0005;
-    transition: none;
-  }
-/* https://codepen.io/t_afif/pen/bGooZmq */
+#fancy{
+  background-color: #028844;
+  padding: 5px;
+  height: 40px;
+  width: 120px;
+  margin-left: 1%;
+  margin-top: 0;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
