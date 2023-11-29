@@ -1,25 +1,23 @@
-<DOCTYPE html>
-<html>
-    <header>
-        <link rel="stylesheet" href="static/CSS/Create Quiz.css">
-        <section class="banner">
-            <img id="bannerImage" src="static/img/CreateQuizBanner.png">
-            <section id="Mid-Centre">
-                <h1>Create Quiz</h1>
-                <p>Make your own Quizes to test your staff</p>
-            </section>
+{%extends 'mainTemplate.html'%}
+
+{% block linkBlock%}
+    <link rel="stylesheet" href="static/CSS/Create Quiz.css">
+{% endblock%}
+{% block head%}
+    <section class="banner" id="Mid-Centre">
+        <h1>Create Quiz</h1>
+        <p>Make your own Quizes to test your staff</p>
+    </section>
+{% endblock%}
+{% block mainBody%}
+    <form class="MakeQuiz" method="POST" onsubmit="return False">
+        <section id="CreateSect">
+            <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
         </section>
-    </header>
-    <body>
-        <form class="MakeQuiz" method="POST" onsubmit="return False">
-            <section id="CreateSect">
-                <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
-            </section>
-            <br>
-            <section id="SubmitSect">
-                <button class="BtnSub" id="Nothing" type="submit">Submit</button>
-            </section>
-        </form>
-    </body>
+        <br>
+        <section id="SubmitSect">
+            <button class="BtnSub" id="Nothing" type="submit">Submit</button>
+        </section>
+    </form>
     <script src="static/JS/Create Quiz.js"></script>
-</html>
+{% endblock%}

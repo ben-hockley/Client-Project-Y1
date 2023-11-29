@@ -1,24 +1,27 @@
 body {
+  background-image: url("/static/img/CreateQuizBanner.png");
   padding: 0%;  
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top;
 }
 
-#bannerImage {
-  width: 100%;
-  display: flex;
-}
 .banner {
+  z-index: -1;
   position:relative;
   text-align: left;
   color: black;
-  font-size: large;
-}
-#Mid-Centre {
+  font-size: x-large;
   background-color: rgba(128, 128, 128, 0.5);
   padding-right: 10px;
   padding-left: 10px;
   position: absolute;
   bottom: 40%;
+  margin-left: -1%;
+  margin-bottom: 5%;
 }
+
+
 #CreateSect {
     margin: 20px;
     margin-bottom: 0;
@@ -62,7 +65,7 @@ body {
 .MakeQuiz {
     background-color: white;
     margin: 25%;
-    margin-top: -20%;
+    margin-top: 30%;
     border-radius: 25px;
     box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
 }
@@ -95,14 +98,15 @@ body {
     background:#0066b9;
 }
 
-#fancy{
+#Fancy{
   background-color: #028844;
   padding: 5px;
   height: 40px;
   width: 120px;
-  margin-left: 1%;
-  margin-top: 0;
   border: none;
   color: white;
   font-family: Arial, Helvetica, sans-serif;
+}
+#Fancy:hover{
+  background-color: #005f2f;
 }
