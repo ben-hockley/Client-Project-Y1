@@ -1,5 +1,5 @@
 import os
-from flask import Flask, redirect, request,render_template
+from flask import Flask, redirect, request, render_template, url_for
 import json
 import sqlite3
 import hashlib
@@ -189,10 +189,10 @@ def updateMood(user):
 
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
-    QuizID="50"
-    UserID="21"
-    if request.method == 'GET':
-        return render_template('User End.html', data=getQuestion(QuizID))
+    QuizID = request.args.get('QuizID')
+    UserID = request.args.get('UserID')
+    # if request.method == 'GET':
+    return render_template('User End.html', data=getQuestion(QuizID))
     if request.method == 'POST':
         Points = request.form.get("POINTS")
         print(Points)
@@ -400,9 +400,6 @@ def updateLastname(user):
             conn.close()
         return redirect("/accountDetails/" + user)
 
-
-
-
 @app.route("/")
 def redirectLogin():
     return redirect('/login')
@@ -411,9 +408,13 @@ def redirectLogin():
 def returnLogin(): 
     return render_template('Log on.html')
 
-
 @app.route("/loginFunction", methods=['POST'])
 def logonFunction():
+    """
+    Funtion that takes the inputs from Log in form and checks to see if the user exists
+    and that the password is correct for that user. If so then it redirects the user to
+    the homepage using their details.
+    """
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
@@ -450,6 +451,10 @@ def logonFunction():
 
 @app.route("/home/<user>")
 def returnHome(user):
+    """
+    Function to load the home page using details passed through from the login function.
+    User is passed through to source the details from the database and use within the HTML. 
+    """
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
@@ -470,8 +475,47 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
+@app.route("/joinQuizFunction", methods=['POST'])
+def findQuizKey():
+    """
+    Function that gets the Key from the input and checks to see if it relates to a Quiz Table
+    """
+    if request.method == 'POST':
+        #Take the Input from the form
+        joinKey = request.form.get("joinCode")
+        print(joinKey)
 
-        
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM Quiz WHERE QuizKey = ?",(joinKey,))
+            conn.commit()
+            Quiz = cur.fetchall()
+            cur.execute("SELECT * FROM User WHERE UserName = ?",(user,))
+            conn.commit()
+            User = cur.fetchall()
+            cur.close()
+            
+            QuizID = Quiz[0][0]
+            QuizName = Quiz[0][1]
+            UserID = User[0][0]
+            print(QuizID)
+            print(QuizName)
+            print(UserID)
+            
+            if QuizID:
+                return redirect(url_for('userEnd', QuizID=QuizID, UserID=UserID))
+
+            else:
+                errormessage = "Quiz not found"
+                print(errormessage)
+                return redirect('/')
+
+        except Exception as e:
+            print(e)
+            print("Error accessing Database")
+            return redirect('/')
+
 if __name__ == "__main__":
     app.run(debug=True)
 
