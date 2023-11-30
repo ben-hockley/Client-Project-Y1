@@ -5,6 +5,7 @@
 {% endblock%}
 
 {% block mainBlock%}
+<title>L&G Quiz</title>
 <form action="/accountDetails/{{user}}" method="GET">
 <p><button id="accountLink" type="submit">Account Details</button></p>
 </form>
@@ -22,9 +23,9 @@
     </form>
 </section>
 <section class="quizPathBox">
-    <form id="joinForm" method="post" action="/userEnd">
+    <form id="joinForm" method="POST" action="/joinQuizFunction">
         <input type="text" id="joinCode" name="joinCode" required placeholder="####">
-        <button id="joinButton" type="button" disabled>JOIN</button>
+        <button id="joinButton" type="submit" disabled>JOIN</button>
     </form>
 </section>
 </div>
