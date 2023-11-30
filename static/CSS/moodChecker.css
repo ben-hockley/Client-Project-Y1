@@ -1,0 +1,36 @@
+/* https://codingartistweb.com/2019/11/mood-slider-custom-range-slider-with-css/ */
+body {
+    margin:0;
+    padding:0;
+}
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.slider, #moodForm {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:100vw;
+}
+input[type = "range"] {
+    width: 90vw;
+    height: 6px;
+    border-radius: 6px;
+    outline: none;
+    margin-top: 60px;
+    padding:0;
+}
+button {
+    border: none;
+    background-color: #028844;
+    padding: 10px;
+    color:white;
+    margin-top:20px;
+}
+#emoji {
+    font-size: 10vw;
+    margin:0;
+    padding:0;
+}

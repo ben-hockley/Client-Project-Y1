@@ -1,9 +1,11 @@
 {% extends 'mainTemplate.html'%}
 {% block mainBlock%}
+<link rel="stylesheet" href="/static/CSS/AccountDetailss.css">
+<h1>Account details</h1>
 {% endblock%}
 
 {% block mainBody%}
-<section title="details">
+<section title="details" id="details">
     <p>First name:</p>
     <section id="firstNameData" label="first name">
     <p id="firstName">Undefined</p>
@@ -16,6 +18,9 @@
     <section id="usernameData" label="username">
     <p id="username">Undefined</p>
     </section>
+    <form action="/">
+        <button type="submit">Log out</button>
+    </form>
 </section>
-<script src="/static/JS/Account____Details.js"></script>
+<script src="/static/JS/AccountDetailss.js"></script>
 {% endblock%}
