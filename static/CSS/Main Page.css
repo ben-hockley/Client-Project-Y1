@@ -35,6 +35,7 @@ form p {
 }
 .inputBoxs {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
     margin-left: 25%;
     margin-right: 25%;
