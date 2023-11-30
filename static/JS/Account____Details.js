@@ -124,3 +124,9 @@ function getDetails() {
     };
     xhttp.send();
 }
+
+//Ben's Code
+
+document.getElementById("getHistory").addEventListener("click", historyLink);
+
+function historyLink():
