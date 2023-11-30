@@ -469,7 +469,7 @@ def jls_extract_def():
 
 def quizSearch(user):
     if request.method =='GET':
-        return render_template('QuizSearch.html',user=user)
+        return render_template('generalPageStyled.html',user=user)
     if request.method =='POST':
         try:
             quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post

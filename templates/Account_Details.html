@@ -1,7 +1,8 @@
 {% extends 'mainTemplate.html'%}
 {% block mainBlock%}
-<link rel="stylesheet" href="/static/CSS/Account__Details.css">
-<h1>Account details</h1>
+<form id='myForm' target='/QuizHistory/{{user}}' method = 'get'>
+    <button type = "submit" class="submitcss"> View Quiz History </button>
+  </form>
 {% endblock%}
 
 {% block mainBody%}
@@ -17,6 +18,9 @@
     <p>Username:</p>
     <section id="usernameData" label="username">
     <p id="username">Undefined</p>
+    </section>
+    <section>
+        <a href="http://127.0.0.1:5000/QuizHistory/McFreddie" target="_blank">View quiz History</a> <!--For testing, not final-->
     </section>
 </section>
 <script src="/static/JS/Account____Details.js"></script>
