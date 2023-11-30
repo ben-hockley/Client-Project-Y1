@@ -5,16 +5,10 @@
 {% block mainBlock%}
 {% endblock%}
 {% block mainBody%}
-    <section class="Select">
-            <section class = "SelectSection">
-                <span type="button" id = "TEXT">Enter Quiz Name</span>
-            </section>
-            <br>
-            <form action = "/hostEnd" method="POST" class = "Inputs" id="Inputs">
-                <input id="QuizName" name="QuizName" type="text">
-                <button id="SubmitButton" type="submit">→</button>
-            </form>
-        </section>
+    <section class = "SelectSection">
+        <h2 id = "TEXT">Submissions</h2>
+        <p>View the results submitted by your staff</p>
+    </section>
         <p id="DATA">{{data}}</p> 
 
         <section class="QuizList">

@@ -4,20 +4,8 @@ data = data.replace(/'/g, '"');
 data = data.replace(/\(/g, '[').replace(/\)/g, ']');
 data = JSON.parse(data);
 if (data.length!=0) {
-    HideStuff();
     data = FindUserMaxSore(data);
     MakeChart(data);
-}
-function HideStuff(){
-    const text = document.getElementById("TEXT");
-    text.textContent="Scores";
-    text.setAttribute("onclick", "Reload()")
-    const Inputs = document.getElementById("Inputs");
-    Inputs.childNodes.forEach(element => {
-        if(element.id!=null){
-            element.style.visibility="hidden";
-        }
-    });
 }
 function FindUserMaxSore(OldData){
     var data = [];
@@ -71,7 +59,4 @@ function MakeChart(data){
             legend: {display:false}
         }
     });
-}
-function Reload(){
-    location.href = 'http://127.0.0.1:5000/hostEnd?';
 }

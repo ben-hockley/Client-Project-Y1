@@ -7,7 +7,8 @@ body{
   background-position: top;
 }
 .SelectSection{
-  z-index: -1;
+  margin-top: 10%;
+  width: 32%;
   position:relative;
   text-align: left;
   color: black;
@@ -15,10 +16,13 @@ body{
   background-color: rgba(128, 128, 128, 0.5);
   padding-right: 10px;
   padding-left: 10px;
-  position: absolute;
-} 
+  left: 0;
+}
+.SelectSection p{
+  visibility: visible;
+}
 
-.Select {
+.Select{
   margin: 12%;
   margin-top: 5%;
   margin-bottom: 0;
@@ -34,7 +38,8 @@ body{
   display: flex;
   flex-direction: column;
   margin:30%;
-  margin-top: 10%;
+  margin-bottom: 5%;
+  margin-top: 0;
   background-color: white;
   box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
   border-radius: 25px;
