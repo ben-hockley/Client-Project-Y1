@@ -1,14 +1,21 @@
+body{
+  padding:0;
+  margin: 0;
+  background-image: url('/static/img/Quiz.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top;
+}
 .SelectSection{
-  text-align: center;
-  width: auto;
-  height: auto;
-  font-size: 60px;
-  font-family: 'Lucida Handwriting Std', sans-serif;
-  box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
-  background-color: white;
+  z-index: -1;
+  position:relative;
+  text-align: left;
   color: black;
-  border-radius: 25px;
-  border: 2px solid black;
+  font-size: x-large;
+  background-color: rgba(128, 128, 128, 0.5);
+  padding-right: 10px;
+  padding-left: 10px;
+  position: absolute;
 } 
 
 .Select {
@@ -26,6 +33,12 @@
   justify-content: space-evenly;
   display: flex;
   flex-direction: column;
+  margin:30%;
+  margin-top: 10%;
+  background-color: white;
+  box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+  border-radius: 25px;
+  padding: 2%;
 } 
 
 .Inputs input, button{
@@ -40,6 +53,9 @@
   border-radius: 25px;
 }
 
-#DATA {
+body p{
   visibility: hidden;
+}
+.navbar-legal-and-general p{
+  visibility: visible;
 }

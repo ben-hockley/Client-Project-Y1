@@ -50,6 +50,7 @@ function MakeChart(data){
     });
     new Chart("myChart", {
         type: "bar",
+        id: "Chart",
         data: {
             labels: xValues,
             datasets: [{
