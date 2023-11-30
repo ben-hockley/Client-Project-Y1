@@ -161,7 +161,49 @@ def getQuestion(QuizID):
             questions.append(question)
     return questions
 
+def getMoodEmoji(mood):
+    moodlist = ["&#128549;","&#128577;","&#128528;","&#128578;","&#128512;"]
+    return moodlist[mood]
 
+def getMood(user):
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("SELECT Mood FROM User WHERE Username = ?", (user,))
+        mood = cur.fetchone()[0]
+        mood = getMoodEmoji(mood)
+    except Exception as e:
+        conn.rollback()
+        print(e)
+        print("error retrieving mood")
+        mood = None
+    cur.close()
+    return mood
+
+@app.route("/moodChecker/<user>",methods=['GET','POST'])
+def updateMood(user):
+    """
+    Function takes in the user's input from the slider and updates the database,
+    before returning the home page
+    """
+    if request.method == 'GET':
+        return render_template("moodChecker.html",user=user)
+    if request.method == 'POST':
+        mood = int(request.form.get("moodSlider"))
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            UPDATE User SET Mood = ? WHERE Username = ?", (mood, user)\
+            )
+            conn.commit()
+        except Exception as e:
+            print(e)
+            print("error during update")
+            conn.rollback()
+            return redirect("/moodChecker/" + user)
+        conn.close()
+        return redirect("/home/" + user)
 
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
@@ -206,9 +248,11 @@ def updateInfo(user):
         conn = sqlite3.connect('quizDatabase.db')
         cur = conn.cursor()
         cur.execute("\
-        SELECT FirstName, SurName, Username FROM User WHERE Username = ?",([user]))
-        details = cur.fetchall()
-        newList = json.dumps(details[0])
+        SELECT FirstName, SurName, Username, Mood FROM User WHERE Username = ?",([user]))
+        details = cur.fetchall()[0]
+        firstname, surname, username, mood = details[0], details[1], details[2], details[3]
+        details = [firstname, surname, username, getMoodEmoji(mood)]
+        newList = json.dumps(details)
         conn.close()
         return newList
     except Exception as e:
@@ -438,14 +482,14 @@ def returnHome(user):
         account = cur.fetchone()
         cur.close()
         print('Welcome,', account[0], account[1] )
-
+        mood = getMood(user)
         if account:
             firstName, surname = account[0], account[1]
         else:
             firstName, surname = user, ""
             print('Error finding User')
 
-        return render_template("Main Page.html", user=user, firstName=firstName, surname=surname)
+        return render_template("Main Page.html", user=user, firstName=firstName, surname=surname, mood=mood)
     except Exception as e:
         print(e)
         print("Error accessing database")
