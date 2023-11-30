@@ -84,6 +84,7 @@ button[disabled]{
 }
 .createQuizButtonSection{
     background-color: white;
+    padding-bottom: 300px;
 }
 .createQuizButton{
     display: inline;
