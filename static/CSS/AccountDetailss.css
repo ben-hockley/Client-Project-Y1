@@ -19,7 +19,7 @@ h1 {
 button, input[type=text] {
     width:30px;
 }
-#usernameData, #lastNameData, #firstNameData {
+#usernameData, #lastNameData, #firstNameData, #linkToQuizHistory {
     padding:0;
     margin-top: 0;
     display:flex;
