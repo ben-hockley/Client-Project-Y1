@@ -522,25 +522,22 @@ def jls_extract_def():
 @app.route("/QuizHistory/<user>", methods = ['GET','POST'])
 
 def quizSearch(user):
-    if request.method =='GET':
-        return render_template('generalPageStyled.html',user=user)
-    if request.method =='POST':
-        try:
-            quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
-            conn = sqlite3.connect(QUIZLISTDATABASE)
-            cur = conn.cursor()
-            print(user)
-            cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
-            userID = cur.fetchone()[0]
-            print(userID)
-            cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
-            QuizHistory = cur.fetchall()
-            QuizzesPlayed = str(len(QuizHistory))
-            return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory)
-        except:
-            print('there was an error')
-        conn.close()
-        return "error"
+    try:
+        quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
+        conn = sqlite3.connect(QUIZLISTDATABASE)
+        cur = conn.cursor()
+        print(user)
+        cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
+        userID = cur.fetchone()[0]
+        print(userID)
+        cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
+        QuizHistory = cur.fetchall()
+        QuizzesPlayed = str(len(QuizHistory))
+        return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory)
+    except:
+        print('there was an error')
+    conn.close()
+    return "error"
         
 @app.route("/joinQuizFunction", methods=['POST'])
 def findQuizKey():
