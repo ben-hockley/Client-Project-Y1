@@ -1,10 +1,11 @@
 import os
-from flask import Flask, redirect, request, render_template, url_for
+from flask import Flask, redirect, request, render_template, url_for, session
 import json
 import sqlite3
 import hashlib
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
 ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
@@ -163,12 +164,47 @@ def getQuestion(QuizID):
 
 
 
-@app.route("/userEnd", methods=['GET', 'POST'])
-def userEnd():
+# @app.route("/userEnd", methods=['GET', 'POST'])
+# def userEnd():
+#     QuizID = request.args.get('QuizID')
+#     UserID = request.args.get('UserID')
+#     # if request.method == 'GET':
+#     return render_template('User End.html', data=getQuestion(QuizID))
+#     if request.method == 'POST':
+#         Points = request.form.get("POINTS")
+#         print(Points)
+#         msg=""
+#         try:
+#             conn = sqlite3.connect('quizDatabase.db')
+#             cur = conn.cursor()
+#             cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
+#             data = cur.fetchall()
+#             conn.commit()
+#         except Exception as e:
+#             conn.rollback()
+#         return redirect('/home/' + user)
+
+@app.route("/initiateQuiz", methods=['GET', 'POST'])
+def initiateQuiz():
+
+    Quiz = session.get('Quiz')
+    User = session.get('User')
+    QuizID = Quiz[0][0]
+    quizname = Quiz[0][1]
+    UserID = User[0][0]
+    user = User[0][1]
+
+    return redirect(url_for('userEnd', QuizID=QuizID, UserID=UserID, quizname=quizname, user=user))
+
+@app.route("/Quiz/<quizname>/<user>", methods=['GET', 'POST'])
+def userEnd(quizname, user):
     QuizID = request.args.get('QuizID')
     UserID = request.args.get('UserID')
-    # if request.method == 'GET':
-    return render_template('User End.html', data=getQuestion(QuizID))
+    quizname = request.args.get('quizname')
+    user = request.args.get('user')
+
+    if request.method == 'GET':
+        return render_template('User End.html', quizname=quizname, user=user, data=getQuestion(QuizID))
     if request.method == 'POST':
         Points = request.form.get("POINTS")
         print(Points)
@@ -181,7 +217,7 @@ def userEnd():
             conn.commit()
         except Exception as e:
             conn.rollback()
-        return render_template('Main Page.html')
+        return redirect('/home/' + user)
 
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
@@ -471,16 +507,18 @@ def findQuizKey():
             conn.commit()
             User = cur.fetchall()
             cur.close()
+
+            print(Quiz)
+            print(User)
+            print(type(Quiz))
+            print(type(User))
             
-            QuizID = Quiz[0][0]
-            QuizName = Quiz[0][1]
-            UserID = User[0][0]
-            print(QuizID)
-            print(QuizName)
-            print(UserID)
+            print('Initiating Quiz...')
             
-            if QuizID:
-                return redirect(url_for('userEnd', QuizID=QuizID, UserID=UserID))
+            if Quiz:
+                session['Quiz'] = Quiz
+                session['User'] = User
+                return redirect('/initiateQuiz')
 
             else:
                 errormessage = "Quiz not found"

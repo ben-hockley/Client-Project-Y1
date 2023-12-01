@@ -76,5 +76,11 @@ function isItCorrect(event) {
     Setup();
 }
 function Submit(){
-
+    window.location.replace('/home/' + user)
+    
+    // const answerSection = document.getElementById("AnswerSection");
+    // var displayMessage = document.createElement("p");
+    // displayMessage.id = "quizEndPopup";
+    // displayMessage.textContent = 'Your results have been submitted. You can review your results in your account details.';
+    // answerSection.appendChild(displayMessage);
 }
