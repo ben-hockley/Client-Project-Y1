@@ -32,6 +32,18 @@ def hostEnd():
             print(DATA)
         return render_template('Host End.html', data=DATA)
 
+def createRandomCode():
+    CharList = []
+    QuizKey = ""
+    for i in range(65, 91):
+        CharList.append(chr(i))
+        CharList.append(chr(i + 32))
+    for i in range(10):
+        CharList.append(str(i))
+    for i in range(4):
+        QuizKey+=str(CharList[random.randint(0, len(CharList))])
+    return QuizKey
+
 @app.route("/createQuiz", methods=['GET', 'POST'])
 def returnFirst():
     if request.method == 'GET':
@@ -73,15 +85,7 @@ def returnFirst():
                 points+=1
             msg = ""
             Last_Quiz=""   
-            CharList = []
-            QuizKey = ""
-            for i in range(65, 91):
-                CharList.append(chr(i))
-                CharList.append(chr(i + 32))
-            for i in range(10):
-                CharList.append(str(i))
-            for i in range(4):
-                QuizKey+=str(CharList[random.randint(0, len(CharList))])
+            QuizKey = createRandomCode()
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
@@ -429,6 +433,17 @@ def updateLastname(user):
             print(message)
             conn.close()
         return redirect("/accountDetails/" + user)
+
+@app.route("/forgotPassword", methods=['GET', 'POST'])
+def redirectForgotPassword():
+    if request.method == 'GET':
+        return render_template('forgotPassword.html')
+    if request.method == 'POST':
+        email = request.form.get("email")
+        print(email)
+        emailCode = createRandomCode()
+        print(emailCode)
+        return redirect("/")
 
 @app.route("/")
 def redirectLogin():
