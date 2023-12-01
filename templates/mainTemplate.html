@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
     <header>
-        <link rel="stylesheet" href="/static/CSS/navBar.css">
+        <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
         {% block linkBlock%}
         {% endblock%}
         <nav class="navbar-legal-and-general">
-            <p class="userDisplay">{{ firstName }} {{ surname }}</p>
-            <a class="navbar-logo" href="Main Page.html">
+            <div class="userDisplay"><p id="accountDetails"></p><p id="moodChecker"></p></div>
+            <a class="navbar-logo" id="navbar-logo" href="Main Page.html">
               <img src="/static/img/L&G_Logo.svg" width="50" height="50" alt="Legal & General Logo">
             </a>
-            <p class="logoText">Legal & General</p>
+            <p class="logoText" id="logoText">Legal & General</p>
         </nav>
     </header>
     <head>
@@ -25,6 +25,10 @@
     </p>
     {% block mainBody%}
     {% endblock%}
+<<<<<<< HEAD
+=======
+    <script src="/static/JS/navBar.js"></script>
+>>>>>>> 64e5cc1eca13b341138a5e829b550636307bb36d
     </body>
     <footer>
 
