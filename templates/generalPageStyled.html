@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+{% extends 'mainTemplate.html'%}
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/Quiz History.css">
+{% endblock%}
+{% block mainBody%}
+<header>
+  <h1 class="welcomeMessage">Quiz History</h1>
+</header>
+<section>
+  <p>Here you can view a record of your past quizzes.</p>
+</section>
+{% endblock%}
+{%block mainBlock%}
+<form id='myForm' action='/QuizHistory/{{user}}' method = 'post'>
+  <button type = "submit" class="submitcss"> View Quiz History </button>
+</form>
+{%endblock%}
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/js/bootstrap.min.js"></script>
+  </body>
+</html>
