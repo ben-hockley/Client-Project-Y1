@@ -181,7 +181,6 @@ def getMood(user):
         cur = conn.cursor()
         cur.execute("SELECT Mood FROM User WHERE Username = ?", (user,))
         mood = cur.fetchone()[0]
-        mood = getMoodEmoji(mood)
     except Exception as e:
         conn.rollback()
         print(e)
@@ -214,6 +213,70 @@ def updateMood(user):
             return redirect("/moodChecker/" + user)
         conn.close()
         return redirect("/home/" + user)
+
+@app.route("/moodBefore/<user>", methods=['GET', 'POST'])
+def moodBefore(user):
+    if request.method == 'GET':
+        return render_template('moodBefore.html', user=user)
+    if request.method == 'POST':
+        mood = int(request.form.get("moodSlider"))
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            UPDATE User SET Mood = ? WHERE Username = ?", (mood, user)\
+            )
+            conn.commit()
+        except Exception as e:
+            print(e)
+            print("error during update")
+            conn.rollback()
+            return redirect("/moodChecker/" + user)
+        conn.close()
+        return redirect("/home/" + user)
+
+def getUserID(username):
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT UserID FROM User WHERE Username = ?", (username,))
+        userID = cur.fetchone()[0]
+        print(userID)
+        conn.close()
+        return userID
+    except Exception as e:
+        print(e)
+        conn.close()
+        return None
+
+@app.route("/moodAfter/<user>", methods=['GET', 'POST'])
+def moodAfter(user):
+    if request.method == 'GET':
+        return render_template('moodAfter.html',user=user)
+    if request.method == 'POST':
+        moodAfter = int(request.form.get("moodSlider"))
+        quizID = 213
+        userID = getUserID(user)
+        moodBefore = getMood(user)
+        print(moodAfter, type(moodAfter))
+        print(quizID, type(quizID))
+        print(userID, type(userID))
+        print(moodBefore, type(moodBefore))
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            INSERT INTO Mood ('QuizID', 'UserID', 'MoodBefore', 'MoodAfter') VALUES (?,?,?,?)", \
+            (quizID, userID, moodBefore, moodAfter))
+            conn.commit()
+        except Exception as e:
+            print(e)
+            conn.rollback()
+        conn.close()
+        return redirect("/home/" + user)
+
+        
 
 @app.route("/userEnd", methods=['GET', 'POST'])
 def userEnd():
@@ -494,6 +557,9 @@ def returnHome(user):
         cur.close()
         print('Welcome,', account[0], account[1] )
         mood = getMood(user)
+        print(mood)
+        print(type(mood))
+        mood = getMoodEmoji(mood)
         if account:
             firstName, surname = account[0], account[1]
         else:
