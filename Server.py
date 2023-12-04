@@ -259,10 +259,6 @@ def moodAfter(user):
         quizID = 213
         userID = getUserID(user)
         moodBefore = getMood(user)
-        print(moodAfter, type(moodAfter))
-        print(quizID, type(quizID))
-        print(userID, type(userID))
-        print(moodBefore, type(moodBefore))
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
@@ -557,8 +553,6 @@ def returnHome(user):
         cur.close()
         print('Welcome,', account[0], account[1] )
         mood = getMood(user)
-        print(mood)
-        print(type(mood))
         mood = getMoodEmoji(mood)
         if account:
             firstName, surname = account[0], account[1]
