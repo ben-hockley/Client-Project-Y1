@@ -172,10 +172,17 @@ def getQuestion(QuizID):
     return questions
 
 def getMoodEmoji(mood):
+    """
+    Returns the code to display the mood on the page
+    when the mood integer is passed as a parameter
+    """
     moodlist = ["&#128549;","&#128577;","&#128528;","&#128578;","&#128512;"]
     return moodlist[mood]
 
 def getMood(user):
+    """
+    Returns the integer which represents the user's mood within the database
+    """
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
@@ -236,15 +243,36 @@ def moodBefore(user):
         return redirect("/home/" + user)
 
 def getUserID(username):
+    """
+    Returns the userID of the username passed in as a parameter
+    """
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute("\
         SELECT UserID FROM User WHERE Username = ?", (username,))
         userID = cur.fetchone()[0]
-        print(userID)
         conn.close()
         return userID
+    except Exception as e:
+        print(e)
+        conn.close()
+        return None
+
+def getQuizID(user):
+    """
+    Returns the most recently played quiz's ID for the username given as a parameter
+    Returns None if they haven't played any quizzes
+    """
+    userID = getUserID(user)
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT QuizID FROM Players WHERE UserID = ?", (userID,))
+        quizID = cur.fetchone()[0]
+        conn.close()
+        return quizID
     except Exception as e:
         print(e)
         conn.close()
@@ -256,7 +284,7 @@ def moodAfter(user):
         return render_template('moodAfter.html',user=user)
     if request.method == 'POST':
         moodAfter = int(request.form.get("moodSlider"))
-        quizID = 213
+        quizID = getQuizID(user)
         userID = getUserID(user)
         moodBefore = getMood(user)
         try:
