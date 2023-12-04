@@ -1,0 +1,22 @@
+{% extends 'mainTemplate.html'%}
+{% block linkBlock%}
+<style>
+    h1 {
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+    }
+</style>
+{% endblock%}
+{% block mainBlock%}
+<h1>View your mood over Previous Quizzes</h1>
+{% endblock%}
+{% block mainBody%}
+<p id="updateMe">Hi</p>
+<script>
+    document.addEventListener('DOMContentLoaded', updateQuizMoods)
+
+    function updateQuizMoods() {
+        document.getElementById("updateMe").innerHTML = "Yeah I'm cool";
+    }
+</script>
+{% endblock%}

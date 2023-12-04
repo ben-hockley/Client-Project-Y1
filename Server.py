@@ -284,7 +284,8 @@ def moodAfter(user):
         return render_template('moodAfter.html',user=user)
     if request.method == 'POST':
         moodAfter = int(request.form.get("moodSlider"))
-        quizID = getQuizID(user)
+        # quizID = getQuizID(user)
+        quizID = 50
         userID = getUserID(user)
         moodBefore = getMood(user)
         try:
@@ -300,6 +301,40 @@ def moodAfter(user):
         conn.close()
         return redirect("/home/" + user)
 
+@app.route("/viewMoods/<user>", methods=['GET', 'POST'])
+def viewMoods(user):
+    if request.method == 'GET':
+        return render_template("viewMoods.html")
+
+@app.route("/updateQuizMood/<user>", methods=['GET', 'POST'])
+def updateQuizMood(user):
+    """
+    Retrieves all the quiz names and moods from the database and returns them in a json list
+    """
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT Quizname, MoodBefore, MoodAfter FROM Mood\
+            LEFT JOIN Quiz USING(QuizID)\
+            WHERE Mood.UserID = 21")
+            bigList = cur.fetchall()
+            conn.close()
+            newList = []
+            for x in range(len(bigList)):
+                subList = []
+                for y in range(len(bigList[x])):
+                    subList.append(bigList[x][y])
+                newList.append(subList)
+            jsonList = json.dumps(newList)
+            return jsonList
+        except Exception as e:
+            print(e)
+            print("hi")
+            conn.close()
+            return None
         
 
 @app.route("/userEnd", methods=['GET', 'POST'])
