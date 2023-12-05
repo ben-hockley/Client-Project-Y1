@@ -130,6 +130,6 @@ function getDetails() {
 function redirectHistory() {
     user = window.location.pathname.split("/").pop();
     console.log(user);
-    newLink = "http://127.0.0.1:5000/QuizHistory/" + user
-    window.location.href = newLink
+    newLink = "/viewMoods/" + user;
+    window.location.href = newLink;
 };
