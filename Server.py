@@ -321,8 +321,6 @@ def updateQuizMood(user):
     """
     if request.method == 'GET':
         userID = getUserID(user)
-        print(userID)
-        print(type(userID))
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
@@ -352,11 +350,9 @@ def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
     UserID = int(UserID)
     if request.method == 'GET':
-        print(getQuestion(QuizID))
         return render_template('User End.html', data=getQuestion(QuizID), QuizID = QuizID, UserID = UserID, user = user)
     if request.method == 'POST':
         Points = request.form.get("POINTS")
-        print(Points)
         msg=""
         try:
             conn = sqlite3.connect('quizDatabase.db')
