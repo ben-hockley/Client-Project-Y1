@@ -333,7 +333,6 @@ def updateQuizMood(user):
             return jsonList
         except Exception as e:
             print(e)
-            print("hi")
             conn.close()
             return None
         
