@@ -10,7 +10,7 @@
 
 {% block mainBody%}
 <section class="loginBox">
-    <h1>LOG IN REQUIRED</h1>
+    <h1>LOG IN</h1>
     <form id="loginForm" method="post" action="/loginFunction">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -18,6 +18,7 @@
         <input type="password" id="password" name="password" required>
         <button type="submit">Login</button>
     </form><br>
+    <a href="/forgotPassword">Forgot Password</a>
     <span id="errorMessage"></span><br>
     <label for="createAccount">Don't have an account? You can create one here.</label>
     <form action="/createAccount">
