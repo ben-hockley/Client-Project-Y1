@@ -582,6 +582,10 @@ def findQuizKey():
             print("Error accessing Database")
             return redirect('/')
 
+@app.route("/forgotPassword")
+def forgotPassword():
+    return render_template("forgotPassword.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
 
