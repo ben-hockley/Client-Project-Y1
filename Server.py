@@ -270,9 +270,9 @@ def getQuizID(user):
         cur = conn.cursor()
         cur.execute("\
         SELECT QuizID FROM Players WHERE UserID = ?", (userID,))
-        quizID = cur.fetchone()[0]
+        quizID = cur.fetchall()[0]
         conn.close()
-        return quizID
+        return quizID[-1]
     except Exception as e:
         print(e)
         conn.close()
@@ -284,8 +284,7 @@ def moodAfter(user):
         return render_template('moodAfter.html',user=user)
     if request.method == 'POST':
         moodAfter = int(request.form.get("moodSlider"))
-        # quizID = getQuizID(user)
-        quizID = 50
+        quizID = getQuizID(user)
         userID = getUserID(user)
         moodBefore = getMood(user)
         try:
