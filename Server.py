@@ -13,7 +13,7 @@ user = None
 UserID = 21
 DATABASE = "quizDatabase.db"
 
-@app.route("/hostEnd", methods=['GET','POST'])
+@app.route("/hostEnd/<user>", methods=['GET','POST'])
 def hostEnd():
     if request.method =='GET':
         return render_template('Host End.html', data=[])
@@ -32,18 +32,55 @@ def hostEnd():
             print(DATA)
         return render_template('Host End.html', data=DATA)
 
-@app.route("/createQuiz", methods=['GET', 'POST'])
-def returnFirst():
+@app.route("/userEnd/<user>", methods=['GET', 'POST'])
+def userEnd():
+    QuizID = request.args.get('QuizID')
+    UserID = request.args.get('UserID')
+    # if request.method == 'GET':
+    return render_template('User End.html', data=getQuestion(QuizID))
+    if request.method == 'POST':
+
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+        conn.commit()
+        ID = cur.fetchall()[0][0]
+        conn.close()
+
+        Points = request.form.get("POINTS")
+        print(Points)
+        msg=""
+        try:
+            conn = sqlite3.connect('quizDatabase.db')
+            cur = conn.cursor()
+            cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
+            data = cur.fetchall()
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+        return render_template('Main Page.html')
+
+@app.route("/createQuiz/<user>", methods=['GET', 'POST'])
+def createQuiz(user):
     if request.method == 'GET':
         return render_template('Create Quiz.html')
     if request.method =='POST':
         QuizName = request.form.get('QuizName')
+
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+        conn.commit()
+        ID = cur.fetchall()[0][0]
+        conn.close()
+
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz WHERE QuizName = "{QuizName}"')
         conn.commit()
         Exists = cur.fetchall()
         conn.close()
+
         if Exists == []:
             keys = request.form.keys()
             print(keys)
@@ -85,7 +122,7 @@ def returnFirst():
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, "21", QuizKey))
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, ID, QuizKey))
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
@@ -126,10 +163,9 @@ def returnFirst():
                                 conn.close()
                             except Exception as e:
                                 conn.rollback()
-            return render_template('Main Page.html')
+            return redirect("/home/" + user)
         else:
             return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
-
 
 def getQuestion(QuizID):
     data=[]
@@ -214,26 +250,6 @@ def updateMood(user):
             return redirect("/moodChecker/" + user)
         conn.close()
         return redirect("/home/" + user)
-
-@app.route("/userEnd", methods=['GET', 'POST'])
-def userEnd():
-    QuizID = request.args.get('QuizID')
-    UserID = request.args.get('UserID')
-    # if request.method == 'GET':
-    return render_template('User End.html', data=getQuestion(QuizID))
-    if request.method == 'POST':
-        Points = request.form.get("POINTS")
-        print(Points)
-        msg=""
-        try:
-            conn = sqlite3.connect('quizDatabase.db')
-            cur = conn.cursor()
-            cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
-            data = cur.fetchall()
-            conn.commit()
-        except Exception as e:
-            conn.rollback()
-        return render_template('Main Page.html')
 
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
@@ -480,7 +496,6 @@ def logonFunction():
         return redirect('/login')
 
 @app.route("/home/<user>")
-
 def returnHome(user):
     """
     Function to load the home page using details passed through from the login function.
@@ -506,8 +521,6 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
-QUIZLISTDATABASE = 'quizDatabase.db'
-
 @app.route("/listQuizzes")
 def printQuiz():
     return render_template("ListQuizzes.html")
@@ -515,9 +528,6 @@ def printQuiz():
 
 def jls_extract_def():
     return 'quizName'
-
-
-
 
 @app.route("/QuizHistory/<user>", methods = ['GET','POST'])
 
@@ -582,4 +592,3 @@ def findQuizKey():
 
 if __name__ == "__main__":
     app.run(debug=True)
-

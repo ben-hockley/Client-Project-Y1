@@ -122,7 +122,7 @@ body {
 
 
 
-#fancy {
+#Fancy {
     --border: 5px;    /* the border width */
     --slant: 0.7em;   /* control the slanted corners */
     --color: #0076d6; /* the color */
@@ -145,18 +145,18 @@ body {
                );
     transition: color var(--t,0.3s), background-size 0.3s;
   }
- #fancy:focus-visible {
+ #Fancy:focus-visible {
     outline-offset: calc(-1*var(--border));
     outline: var(--border) solid #000c;
     clip-path: none;
     background-size: 0 0;
   }
- #fancy:hover, button:active{
+ #Fancy:hover, button:active{
     background-size: 100% 100%;
     color: #fff;
     --t: 0.2s 0.1s;
   }
-#fancy :active {
+#Fancy :active {
     --s: #0005;
     transition: none;
   }
