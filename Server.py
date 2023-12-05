@@ -1,5 +1,6 @@
 import os
-from flask import Flask, redirect, request,render_template
+from sqlite3 import dbapi2
+from flask import Flask, abort, flash, redirect, request,render_template, url_for
 import json
 import sqlite3
 
@@ -61,6 +62,57 @@ def usernameExist():
         except Exception as e:
             message = "Error during check"
         return render_template('Create_Account.html', data = message)
+@app.route("/post/<int:post_id>/update", methods=["GET", "POST"])
+
+
+
+
+
+def create_table():
+    conn = sqlite3.connect('quizDatabase.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS questions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question_text TEXT NOT NULL,
+            option1 TEXT NOT NULL,
+            option2 TEXT NOT NULL,
+            option3 TEXT NOT NULL,
+            correct_option TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+@app.route('/')
+def index():
+    create_table()
+    conn = sqlite3.connect('quizDatabase.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM questions')
+    questions = cursor.fetchall()
+    conn.close()
+    return render_template('Edit_Quiz.html', questions=questions)
+
+@app.route('/add', methods=['POST'])
+def add_question():
+    question_text = request.form['question_text']
+    option1 = request.form['Answer1']
+    option2 = request.form['Answer2']
+    option3 = request.form['Answer3']
+    correct_option = request.form['correct_Answer']
+
+    conn = sqlite3.connect('quizDatabase.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO questions (question_text, option1, option2, option3, correct_option)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (question_text, option1, option2, option3, correct_option))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('index'))
+
 
 
 
