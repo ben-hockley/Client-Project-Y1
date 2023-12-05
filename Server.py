@@ -322,13 +322,14 @@ def updateQuizMood(user):
             WHERE Mood.UserID = 21")
             bigList = cur.fetchall()
             conn.close()
-            newList = []
+            newDict = {}
             for x in range(len(bigList)):
                 subList = []
                 for y in range(len(bigList[x])):
                     subList.append(bigList[x][y])
-                newList.append(subList)
-            jsonList = json.dumps(newList)
+                newDict.update({x: subList})
+            jsonList = json.dumps(newDict)
+            print(jsonList)
             return jsonList
         except Exception as e:
             print(e)

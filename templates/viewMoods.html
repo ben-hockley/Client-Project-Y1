@@ -11,12 +11,30 @@
 <h1>View your mood over Previous Quizzes</h1>
 {% endblock%}
 {% block mainBody%}
-<p id="updateMe">Hi</p>
+<table>
+    <!-- <tr>
+        <th>Quiz Name</th>
+        <th>Mood Before</th>
+        <th>Mood After</th>
+    </tr> -->
+    <div id="quizMoods"></div>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', updateQuizMoods)
+    document.addEventListener("DOMContentLoaded", updateQuizMoods())
 
     function updateQuizMoods() {
-        document.getElementById("updateMe").innerHTML = "Yeah I'm cool";
+        let emojiList = ["&#128549","&#128577","&#128528","&#128578","&#128512"];
+        user = window.location.pathname.split("/").pop();
+        newRoute = "/updateQuizMood/" + user;
+        $.ajax({type:'GET', url:newRoute, success: function appendInfo(result) {
+            result = JSON.parse(result);
+            for (let i=0; i < Object.keys(result).length; i++) {
+                row = "<tr><td>" + result[i][0] + "</td><td>" + emojiList[result[i][1]] + "</td><td>" + emojiList[result[i][2]];
+                console.log(row);
+                $("#quizMoods").append(row);
+        }
+        }});
     }
 </script>
 {% endblock%}
