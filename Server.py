@@ -334,10 +334,12 @@ def usernameExist():
     Returns either the Account_Details.html page if successful, or Create_Account.html if unsuccessful
     """
     if request.method == 'POST':
-        firstName = request.form.get("firstName").title()
-        lastName = request.form.get("lastName").title()
+        firstName = request.form.get("firstName").title() #saves first letter as uppercase.
+        lastName = request.form.get("lastName").title() #saves first letter as uppercase.
         userName = request.form.get("username")
         password = request.form.get("password")
+        securityQuestion = request.form.get("securityQuestion")
+        securityAnswer = request.form.get("securityAnswer")
         # Hashing password
         password = hashPassword(userName,password)
         if usernameCheck(userName) == False:
