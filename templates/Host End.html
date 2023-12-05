@@ -1,14 +1,14 @@
 <html>
     <header>
-        <link rel="stylesheet" href="static/CSS/Host End.css">
+        <link rel="stylesheet" href="/static/CSS/Host End.css">
     </header>
     <body>
         <section class="Select">
             <section class = "SelectSection">
-                <span type="button" id = "TEXT">Enter Quiz Name</span>
+                <span id = "TEXT">Enter Quiz Name</span>
             </section>
             <br>
-            <form action = "/hostEnd" method="POST" class = "Inputs" id="Inputs">
+            <form action = "/hostEnd" method="get" class = "Inputs" id="Inputs">
                 <input id="QuizName" name="QuizName" type="text">
                 <button id="SubmitButton" type="submit">→</button>
             </form>

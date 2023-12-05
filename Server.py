@@ -13,31 +13,27 @@ user = None
 UserID = 21
 DATABASE = "quizDatabase.db"
 
-@app.route("/hostEnd/<user>", methods=['GET','POST'])
-def hostEnd():
-    if request.method =='GET':
-        return render_template('Host End.html', data=[])
-    if request.method =='POST':
-        QuizName = request.form.get("QuizName")
-        conn = sqlite3.connect("quizDatabase.db")
-        cur = conn.cursor()
-        cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
+@app.route("/hostEnd/<QuizName>/<user>", methods=['GET'])
+def hostEnd(QuizName, user):
+    conn = sqlite3.connect("quizDatabase.db")
+    cur = conn.cursor()
+    cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
+    conn.commit()
+    DATA = cur.fetchall()
+
+    if DATA!=[]:
+        cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
         conn.commit()
         DATA = cur.fetchall()
-
-        if DATA!=[]:
-            cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
-            conn.commit()
-            DATA = cur.fetchall()
-            print(DATA)
-        return render_template('Host End.html', data=DATA)
+        print(DATA)
+    return render_template('Host End.html', data=DATA, user=user)
 
 @app.route("/userEnd/<user>", methods=['GET', 'POST'])
-def userEnd():
+def userEnd(user):
     QuizID = request.args.get('QuizID')
     UserID = request.args.get('UserID')
     if request.method == 'GET':
-        return render_template('User End.html', data=getQuestion(QuizID))
+        return render_template('User End.html', data=getQuestion(QuizID), user=user)
     if request.method == 'POST':
 
         conn = sqlite3.connect("quizDatabase.db")
@@ -58,7 +54,7 @@ def userEnd():
             conn.commit()
         except Exception as e:
             conn.rollback()
-        return render_template('Main Page.html')
+        return redirect("/home/"+user)
 
 def RandomKey():
     while True:
@@ -76,12 +72,13 @@ def RandomKey():
         
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
-        cur.execute(f'SELECT QuizName from Quiz where QuizKey{QuizKey}')
+        cur.execute(f'SELECT QuizName from Quiz where QuizKey = "{QuizKey}"')
         conn.commit()
-        ID = cur.fetchall()[0][0]
+        stuff = cur.fetchall()
         conn.close()
-
-
+        print(stuff)
+        if stuff == []:
+            break
     return QuizKey
 
 @app.route("/createQuiz/<user>", methods=['GET', 'POST'])
@@ -179,7 +176,7 @@ def createQuiz(user):
                                 conn.rollback()
             return redirect("/home/" + user)
         else:
-            return render_template('Create Quiz.html',QuizKey="oseu" , data = "A quiz already has that name. Please try another.")
+            return render_template('Create Quiz.html',QuizKey=RandomKey() , data = "A quiz already has that name. Please try another.")
 
 def getQuestion(QuizID):
     data=[]

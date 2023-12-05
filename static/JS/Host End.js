@@ -11,7 +11,6 @@ if (data.length!=0) {
 function HideStuff(){
     const text = document.getElementById("TEXT");
     text.textContent="Scores";
-    text.setAttribute("onclick", "Reload()")
     const Inputs = document.getElementById("Inputs");
     Inputs.childNodes.forEach(element => {
         if(element.id!=null){
@@ -70,7 +69,4 @@ function MakeChart(data){
             legend: {display:false}
         }
     });
-}
-function Reload(){
-    location.href = 'http://127.0.0.1:5000/hostEnd?';
 }
