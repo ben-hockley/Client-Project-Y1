@@ -136,7 +136,7 @@ def getQuestion(QuizID):
     try:
         conn = sqlite3.connect('quizDatabase.db')
         cur = conn.cursor()
-        cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID='+QuizID)
+        cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID = ?', [QuizID,])
         data = cur.fetchall()
         conn.commit()
     except Exception as e:
@@ -221,10 +221,19 @@ def updateMood(user):
         conn.close()
         return redirect("/home/" + user)
 
-@app.route("/moodBefore/<user>", methods=['GET', 'POST'])
-def moodBefore(user):
+@app.route("/moodBeforeSubmit/<user>", methods=['GET', 'POST'])
+def moodBeforeSubmit(user):
+    if request.method == 'POST':
+        joinKey = request.form.get("joinCode")
+        quizKeyExist = checkQuizKey(user, joinKey)
+        if quizKeyExist == False:
+            return redirect("/home/" + user)
+        return redirect("/moodBefore/" + joinKey + "/" + user)
+
+@app.route("/moodBefore/<joinKey>/<user>", methods=['GET', 'POST'])
+def moodBefore(joinKey, user):
     if request.method == 'GET':
-        return render_template('moodBefore.html', user=user)
+        return render_template('moodBefore.html', user=user, joinKey=joinKey)
     if request.method == 'POST':
         mood = int(request.form.get("moodSlider"))
         try:
@@ -238,9 +247,9 @@ def moodBefore(user):
             print(e)
             print("error during update")
             conn.rollback()
-            return redirect("/moodChecker/" + user)
+            return redirect("/home/" + user)
         conn.close()
-        return redirect("/home/" + user)
+        return redirect("/joinQuizFunction/" + joinKey + "/" + user)
 
 def getUserID(username):
     """
@@ -312,13 +321,15 @@ def updateQuizMood(user):
     """
     if request.method == 'GET':
         userID = getUserID(user)
+        print(userID)
+        print(type(userID))
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
             cur.execute("\
             SELECT Quizname, MoodBefore, MoodAfter FROM Mood\
             LEFT JOIN Quiz USING(QuizID)\
-            WHERE Mood.UserID = 21")
+            WHERE Mood.UserID = ?", [userID,])
             bigList = cur.fetchall()
             conn.close()
             newDict = {}
@@ -336,12 +347,13 @@ def updateQuizMood(user):
             return None
         
 
-@app.route("/userEnd", methods=['GET', 'POST'])
-def userEnd():
-    QuizID = request.args.get('QuizID')
-    UserID = request.args.get('UserID')
-    # if request.method == 'GET':
-    return render_template('User End.html', data=getQuestion(QuizID))
+@app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
+def userEnd(QuizID, UserID, user):
+    QuizID = int(QuizID)
+    UserID = int(UserID)
+    if request.method == 'GET':
+        print(getQuestion(QuizID))
+        return render_template('User End.html', data=getQuestion(QuizID), QuizID = QuizID, UserID = UserID, user = user)
     if request.method == 'POST':
         Points = request.form.get("POINTS")
         print(Points)
@@ -354,7 +366,7 @@ def userEnd():
             conn.commit()
         except Exception as e:
             conn.rollback()
-        return render_template('Main Page.html')
+        return redirect("/moodAfter/" + user)
 
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
@@ -661,16 +673,13 @@ def quizSearch(user):
     conn.close()
     return "error"
         
-@app.route("/joinQuizFunction", methods=['POST'])
-def findQuizKey():
+@app.route("/joinQuizFunction/<joinKey>/<user>", methods=['GET'])
+def findQuizKey(joinKey, user):
     """
     Function that gets the Key from the input and checks to see if it relates to a Quiz Table
     """
-    if request.method == 'POST':
-        #Take the Input from the form
-        joinKey = request.form.get("joinCode")
+    if request.method == 'GET':
         print(joinKey)
-
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
@@ -690,17 +699,38 @@ def findQuizKey():
             print(UserID)
             
             if QuizID:
-                return redirect(url_for('userEnd', QuizID=QuizID, UserID=UserID))
+                # return redirect('userEnd/' + user, QuizID=QuizID, UserID=UserID)
+                return redirect('/userEnd/' + str(QuizID) + '/' + str(UserID) + '/' + user)
 
             else:
                 errormessage = "Quiz not found"
                 print(errormessage)
-                return redirect('/')
+                return redirect('/home/' + user)
 
         except Exception as e:
             print(e)
             print("Error accessing Database")
             return redirect('/')
+
+def checkQuizKey(user, joinKey):
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Quiz WHERE QuizKey = ?",(joinKey,))
+        conn.commit()
+        Quiz = cur.fetchall()
+        QuizID = Quiz[0][0]
+        conn.close()
+        if QuizID:
+            return True
+        else:
+            errormessage = "Quiz not found"
+            print(errormessage)
+            return False
+    except Exception as e:
+        conn.close()
+        print(e)
+        return False
 
 if __name__ == "__main__":
     app.run(debug=True)

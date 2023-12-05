@@ -10,7 +10,7 @@
     <p class="material-icons" id="emoji">
         &#128528;
     </p>
-    <form action="/moodBefore/{{user}}" id="moodForm" method="post">
+    <form action="/moodBefore/{{joinKey}}/{{user}}" id="moodForm" method="post">
         <input type="range" min="0" max="4" value="2" id="moodSlider" name="moodSlider">
         <button type="submit">Update your mood</button>
     </form>
