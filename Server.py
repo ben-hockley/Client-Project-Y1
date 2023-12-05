@@ -274,7 +274,7 @@ def updateInfo(user):
     return details
 
 
-def submitNewAccount(firstName,lastName,userName,password):
+def submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer):
     """
     Function to create a new entry in the User table.
     Takes all the data as parameters, and returns True if the insert was a success
@@ -283,8 +283,8 @@ def submitNewAccount(firstName,lastName,userName,password):
         conn = sqlite3.connect('quizDatabase.db')
         cur = conn.cursor()
         cur.execute(\
-        "INSERT INTO User ('Username', 'FirstName','SurName','Password','Admin') \
-        VALUES (?,?,?,?,?)", (userName,firstName,lastName,password,"N"))
+        "INSERT INTO User ('Username', 'FirstName','SurName','Password','Admin', 'SecurityQuestion', 'SecurityAnswer') \
+        VALUES (?,?,?,?,?,?,?)", (userName,firstName,lastName,password,"N",securityQuestion,securityAnswer))
         message = True
         conn.commit()
     except Exception as e:
@@ -343,7 +343,7 @@ def usernameExist():
         # Hashing password
         password = hashPassword(userName,password)
         if usernameCheck(userName) == False:
-            if submitNewAccount(firstName,lastName,userName,password) == True:
+            if submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer) == True:
                 message = "Welcome to your account, " + firstName
                 user = userName
                 return redirect("/accountDetails/" + user)
@@ -480,6 +480,49 @@ def logonFunction():
             message = "Database error"
         print(message)
         return redirect('/login')
+
+@app.route("/securityQuestionFunction", methods=['POST'])
+def securityQuestionFunction():
+    """
+    Funtion that takes the inputs from Forgot Password form and checks to see if the user exists
+    and that the security question + answer is correct for that user. If so then it redirects the user to
+    the homepage using their details.
+    """
+    if request.method == 'POST':
+        username = request.form.get("username")
+        securityQuestion = request.form.get("securityQuestion")
+        securityAnswer = request.form.get("securityAnswer")
+
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute(\
+            "SELECT securityQuestion,securityAnswer FROM User WHERE Username = ?",([username]))
+            isExist = cur.fetchall()
+
+            cur.close()
+            if isExist != []:
+                if isExist[0][0] == securityQuestion and isExist[0][1] == securityAnswer:
+                    global user
+                    user = username
+                    print('Signed in as', user)
+                    return redirect("/home/" + user)
+                else:
+                    message = "Security Question/Answer are incorrect."
+                    print(message)
+                    return redirect('/login')
+            else:
+                message = "User not found"
+                print(message)
+                return redirect('/login')
+        except Exception as e:
+            cur.close()
+            print(e)
+            message = "Database error"
+        print(message)
+        return redirect('/login')
+
+
 
 @app.route("/home/<user>")
 
