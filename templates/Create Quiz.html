@@ -8,7 +8,7 @@
 {% block mainBody%}
     <form class="MakeQuiz" method="POST" onsubmit="return False">
         <section id="CreateSect">
-                <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
+            <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><br><span id="KeyDisplay">Your QuizKey = {{QuizKey}}</span><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
         </section>
         <br>
         <section id="SubmitSect">
