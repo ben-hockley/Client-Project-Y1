@@ -307,6 +307,19 @@ def moodAfter(user):
             print(e)
             conn.rollback()
         conn.close()
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            UPDATE User SET Mood = ? WHERE Username = ?", (moodAfter, user)\
+            )
+            conn.commit()
+        except Exception as e:
+            print(e)
+            print("error during update")
+            conn.rollback()
+            return redirect("/home/" + user)
+        conn.close()
         return redirect("/home/" + user)
 
 @app.route("/viewMoods/<user>", methods=['GET', 'POST'])
