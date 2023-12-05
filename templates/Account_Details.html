@@ -1,6 +1,6 @@
 {% extends 'mainTemplate.html'%}
 {% block mainBlock%}
-<link rel="stylesheet" href="/static/CSS/AccountDetailss.css">
+<link rel="stylesheet" href="/static/CSS/AccountDetailsss.css">
 <h1>Account details</h1>
 {% endblock%}
 
@@ -22,5 +22,9 @@
         <button type="submit">Log out</button>
     </form>
 </section>
-<script src="/static/JS/AccountDetailss.js"></script>
+<section title="linkToQuizHistory" id="linkToQuizHistory">
+    <button id="redirectHistory" onclick="redirectHistory()">View Quiz History</button>
+</section>
+
+<script src="/static/JS/AccountDetailsss.js"></script>
 {% endblock%}

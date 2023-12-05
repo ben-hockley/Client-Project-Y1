@@ -4,6 +4,11 @@ document.getElementById("logoText").addEventListener("click", function() {
     newRoute = "/home/" + user;
     window.location = newRoute;
 });
+document.getElementById("navbar-logo").addEventListener("click", function() {
+    user = window.location.pathname.split("/").pop();
+    newRoute = "/home/" + user;
+    window.location = newRoute;
+}); //links navbar logo back to home; keeps user signed in.
 document.getElementById("accountDetails").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
     newRoute = "/accountDetails/" + user;

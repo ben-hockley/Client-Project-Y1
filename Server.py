@@ -3,6 +3,7 @@ from flask import Flask, redirect, request, render_template, url_for
 import json
 import sqlite3
 import hashlib
+import random
 
 
 app = Flask(__name__)
@@ -70,10 +71,19 @@ def returnFirst():
                 points+=1
             msg = ""
             Last_Quiz=""   
+            CharList = []
+            QuizKey = ""
+            for i in range(65, 91):
+                CharList.append(chr(i))
+                CharList.append(chr(i + 32))
+            for i in range(10):
+                CharList.append(str(i))
+            for i in range(4):
+                QuizKey+=str(CharList[random.randint(0, len(CharList))])
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID") VALUES (?, ?)', (QuizName, "21"))
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, "21", QuizKey))
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
@@ -471,6 +481,7 @@ def logonFunction():
         return redirect('/login')
 
 @app.route("/home/<user>")
+
 def returnHome(user):
     """
     Function to load the home page using details passed through from the login function.
@@ -496,6 +507,39 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
+QUIZLISTDATABASE = 'quizDatabase.db'
+
+@app.route("/listQuizzes")
+def printQuiz():
+    return render_template("ListQuizzes.html")
+
+
+def jls_extract_def():
+    return 'quizName'
+
+
+
+
+@app.route("/QuizHistory/<user>", methods = ['GET','POST'])
+
+def quizSearch(user):
+    try:
+        quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
+        conn = sqlite3.connect(QUIZLISTDATABASE)
+        cur = conn.cursor()
+        print(user)
+        cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
+        userID = cur.fetchone()[0]
+        print(userID)
+        cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
+        QuizHistory = cur.fetchall()
+        QuizzesPlayed = str(len(QuizHistory))
+        return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory)
+    except:
+        print('there was an error')
+    conn.close()
+    return "error"
+        
 @app.route("/joinQuizFunction", methods=['POST'])
 def findQuizKey():
     """
