@@ -52,32 +52,91 @@ def hostEnd():
         cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
         conn.commit()
         DATA = cur.fetchall()
-        if DATA!=[]:
-            cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
-            conn.commit()
-            DATA = cur.fetchall()
-            print(DATA)
-        return render_template('Host End.html', data=DATA)
+        print(DATA)
+    return render_template('Host End.html', data=DATA, user=user)
 
-@app.route("/createQuiz", methods=['GET', 'POST'])
-def returnFirst():
+# @app.route("/userEnd/<user>", methods=['GET', 'POST'])
+# def userEnd(user):
+#     QuizID = request.args.get('QuizID')
+#     UserID = request.args.get('UserID')
+#     if request.method == 'GET':
+#         return render_template('User End.html', data=getQuestion(QuizID), user=user)
+#     if request.method == 'POST':
+
+#         conn = sqlite3.connect("quizDatabase.db")
+#         cur = conn.cursor()
+#         cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+#         conn.commit()
+#         ID = cur.fetchall()[0][0]
+#         conn.close()
+
+#         Points = request.form.get("POINTS")
+#         print(Points)
+#         msg=""
+#         try:
+#             conn = sqlite3.connect('quizDatabase.db')
+#             cur = conn.cursor()
+#             cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
+#             data = cur.fetchall()
+#             conn.commit()
+#         except Exception as e:
+#             conn.rollback()
+#         return redirect("/home/"+user)
+
+def RandomKey():
+    while True:
+        msg = ""
+        Last_Quiz=""   
+        CharList = []
+        QuizKey = ""
+        for i in range(65, 91):
+            CharList.append(chr(i))
+            CharList.append(chr(i + 32))
+            for i in range(10):
+                CharList.append(str(i))
+        for i in range(4):
+            QuizKey+=str(CharList[random.randint(0, len(CharList))])
+        
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT QuizName from Quiz where QuizKey = "{QuizKey}"')
+        conn.commit()
+        stuff = cur.fetchall()
+        conn.close()
+        print(stuff)
+        if stuff == []:
+            break
+    return QuizKey
+
+@app.route("/createQuiz/<user>", methods=['GET', 'POST'])
+def createQuiz(user):
     if request.method == 'GET':
-        return render_template('Create Quiz.html')
+        return render_template('Create Quiz.html', QuizKey=RandomKey())
     if request.method =='POST':
         QuizName = request.form.get('QuizName')
+        QuizKey = request.form.get('Key')
+        print(QuizKey)
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+        conn.commit()
+        ID = cur.fetchall()[0][0]
+        conn.close()
+
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz WHERE QuizName = "{QuizName}"')
         conn.commit()
         Exists = cur.fetchall()
         conn.close()
+
         if Exists == []:
             keys = request.form.keys()
-            print(keys)
             Elements = []
             for i in keys:
                 Elements.append(i)
             Elements.remove("QuizName")
+            Elements.remove("Key")
             Numbers = []
             for i in Elements:
                 IsIn = False
@@ -98,21 +157,11 @@ def returnFirst():
             points = 0
             for i in Quiz:
                 points+=1
-            msg = ""
-            Last_Quiz=""   
-            CharList = []
-            QuizKey = ""
-            for i in range(65, 91):
-                CharList.append(chr(i))
-                CharList.append(chr(i + 32))
-            for i in range(10):
-                CharList.append(str(i))
-            for i in range(4):
-                QuizKey+=str(CharList[random.randint(0, len(CharList))])
+
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, "21", QuizKey))
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, ID, QuizKey))
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
@@ -153,10 +202,9 @@ def returnFirst():
                                 conn.close()
                             except Exception as e:
                                 conn.rollback()
-            return render_template('Main Page.html')
+            return redirect("/home/" + user)
         else:
-            return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
-
+            return render_template('Create Quiz.html',QuizKey=RandomKey() , data = "A quiz already has that name. Please try another.")
 
 def getQuestion(QuizID):
     data=[]
@@ -698,7 +746,6 @@ def securityQuestionFunction():
 
 
 @app.route("/home/<user>")
-
 def returnHome(user):
     """
     Function to load the home page using details passed through from the login function.
@@ -724,8 +771,6 @@ def returnHome(user):
         print(e)
         print("Error accessing database")
         return redirect('/login')
-
-QUIZLISTDATABASE = 'quizDatabase.db'
 
 @app.route("/listQuizzes")
 def printQuiz():
@@ -818,4 +863,3 @@ def forgotPassword():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
