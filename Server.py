@@ -5,6 +5,7 @@ import sqlite3
 import hashlib
 import random
 
+
 app = Flask(__name__)
 
 ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
@@ -45,15 +46,12 @@ def checkGuest(user):
 @app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
     if request.method =='GET':
-        return render_template('Host End.html', data=[])
-    if request.method =='POST':
-        QuizName = request.form.get("QuizName")
+        QuizName = "Quiz"
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
         conn.commit()
         DATA = cur.fetchall()
-
         if DATA!=[]:
             cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
             conn.commit()
@@ -603,6 +601,9 @@ def updateLastname(user):
             print(message)
             conn.close()
         return redirect("/accountDetails/" + user)
+
+
+
 
 @app.route("/")
 def redirectLogin():
