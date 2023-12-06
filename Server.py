@@ -375,6 +375,7 @@ def userEnd(QuizID, UserID, user):
             conn.commit()
         except Exception as e:
             conn.rollback()
+        conn.close()
         return redirect("/moodAfter/" + user)
 
 @app.route("/createAccount", methods=['GET'])
