@@ -54,7 +54,7 @@ footer{
 /*Selector for font awesome icons*/
 .fa{
     text-align: center;
-    margin:auto;
+    margin:auto; 
     text-decoration: none;
 }
 /*Social media icons in color scheme of legal and general*/
