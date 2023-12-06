@@ -4,10 +4,31 @@ document.getElementById("logoText").addEventListener("click", function() {
     newRoute = "/home/" + user;
     window.location = newRoute;
 });
+document.getElementById("navbar-logo").addEventListener("click", function() {
+    user = window.location.pathname.split("/").pop();
+    newRoute = "/home/" + user;
+    window.location = newRoute;
+}); //links navbar logo back to home; keeps user signed in.
 document.getElementById("accountDetails").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/accountDetails/" + user;
-    window.location = newRoute;
+    var text="";
+    newRoute = "/checkGuest/" + user;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET",newRoute,true);
+    xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState === 4) {
+            if (xhttp.status === 200) {
+                text = String(xhttp.responseText);
+                if (text=="F"){
+                    newRoute = "/accountDetails/" + user;
+                    window.location = newRoute;
+                }
+            }
+        }
+    };
+    xhttp.send();
+
 })
 document.getElementById("moodChecker").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
