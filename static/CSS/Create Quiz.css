@@ -1,8 +1,26 @@
 body {
-    background-color: #68bbff; /* For browsers that do not support gradients */
-    background-image: linear-gradient(to bottom right, #68bbff, #02467d);
+  background-image: url("/static/img/CreateQuizBanner.png");
+  padding: 0;
+  margin: 0;  
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top;
+}
 
-  }
+body h1{
+  display: flex;
+  visibility: hidden;
+}
+
+.banner {
+  width:100%;
+  text-align: center;
+  background-color:white;
+  border:5px solid #0076d6;
+  box-sizing: border-box;
+}
+
+
 #CreateSect {
     margin: 20px;
     margin-bottom: 0;
@@ -46,7 +64,8 @@ body {
 .MakeQuiz {
     background-color: white;
     margin: 25%;
-    margin-top: 5%;
+    margin-bottom: 5%;
+    margin-top: 20%;
     border-radius: 25px;
     box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
 }
@@ -81,85 +100,25 @@ body {
 #Key{
   visibility: hidden;
 }
+#Fancy{
+  background-color: #028844;
+  padding: 5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#Fancy:hover{
+  background-color: #005f2f;
+}
 
-/* https://codepen.io/t_afif/pen/bGooZmq */
-#Nothing {
-    --border: 5px;    /* the border width */
-    --slant: 0.7em;   /* control the slanted corners */
-    --color: #838383; /* the color */
-    padding: 0.4em 1.2em;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--color);
-    background: 
-       linear-gradient(to bottom left,var(--color)  50%,#0000 50.1%) top right,
-       linear-gradient(to top   right,var(--color)  50%,#0000 50.1%) bottom left;
-    background-size: calc(var(--slant) + 1.3*var(--border)) calc(var(--slant) + 1.3*var(--border));
-    background-repeat: no-repeat;
-    box-shadow:
-      0 0 0 200px inset var(--s,#0000),
-      0 0 0 var(--border) inset var(--color);
-    clip-path: 
-        polygon(0 0, calc(100% - var(--slant)) 0, 100% var(--slant),
-                100% 100%, var(--slant) 100%,0 calc(100% - var(--slant))
-               );
-    transition: color var(--t,0.3s), background-size 0.3s;
-  }
- #Nothing:focus-visible {
-    outline-offset: calc(-1*var(--border));
-    outline: var(--border) solid #000c;
-    clip-path: none;
-    background-size: 0 0;
-  }
-#Nothing:hover, button:active{
-    background-size: 100% 100%;
-    color: #fff;
-    --t: 0.2s 0.1s;
-  }
-#Nothing :active {
-    --s: #0005;
-    transition: none;
-  }
-
-
-
-#Fancy {
-    --border: 5px;    /* the border width */
-    --slant: 0.7em;   /* control the slanted corners */
-    --color: #0076d6; /* the color */
-    padding: 0.4em 1.2em;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--color);
-    background: 
-       linear-gradient(to bottom left,var(--color)  50%,#0000 50.1%) top right,
-       linear-gradient(to top   right,var(--color)  50%,#0000 50.1%) bottom left;
-    background-size: calc(var(--slant) + 1.3*var(--border)) calc(var(--slant) + 1.3*var(--border));
-    background-repeat: no-repeat;
-    box-shadow:
-      0 0 0 200px inset var(--s,#0000),
-      0 0 0 var(--border) inset var(--color);
-    clip-path: 
-        polygon(0 0, calc(100% - var(--slant)) 0, 100% var(--slant),
-                100% 100%, var(--slant) 100%,0 calc(100% - var(--slant))
-               );
-    transition: color var(--t,0.3s), background-size 0.3s;
-  }
- #Fancy:focus-visible {
-    outline-offset: calc(-1*var(--border));
-    outline: var(--border) solid #000c;
-    clip-path: none;
-    background-size: 0 0;
-  }
- #Fancy:hover, button:active{
-    background-size: 100% 100%;
-    color: #fff;
-    --t: 0.2s 0.1s;
-  }
-#Fancy :active {
-    --s: #0005;
-    transition: none;
-  }
-/* https://codepen.io/t_afif/pen/bGooZmq */
+#Nothing{
+  background-color: #999999;
+  padding: 5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
