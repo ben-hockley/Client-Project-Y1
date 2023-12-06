@@ -14,7 +14,36 @@ user = None
 UserID = 21
 DATABASE = "quizDatabase.db"
 
-@app.route("/hostEnd", methods=['GET'])
+@app.route("/createGuest")
+def createGuest():
+    conn = sqlite3.connect('quizDatabase.db')
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM User')
+    last = cur.fetchall()
+    last = last[len(last)-1]
+    conn.commit()
+    conn.close()
+    conn = sqlite3.connect('quizDatabase.db')
+    cur = conn.cursor()
+    cur.execute(f'INSERT INTO User (Username, FirstName, SurName) VALUES ("{"Guest"+str(last[0]+1)}", "Guest", "{last[0]+1}")')
+    conn.commit()
+    conn.close()
+
+    return redirect("/home/Guest"+str(last[0]+1))
+
+@app.route("/checkGuest/<user>")
+def checkGuest(user):
+    conn = sqlite3.connect('quizDatabase.db')
+    cur = conn.cursor()
+    cur.execute(f'SELECT password FROM User WHERE Username = "{user}"')
+    Password = cur.fetchone()[0]
+    conn.commit()
+    conn.close()
+    if Password == None:
+        return "T"
+    return "F"
+
+@app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
     if request.method =='GET':
         QuizName = "Quiz"
@@ -562,11 +591,7 @@ def printQuiz():
 def jls_extract_def():
     return 'quizName'
 
-
-
-
 @app.route("/QuizHistory/<user>", methods = ['GET','POST'])
-
 def quizSearch(user):
     try:
         quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
