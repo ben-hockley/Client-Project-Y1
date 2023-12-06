@@ -35,13 +35,12 @@ def checkGuest(user):
     conn = sqlite3.connect('quizDatabase.db')
     cur = conn.cursor()
     cur.execute(f'SELECT password FROM User WHERE Username = "{user}"')
-    Password = cur.fetchone()
+    Password = cur.fetchone()[0]
     conn.commit()
     conn.close()
     if Password == None:
         return "T"
-    else:
-        return "F"
+    return "F"
 
 @app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
