@@ -6,8 +6,8 @@ body {
     margin: 0;
     padding: 0;
     background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background-size: contain;
+    background-position: top;
 }
 #accountLink {
     background-color: #028844;
@@ -29,9 +29,18 @@ form p {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 70px;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 70px;
     margin-bottom: 60px;
     color: white;
+}
+#nameText {
+    color: #0076D6;
+    text-shadow:
+      -2px -2px 0 white,  
+      2px -2px 0 white,
+      -2px 2px 0 white,
+      2px 2px 0 white;
+
 }
 .inputBoxs {
     display: flex;
