@@ -2,6 +2,9 @@
 <html>
     <header>
         <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
+
+        <!--Icon library for social media logo's in footer source:https://www.w3schools.com/howto/howto_css_social_media_buttons.asp-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         {% block linkBlock%}
         {% endblock%}
         <nav class="navbar-legal-and-general">
@@ -27,7 +30,11 @@
     {% endblock%}
     <script src="/static/JS/navBar.js"></script>
     </body>
-    <footer>
-
+    <footer> <!--Footer that links to social media--->
+        <a href="https://www.facebook.com/legalandgeneral/" class="fa fa-facebook fa-2x"></a> <!--Font Awesome icons link to social media pages of legal and general-->
+        <a href="https://twitter.com/landg_uk" class="fa fa-twitter fa-2x"></a>
+        <a href="https://www.linkedin.com/company/legal-&-general" class="fa fa-linkedin fa-2x"></a>
+        <a href="https://www.youtube.com/legalandgeneral" class="fa fa-youtube fa-2x"></a>
+        <a href="https://www.instagram.com/legalandgeneral/" class="fa fa-instagram fa-2x"></a>
     </footer>
 </html>

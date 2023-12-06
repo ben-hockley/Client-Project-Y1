@@ -1,3 +1,4 @@
+/*CSS for navbar at top of mainTemplate.html */
 body{
     background-size: cover;
     margin: 0;
@@ -39,4 +40,36 @@ body{
     color: white;
     text-decoration: none;
     margin-right: 10px;
+}
+
+/* CSS for footer at bottom of mainTemplate.html */
+footer{
+    width:100%;
+    height:20vh;
+    background-color: #333;
+    margin-top:5vh;
+    display:flex;
+    justify-content: space-evenly;
+}
+/*Selector for font awesome icons*/
+.fa{
+    text-align: center;
+    margin:auto;
+    text-decoration: none;
+}
+/*Social media icons in color scheme of legal and general*/
+.fa-facebook{
+    color:#e22922
+}
+.fa-twitter{
+    color:#0076d6
+}
+.fa-linkedin{
+    color:white
+}
+.fa-youtube{
+    color:#ffd500
+}
+.fa-instagram{
+    color:#028844
 }
