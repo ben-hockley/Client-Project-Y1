@@ -16,10 +16,13 @@ body{
     padding:0;
     width:50%;
 }
+#navbar-legal-and-general {
+    background-color:#333;
+}
 #accountDetails {
     float:left;
     color:white;
-    margin-top: 17px;
+    margin-top: 14px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: medium;
     display:inline;
@@ -30,9 +33,12 @@ body{
     font-size: 36px;
     margin: 0;
 }
-.navbar-legal-and-general .logoText {
+.logoText {
     color: white;
     float: right;
+    margin-top: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
 }
 .navbar-logo {
     float: right;
