@@ -1,10 +1,10 @@
 <html>
     <header>
-        <link rel="stylesheet" href="/static/CSS/User End.css">
+        <link rel="stylesheet" href="/static/CSS/UserEnd.css">
     </header>
     <body>
         <p id="DATA">{{data}}</p> 
-        <form class="Quiz" method="get" action="/userEnd">
+        <form class="Quiz" method="get" action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}">
             <section class="QuestionSection">
                 <section>
                     <span id="QuestionNumber">Quiz Empty</span><br>
@@ -12,7 +12,7 @@
                 </section>
             </section>
         </form>
-        <form action="/userEnd/{{user}}" method="post" class="Quiz">
+        <form action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}" method="post" class="Quiz">
             <section id="AnswerSection" class="AnswerSection">
             </section>
             <input id="POINTS"name="POINTS" value="5" type=""></input>

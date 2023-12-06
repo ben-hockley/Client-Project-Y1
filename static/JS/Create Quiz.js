@@ -1,7 +1,7 @@
 var number = -1;
 const thingy = document.getElementById("Fancy");
 thingy.click();
-// SetQuizKey();
+
 
 
 function AddAnswer(event){
@@ -129,25 +129,3 @@ function On(event){
         event.target.textContent="F";
     }
 }
-// function SetQuizKey(){
-//     let msg = "";
-//     let Last_Quiz = "";
-//     let CharList = [];
-//     let QuizKey = "";
-
-//     for (let i = 65; i <= 90; i++) {
-//     CharList.push(String.fromCharCode(i));
-//     CharList.push(String.fromCharCode(i + 32));
-//     }
-
-//     for (let i = 0; i < 10; i++) {
-//     CharList.push(i.toString());
-//     }
-
-//     for (let i = 0; i < 4; i++) {
-//     QuizKey += CharList[Math.floor(Math.random() * CharList.length)];
-//     }
-
-//     const KeyDisplay = document.getElementById("KeyDisplay");
-//     KeyDisplay.textContent = "Your QuizKey = "+QuizKey;
-// }

@@ -78,7 +78,9 @@ body {
 #bland:hover{
     background:#0066b9;
 }
-
+#Key{
+  visibility: hidden;
+}
 
 /* https://codepen.io/t_afif/pen/bGooZmq */
 #Nothing {
