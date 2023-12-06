@@ -745,7 +745,7 @@ def resetPassword(user):
     if request.method == 'GET':
         return render_template("resetPassword.html", user=user)
     if request.method == 'POST':
-        newPassword = request.form.get("newPassword")
+        newPassword = request.form.get("password")
         newPassword = hashPassword(user, newPassword)
         try:
             conn = sqlite3.connect("quizDatabase.db")
