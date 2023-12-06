@@ -13,17 +13,11 @@ body h1{
 }
 
 .banner {
-  z-index: -1;
-  position:relative;
-  text-align: left;
-  color: black;
-  font-size: x-large;
-  background-color: rgba(128, 128, 128, 0.5);
-  padding-right: 10px;
-  padding-left: 10px;
-  position: absolute;
-  bottom: 40%;
-  margin-bottom: 5%;
+  width:100%;
+  text-align: center;
+  background-color:white;
+  border:5px solid #0076d6;
+  box-sizing: border-box;
 }
 
 

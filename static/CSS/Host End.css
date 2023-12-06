@@ -7,16 +7,12 @@ body{
   background-position: top;
 }
 .SelectSection{
-  margin-top: 10%;
-  width: 32%;
-  position:relative;
-  text-align: left;
-  color: black;
+  width:100%;
+  text-align: center;
+  background-color:white;
+  border:5px solid #0076d6;
+  box-sizing: border-box;
   font-size: x-large;
-  background-color: rgba(128, 128, 128, 0.5);
-  padding-right: 10px;
-  padding-left: 10px;
-  left: 0;
 }
 .SelectSection p{
   visibility: visible;
