@@ -1,0 +1,19 @@
+{% extends 'mainTemplate.html'%}
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/moodChecker.css">
+{% endblock%}
+{% block mainBlock%}
+<h1>Mood Checker before Quiz</h1>
+{% endblock%}
+{% block mainBody%}
+<div class="slider">
+    <p class="material-icons" id="emoji">
+        &#128528;
+    </p>
+    <form action="/moodBefore/{{joinKey}}/{{user}}" id="moodForm" method="post">
+        <input type="range" min="0" max="4" value="2" id="moodSlider" name="moodSlider">
+        <button type="submit">Update your mood</button>
+    </form>
+</div>
+<script src="/static/JS/moodChecker.js"></script>
+{% endblock%}
