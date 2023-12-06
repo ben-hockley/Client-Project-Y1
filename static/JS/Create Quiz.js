@@ -1,6 +1,9 @@
 var number = -1;
 const thingy = document.getElementById("Fancy");
 thingy.click();
+
+
+
 function AddAnswer(event){
     const sect = event.target.parentNode.parentNode;
     const parent=sect.parentNode;
