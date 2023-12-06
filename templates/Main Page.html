@@ -14,9 +14,9 @@
 
 <div class="inputBoxs">
 <section class="quizPathBox">
-    <form id="hostForm" method="post" action="/hostEnd">
+    <form id="hostForm" method="POST" action="/goHostEnd/{{user}}">
         <input type="text" id="hostCode" name="hostCode" required placeholder="####">
-        <button id="hostButton" type="button" disabled>HOST</button>
+        <button id="hostButton" type="submit" disabled>HOST</button>
     </form>
 </section>
 <!-- <section class="quizPathBox">
