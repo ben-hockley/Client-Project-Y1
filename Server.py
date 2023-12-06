@@ -558,8 +558,9 @@ def usernameExist():
         password = request.form.get("password")
         securityQuestion = request.form.get("securityQuestion")
         securityAnswer = request.form.get("securityAnswer")
-        # Hashing password
+        # Hashing password and security answer
         password = hashPassword(userName,password)
+        securityAnswer = hashPassword(userName, securityAnswer)
         if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer) == True:
                 message = "Welcome to your account, " + firstName
@@ -713,6 +714,7 @@ def securityQuestionFunction():
         user = request.form.get("username")
         securityQuestion = request.form.get("securityQuestion")
         securityAnswer = request.form.get("securityAnswer")
+        securityAnswer = hashPassword(user, securityAnswer)
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
