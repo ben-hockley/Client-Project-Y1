@@ -6,6 +6,8 @@ data = JSON.parse(data);
 var questionNumber = 0;
 var points = 0;
 var answers = [];
+var count = '';
+var timer = document.getElementById("TIMER")
 Setup()
 function Setup(){
     if(questionNumber<data.length){
