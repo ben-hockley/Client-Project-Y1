@@ -48,7 +48,7 @@ function Setup(){
         const question = document.getElementById("Question");
         question.textContent= "You scored "+points+" out of "+data.length+" points";
         const Submit = document.createElement("button");
-        Submit.setAttribute("onclick", "Submit()")
+        Submit.type = "submit"
         Submit.textContent="Submit score";
         const point = document.getElementById("POINTS")
         point.value=points;
@@ -74,7 +74,4 @@ function isItCorrect(event) {
     });
     questionNumber++;
     Setup();
-}
-function Submit(){
-
 }

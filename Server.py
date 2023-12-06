@@ -5,6 +5,7 @@ import sqlite3
 import hashlib
 import random
 
+
 app = Flask(__name__)
 
 ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
@@ -13,44 +14,129 @@ user = None
 UserID = 21
 DATABASE = "quizDatabase.db"
 
+@app.route("/createGuest")
+def createGuest():
+    conn = sqlite3.connect('quizDatabase.db')
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM User')
+    last = cur.fetchall()
+    last = last[len(last)-1]
+    conn.commit()
+    conn.close()
+    conn = sqlite3.connect('quizDatabase.db')
+    cur = conn.cursor()
+    cur.execute(f'INSERT INTO User (Username, FirstName, SurName) VALUES ("{"Guest"+str(last[0]+1)}", "Guest", "{last[0]+1}")')
+    conn.commit()
+    conn.close()
+
+    return redirect("/home/Guest"+str(last[0]+1))
+
+@app.route("/checkGuest/<user>")
+def checkGuest(user):
+    conn = sqlite3.connect('quizDatabase.db')
+    cur = conn.cursor()
+    cur.execute(f'SELECT password FROM User WHERE Username = "{user}"')
+    Password = cur.fetchone()[0]
+    conn.commit()
+    conn.close()
+    if Password == None:
+        return "T"
+    return "F"
+
 @app.route("/hostEnd", methods=['GET','POST'])
 def hostEnd():
     if request.method =='GET':
-        return render_template('Host End.html', data=[])
-    if request.method =='POST':
-        QuizName = request.form.get("QuizName")
+        QuizName = "Quiz"
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
         conn.commit()
         DATA = cur.fetchall()
+        print(DATA)
+    return render_template('Host End.html', data=DATA, user=user)
 
-        if DATA!=[]:
-            cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
-            conn.commit()
-            DATA = cur.fetchall()
-            print(DATA)
-        return render_template('Host End.html', data=DATA)
+# @app.route("/userEnd/<user>", methods=['GET', 'POST'])
+# def userEnd(user):
+#     QuizID = request.args.get('QuizID')
+#     UserID = request.args.get('UserID')
+#     if request.method == 'GET':
+#         return render_template('User End.html', data=getQuestion(QuizID), user=user)
+#     if request.method == 'POST':
 
-@app.route("/createQuiz", methods=['GET', 'POST'])
-def returnFirst():
+#         conn = sqlite3.connect("quizDatabase.db")
+#         cur = conn.cursor()
+#         cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+#         conn.commit()
+#         ID = cur.fetchall()[0][0]
+#         conn.close()
+
+#         Points = request.form.get("POINTS")
+#         print(Points)
+#         msg=""
+#         try:
+#             conn = sqlite3.connect('quizDatabase.db')
+#             cur = conn.cursor()
+#             cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
+#             data = cur.fetchall()
+#             conn.commit()
+#         except Exception as e:
+#             conn.rollback()
+#         return redirect("/home/"+user)
+
+def RandomKey():
+    while True:
+        msg = ""
+        Last_Quiz=""   
+        CharList = []
+        QuizKey = ""
+        for i in range(65, 91):
+            CharList.append(chr(i))
+            CharList.append(chr(i + 32))
+            for i in range(10):
+                CharList.append(str(i))
+        for i in range(4):
+            QuizKey+=str(CharList[random.randint(0, len(CharList))])
+        
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT QuizName from Quiz where QuizKey = "{QuizKey}"')
+        conn.commit()
+        stuff = cur.fetchall()
+        conn.close()
+        print(stuff)
+        if stuff == []:
+            break
+    return QuizKey
+
+@app.route("/createQuiz/<user>", methods=['GET', 'POST'])
+def createQuiz(user):
     if request.method == 'GET':
-        return render_template('Create Quiz.html')
+        return render_template('Create Quiz.html', QuizKey=RandomKey())
     if request.method =='POST':
         QuizName = request.form.get('QuizName')
+        QuizKey = request.form.get('Key')
+        print(QuizKey)
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+        conn.commit()
+        ID = cur.fetchall()[0][0]
+        conn.close()
+
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute(f'SELECT QuizID FROM Quiz WHERE QuizName = "{QuizName}"')
         conn.commit()
         Exists = cur.fetchall()
         conn.close()
+
         if Exists == []:
             keys = request.form.keys()
-            print(keys)
             Elements = []
             for i in keys:
                 Elements.append(i)
             Elements.remove("QuizName")
+            Elements.remove("Key")
             Numbers = []
             for i in Elements:
                 IsIn = False
@@ -71,21 +157,11 @@ def returnFirst():
             points = 0
             for i in Quiz:
                 points+=1
-            msg = ""
-            Last_Quiz=""   
-            CharList = []
-            QuizKey = ""
-            for i in range(65, 91):
-                CharList.append(chr(i))
-                CharList.append(chr(i + 32))
-            for i in range(10):
-                CharList.append(str(i))
-            for i in range(4):
-                QuizKey+=str(CharList[random.randint(0, len(CharList))])
+
             try:
                 conn = sqlite3.connect(DATABASE)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, "21", QuizKey))
+                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, ID, QuizKey))
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
@@ -126,17 +202,16 @@ def returnFirst():
                                 conn.close()
                             except Exception as e:
                                 conn.rollback()
-            return render_template('Main Page.html')
+            return redirect("/home/" + user)
         else:
-            return render_template('Create Quiz.html', data = "A quiz already has that name. Please try another.")
-
+            return render_template('Create Quiz.html',QuizKey=RandomKey() , data = "A quiz already has that name. Please try another.")
 
 def getQuestion(QuizID):
     data=[]
     try:
         conn = sqlite3.connect('quizDatabase.db')
         cur = conn.cursor()
-        cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID='+QuizID)
+        cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID = ?', [QuizID,])
         data = cur.fetchall()
         conn.commit()
     except Exception as e:
@@ -172,16 +247,22 @@ def getQuestion(QuizID):
     return questions
 
 def getMoodEmoji(mood):
+    """
+    Returns the code to display the mood on the page
+    when the mood integer is passed as a parameter
+    """
     moodlist = ["&#128549;","&#128577;","&#128528;","&#128578;","&#128512;"]
     return moodlist[mood]
 
 def getMood(user):
+    """
+    Returns the integer which represents the user's mood within the database
+    """
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
         cur.execute("SELECT Mood FROM User WHERE Username = ?", (user,))
         mood = cur.fetchone()[0]
-        mood = getMoodEmoji(mood)
     except Exception as e:
         conn.rollback()
         print(e)
@@ -215,15 +296,151 @@ def updateMood(user):
         conn.close()
         return redirect("/home/" + user)
 
-@app.route("/userEnd", methods=['GET', 'POST'])
-def userEnd():
-    QuizID = request.args.get('QuizID')
-    UserID = request.args.get('UserID')
-    # if request.method == 'GET':
-    return render_template('User End.html', data=getQuestion(QuizID))
+@app.route("/moodBeforeSubmit/<user>", methods=['GET', 'POST'])
+def moodBeforeSubmit(user):
+    if request.method == 'POST':
+        joinKey = request.form.get("joinCode")
+        quizKeyExist = checkQuizKey(user, joinKey)
+        if quizKeyExist == False:
+            return redirect("/home/" + user)
+        return redirect("/moodBefore/" + joinKey + "/" + user)
+
+@app.route("/moodBefore/<joinKey>/<user>", methods=['GET', 'POST'])
+def moodBefore(joinKey, user):
+    if request.method == 'GET':
+        return render_template('moodBefore.html', user=user, joinKey=joinKey)
+    if request.method == 'POST':
+        mood = int(request.form.get("moodSlider"))
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            UPDATE User SET Mood = ? WHERE Username = ?", (mood, user)\
+            )
+            conn.commit()
+        except Exception as e:
+            print(e)
+            print("error during update")
+            conn.rollback()
+            return redirect("/home/" + user)
+        conn.close()
+        return redirect("/joinQuizFunction/" + joinKey + "/" + user)
+
+def getUserID(username):
+    """
+    Returns the userID of the username passed in as a parameter
+    """
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT UserID FROM User WHERE Username = ?", (username,))
+        userID = cur.fetchone()[0]
+        conn.close()
+        return userID
+    except Exception as e:
+        print(e)
+        conn.close()
+        return None
+
+def getQuizID(user):
+    """
+    Returns the most recently played quiz's ID for the username given as a parameter
+    Returns None if they haven't played any quizzes
+    """
+    userID = getUserID(user)
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT QuizID FROM Players WHERE UserID = ?", (userID,))
+        quizID = cur.fetchall()[0]
+        conn.close()
+        return quizID[-1]
+    except Exception as e:
+        print(e)
+        conn.close()
+        return None
+
+@app.route("/moodAfter/<user>", methods=['GET', 'POST'])
+def moodAfter(user):
+    if request.method == 'GET':
+        return render_template('moodAfter.html',user=user)
+    if request.method == 'POST':
+        moodAfter = int(request.form.get("moodSlider"))
+        quizID = getQuizID(user)
+        userID = getUserID(user)
+        moodBefore = getMood(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            INSERT INTO Mood ('QuizID', 'UserID', 'MoodBefore', 'MoodAfter') VALUES (?,?,?,?)", \
+            (quizID, userID, moodBefore, moodAfter))
+            conn.commit()
+        except Exception as e:
+            print(e)
+            conn.rollback()
+        conn.close()
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            UPDATE User SET Mood = ? WHERE Username = ?", (moodAfter, user)\
+            )
+            conn.commit()
+        except Exception as e:
+            print(e)
+            print("error during update")
+            conn.rollback()
+            return redirect("/home/" + user)
+        conn.close()
+        return redirect("/home/" + user)
+
+@app.route("/viewMoods/<user>", methods=['GET', 'POST'])
+def viewMoods(user):
+    if request.method == 'GET':
+        return render_template("viewMoods.html")
+
+@app.route("/updateQuizMood/<user>", methods=['GET', 'POST'])
+def updateQuizMood(user):
+    """
+    Retrieves all the quiz names and moods from the database and returns them in a json list
+    """
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT Quizname, MoodBefore, MoodAfter FROM Mood\
+            LEFT JOIN Quiz USING(QuizID)\
+            WHERE Mood.UserID = ?", [userID,])
+            bigList = cur.fetchall()
+            conn.close()
+            newDict = {}
+            for x in range(len(bigList)):
+                subList = []
+                for y in range(len(bigList[x])):
+                    subList.append(bigList[x][y])
+                newDict.update({x: subList})
+            jsonList = json.dumps(newDict)
+            print(jsonList)
+            return jsonList
+        except Exception as e:
+            print(e)
+            conn.close()
+            return None
+        
+
+@app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
+def userEnd(QuizID, UserID, user):
+    QuizID = int(QuizID)
+    UserID = int(UserID)
+    if request.method == 'GET':
+        return render_template('User End.html', data=getQuestion(QuizID), QuizID = QuizID, UserID = UserID, user = user)
     if request.method == 'POST':
         Points = request.form.get("POINTS")
-        print(Points)
         msg=""
         try:
             conn = sqlite3.connect('quizDatabase.db')
@@ -233,7 +450,8 @@ def userEnd():
             conn.commit()
         except Exception as e:
             conn.rollback()
-        return render_template('Main Page.html')
+        conn.close()
+        return redirect("/moodAfter/" + user)
 
 @app.route("/createAccount", methods=['GET'])
 def returnCreateAccount():
@@ -432,6 +650,9 @@ def updateLastname(user):
             conn.close()
         return redirect("/accountDetails/" + user)
 
+
+
+
 @app.route("/")
 def redirectLogin():
     return redirect('/login')
@@ -525,7 +746,6 @@ def securityQuestionFunction():
 
 
 @app.route("/home/<user>")
-
 def returnHome(user):
     """
     Function to load the home page using details passed through from the login function.
@@ -539,6 +759,7 @@ def returnHome(user):
         cur.close()
         print('Welcome,', account[0], account[1] )
         mood = getMood(user)
+        mood = getMoodEmoji(mood)
         if account:
             firstName, surname = account[0], account[1]
         else:
@@ -551,8 +772,6 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
-QUIZLISTDATABASE = 'quizDatabase.db'
-
 @app.route("/listQuizzes")
 def printQuiz():
     return render_template("ListQuizzes.html")
@@ -561,11 +780,7 @@ def printQuiz():
 def jls_extract_def():
     return 'quizName'
 
-
-
-
 @app.route("/QuizHistory/<user>", methods = ['GET','POST'])
-
 def quizSearch(user):
     try:
         quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
@@ -584,16 +799,13 @@ def quizSearch(user):
     conn.close()
     return "error"
         
-@app.route("/joinQuizFunction", methods=['POST'])
-def findQuizKey():
+@app.route("/joinQuizFunction/<joinKey>/<user>", methods=['GET'])
+def findQuizKey(joinKey, user):
     """
     Function that gets the Key from the input and checks to see if it relates to a Quiz Table
     """
-    if request.method == 'POST':
-        #Take the Input from the form
-        joinKey = request.form.get("joinCode")
+    if request.method == 'GET':
         print(joinKey)
-
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
@@ -613,22 +825,41 @@ def findQuizKey():
             print(UserID)
             
             if QuizID:
-                return redirect(url_for('userEnd', QuizID=QuizID, UserID=UserID))
+                # return redirect('userEnd/' + user, QuizID=QuizID, UserID=UserID)
+                return redirect('/userEnd/' + str(QuizID) + '/' + str(UserID) + '/' + user)
 
             else:
                 errormessage = "Quiz not found"
                 print(errormessage)
-                return redirect('/')
+                return redirect('/home/' + user)
 
         except Exception as e:
             print(e)
             print("Error accessing Database")
             return redirect('/')
 
+def checkQuizKey(user, joinKey):
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Quiz WHERE QuizKey = ?",(joinKey,))
+        conn.commit()
+        Quiz = cur.fetchall()
+        QuizID = Quiz[0][0]
+        conn.close()
+        if QuizID:
+            return True
+        else:
+            errormessage = "Quiz not found"
+            print(errormessage)
+            return False
+    except Exception as e:
+        conn.close()
+        print(e)
+        return False
 @app.route("/forgotPassword")
 def forgotPassword():
     return render_template("forgotPassword.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
-

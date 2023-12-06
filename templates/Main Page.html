@@ -19,8 +19,14 @@
         <button id="hostButton" type="button" disabled>HOST</button>
     </form>
 </section>
-<section class="quizPathBox">
+<!-- <section class="quizPathBox">
     <form id="joinForm" method="POST" action="/joinQuizFunction">
+        <input type="text" id="joinCode" name="joinCode" required placeholder="####">
+        <button id="joinButton" type="submit" disabled>JOIN</button>
+    </form>
+</section> -->
+<section class="quizPathBox">
+    <form id="joinForm" method="POST" action="/moodBeforeSubmit/{{user}}">
         <input type="text" id="joinCode" name="joinCode" required placeholder="####">
         <button id="joinButton" type="submit" disabled>JOIN</button>
     </form>
@@ -28,7 +34,7 @@
 </div>
 <section class="createQuizButtonSection">
 <div class="createQuizButton">
-<a href="/createQuiz"><button type="button">CREATE QUIZ</button></a>
+<a href="/createQuiz/{{user}}"><button type="button">CREATE QUIZ</button></a>
 </div>
 </section>
 <script src="/static/JS/Main Page.js"></script>
