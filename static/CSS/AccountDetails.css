@@ -49,7 +49,7 @@ input[type=text] {
 }
 /* https://www.w3schools.com/css/css_form.asp */
 /* Got help from this site */
-.btn {
+.btn-success {
     width:fit-content;
     background-color: #028844;
     margin-top: 3px;
