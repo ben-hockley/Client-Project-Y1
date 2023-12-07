@@ -1,0 +1,21 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Editor</title>
+</head>
+<body>
+    <h1>Quiz Questions and Answers</h1>
+    <ul>
+        {% for question in quiz_data %}
+            <li>
+                {{ question[1] }} - {{ question[2] }}
+                <a href="Edit_Quiz.html">Edit</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
