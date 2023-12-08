@@ -1,0 +1,74 @@
+.Messages {
+    margin: 0 auto;
+    width: 60%;
+    padding: 0 20px;
+}
+  
+.left {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    width: fit-content;
+}
+
+.right {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    width: fit-content;
+    float: right;
+}
+
+.name{
+    font-weight: bold;
+}
+
+.darker {
+    border-color: #ccc;
+    background-color: #ddd;
+}
+  
+.left::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.time-right {
+    float: right;
+    color: #aaa;
+}
+  
+.time-left {
+    float: left;
+    color: #999;
+}
+
+.Send{
+    justify-content: center;  
+    display: flex;
+}
+.Message{
+    border-radius: 10px;
+    border: 1px solid black;
+    margin: 25%;
+    margin-top: 0;
+    padding: 5px;
+    height: 500px;
+    box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+
+}
+.quizName{
+    justify-content: center;
+    display: flex;
+}
+.Send button, input{
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: black;
+    padding: 5px;
+}

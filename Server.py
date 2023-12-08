@@ -4,6 +4,7 @@ import json
 import sqlite3
 import hashlib
 import random
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -849,9 +850,32 @@ def chatPage(quizID, user):
     cur = conn.cursor()
     cur.execute(f"SELECT QuizName FROM Quiz WHERE QuizID = {quizID}")
     conn.commit()
-    quizName = cur.fetchall()
+    quizName = cur.fetchall()[0][0]
     cur.close()
-    return render_template("chatPage.html", quizName=quizName)
+    return render_template("chatPage.html", quizName=quizName, quizID=quizID, user=user)
 
+@app.route("/getMessages/<quizID>/<user>")
+def getMessages(quizID, user):
+    conn = sqlite3.connect("quizDatabase.db")
+    cur = conn.cursor()
+    print(user)
+    cur.execute(f'SELECT Date, Time, Username, Message from Messages, User WHERE QuizID = {quizID} AND Messages.UserID=User.UserID AND Username = "{user}"')
+    conn.commit()
+    Messages = cur.fetchall()
+    cur.close()
+    return Messages
+
+@app.route("/sendMessages/<quizID>/<user>/<message>")
+def sendMessages(quizID, user, message):
+    conn = sqlite3.connect("quizDatabase.db")
+    cur = conn.cursor()
+    cur.execute(f'SELECT UserID FROM User WHERE Username="{user}"')
+    userID = cur.fetchone()[0]
+    cur.execute(f'INSERT INTO Messages (QuizID, UserID, Message, Time, Date) VALUES ({quizID}, {userID}, "{message}", "{datetime.now().strftime("%X")}", "{datetime.now().strftime("%d/%m/%Y")}")')
+    conn.commit()
+    cur.close()
+    return "sent"
+    
 if __name__ == "__main__":
+    print(datetime.now().strftime("%d/%m/%Y"))
     app.run(debug=True)
