@@ -794,7 +794,7 @@ def displayQuizCode(quizName, quizCode, user):
     print(quizName)
     print(quizCode)
     print(user)
-    return render_template("displayQuizCode.html", quizName=quizName, quizCode=quizCode)
+    return render_template("displayQuizCode.html", quizName=quizName, quizCode=quizCode, user=user)
 
 def jls_extract_def():
     return 'quizName'

@@ -5,11 +5,19 @@
     #quizName {
         text-align: center;
         font-size: 5vw;
-        padding-top: 5vh;
     }
     #quizCode {
         text-align: center;
         font-size: 20vw;
+    }
+    #playForm {
+        display: flex;
+        justify-content: center;
+    }
+    #playButton {
+        background-color: #028844;
+        font-size: 150%;
+        padding: 10px;
     }
 </style>
 {% endblock%}
@@ -18,5 +26,8 @@
 {% block mainBody%}
 <p id="quizName">{{quizName}}</p>
 <p id="quizCode">{{quizCode}}</p>
+<form id="playForm" action="/moodBefore/{{quizCode}}/{{user}}">
+    <button type="submit" id="playButton" class="btn btn-success">Play the Quiz</button>
+</form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% endblock%}
