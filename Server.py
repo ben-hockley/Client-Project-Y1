@@ -579,17 +579,17 @@ def findQuizKey():
             print(e)
             print("Error accessing Database")
             return redirect('/')
-@app.route('/')
+@app.route('/index/<user>')
 def index():
     connection = sqlite3.connect("quizDatabase.db")
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Questions')
+    cursor.execute('SELECT * FROM Quiz')
     quiz_data = cursor.fetchall()
     connection.close()
     return render_template('Index.html', quiz_data=quiz_data)
 
-@app.route('/edit/<int:QuestionID>', methods=['GET', 'POST'])
-def edit(question_id):
+@app.route('/edit/<user>', methods=['GET', 'POST'])
+def edit(user, QuestionID):
     connection = sqlite3.connect("quizDatabase.db")
     cursor = connection.cursor()
 
@@ -600,12 +600,12 @@ def edit(question_id):
             UPDATE Questions
             SET Question = ?, Answer = ?
             WHERE QuestionID = ?
-        ''', (new_question, new_answer, question_id))
+        ''', (new_question, new_answer, QuestionID))
         connection.commit()
         connection.close()
         return redirect(url_for('Index'))
 
-    cursor.execute('SELECT * FROM Questions WHERE QuestionID = ?', (question_id,))
+    cursor.execute('SELECT * FROM Questions WHERE QuestionID = ?', (QuestionID,))
     question_data = cursor.fetchone()
     connection.close()
     return render_template('Edit_Quiz.html', question_data=question_data)
