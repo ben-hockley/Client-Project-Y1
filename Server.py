@@ -580,10 +580,10 @@ def findQuizKey():
             print("Error accessing Database")
             return redirect('/')
 @app.route('/index/<user>')
-def index():
+def index(user):
     connection = sqlite3.connect("quizDatabase.db")
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?',)
+    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?',user)
     quiz_data = cursor.fetchall()
     connection.close()
     return render_template('Index.html', quiz_data=quiz_data)
