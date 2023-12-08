@@ -354,9 +354,9 @@ def getQuizID(user):
         cur = conn.cursor()
         cur.execute("\
         SELECT QuizID FROM Players WHERE UserID = ?", (userID,))
-        quizID = cur.fetchall()[0]
+        quizID = cur.fetchall()
         conn.close()
-        return quizID[-1]
+        return quizID[-1][0]
     except Exception as e:
         print(e)
         conn.close()
