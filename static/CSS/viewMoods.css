@@ -13,6 +13,7 @@
 #quizMoods {
     text-align: center;
     vertical-align: middle;
+    min-height: 70vh;
 }
 th {
     text-align: center;

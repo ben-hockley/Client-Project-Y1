@@ -1,6 +1,8 @@
-body {
+#details{
     margin:0;
-    padding:0;
+    width:100%;
+    min-height:70vh;
+    border:1px solid black;
 }
 h1 {
     text-align: center;
