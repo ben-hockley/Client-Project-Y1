@@ -13,9 +13,7 @@ body{
   border:5px solid #0076d6;
   box-sizing: border-box;
   font-size: x-large;
-}
-.SelectSection p{
-  visibility: visible;
+  margin-top: 10%;
 }
 
 .Select{
@@ -54,7 +52,8 @@ body{
   border-radius: 25px;
 }
 
-body p{
+#DATA{
+  margin-top: 5%;
   visibility: hidden;
 }
 .navbar-legal-and-general p{

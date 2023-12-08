@@ -5,7 +5,6 @@ import sqlite3
 import hashlib
 import random
 
-
 app = Flask(__name__)
 
 ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
@@ -43,45 +42,26 @@ def checkGuest(user):
         return "T"
     return "F"
 
-@app.route("/hostEnd", methods=['GET','POST'])
-def hostEnd():
-    if request.method =='GET':
-        QuizName = "Quiz"
-        conn = sqlite3.connect("quizDatabase.db")
-        cur = conn.cursor()
-        cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
+@app.route("/goHostEnd/<user>", methods=['POST'])
+def goHostEnd(user):
+    QuizKey = request.form.get("hostCode")
+    print(QuizKey)
+    return redirect(f"/hostEnd/{QuizKey}/{user}")
+
+@app.route("/hostEnd/<QuizKey>/<user>")
+def hostEnd(QuizKey, user):
+    QuizName = request.form.get("QuizName")
+    conn = sqlite3.connect("quizDatabase.db")
+    cur = conn.cursor()
+    cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizKey = "{QuizKey}" AND Quiz.UserID = User.UserID')
+    conn.commit()
+    DATA = cur.fetchall()
+    if DATA!=[]:
+        cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
         conn.commit()
         DATA = cur.fetchall()
         print(DATA)
-    return render_template('Host End.html', data=DATA, user=user)
-
-# @app.route("/userEnd/<user>", methods=['GET', 'POST'])
-# def userEnd(user):
-#     QuizID = request.args.get('QuizID')
-#     UserID = request.args.get('UserID')
-#     if request.method == 'GET':
-#         return render_template('User End.html', data=getQuestion(QuizID), user=user)
-#     if request.method == 'POST':
-
-#         conn = sqlite3.connect("quizDatabase.db")
-#         cur = conn.cursor()
-#         cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
-#         conn.commit()
-#         ID = cur.fetchall()[0][0]
-#         conn.close()
-
-#         Points = request.form.get("POINTS")
-#         print(Points)
-#         msg=""
-#         try:
-#             conn = sqlite3.connect('quizDatabase.db')
-#             cur = conn.cursor()
-#             cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
-#             data = cur.fetchall()
-#             conn.commit()
-#         except Exception as e:
-#             conn.rollback()
-#         return redirect("/home/"+user)
+    return render_template('Host End.html', data=DATA)
 
 def RandomKey():
     while True:
@@ -432,7 +412,6 @@ def updateQuizMood(user):
             conn.close()
             return None
         
-
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
@@ -463,7 +442,6 @@ def returnAccountDetails(user):
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
-
 @app.route("/updateInfo/<user>", methods=['GET'])
 def updateInfo(user):
     """
@@ -490,7 +468,6 @@ def updateInfo(user):
     conn.close()
     print(details)
     return details
-
 
 def submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer):
     """
@@ -651,9 +628,6 @@ def updateLastname(user):
             conn.close()
         return redirect("/accountDetails/" + user)
 
-
-
-
 @app.route("/")
 def redirectLogin():
     return redirect('/login')
@@ -791,7 +765,6 @@ def returnHome(user):
 def printQuiz():
     return render_template("ListQuizzes.html")
 
-
 def jls_extract_def():
     return 'quizName'
 
@@ -854,6 +827,7 @@ def findQuizKey(joinKey, user):
             return redirect('/')
 
 def checkQuizKey(user, joinKey):
+
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
