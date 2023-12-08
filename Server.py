@@ -789,6 +789,13 @@ def updateQuizDisplay():
     conn.close()
     return newDict
 
+@app.route("/displayQuizCode/<quizName>/<quizCode>/<user>", methods=['GET'])
+def displayQuizCode(quizName, quizCode, user):
+    print(quizName)
+    print(quizCode)
+    print(user)
+    return render_template("displayQuizCode.html", quizName=quizName, quizCode=quizCode)
+
 def jls_extract_def():
     return 'quizName'
 

@@ -1,0 +1,22 @@
+{%extends 'generalPageStyled.html'%}
+
+{% block linkBlock%}
+<style>
+    #quizName {
+        text-align: center;
+        font-size: 5vw;
+        padding-top: 5vh;
+    }
+    #quizCode {
+        text-align: center;
+        font-size: 20vw;
+    }
+</style>
+{% endblock%}
+{% block mainBlock%}
+{% endblock%}
+{% block mainBody%}
+<p id="quizName">{{quizName}}</p>
+<p id="quizCode">{{quizCode}}</p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock%}
