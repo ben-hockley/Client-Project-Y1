@@ -1,0 +1,20 @@
+.heading-center {   
+    text-align: center;
+    padding-bottom:20px;
+    margin:0;
+}
+#emoji {
+    font-size: 40px;
+}
+#quizTitle {
+    padding-top: 24px;
+    font-size: larger;
+}
+#quizMoods {
+    text-align: center;
+    vertical-align: middle;
+}
+th {
+    text-align: center;
+    width: 33%;
+}

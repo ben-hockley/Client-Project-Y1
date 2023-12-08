@@ -1,0 +1,115 @@
+header {
+    margin-bottom: 0;
+}
+body {
+    background-image: url("/static/img/homePageBanner.jpg");
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: top;
+}
+#accountLink {
+    background-color: #028844;
+    padding: 5px;
+    height: 40px;
+    width: 120px;
+    margin-left: 1%;
+    margin-top: 0;
+    border: none;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+form p {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
+}
+.headerText {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 70px;
+    text-align: center;
+    margin-top: 70px;
+    margin-bottom: 60px;
+    color: white;
+}
+#nameText {
+    color: #0076D6;
+    text-shadow:
+      -2px -2px 0 white,  
+      2px -2px 0 white,
+      -2px 2px 0 white,
+      2px 2px 0 white;
+
+}
+.inputBoxs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 25%;
+    margin-right: 25%;
+    background-color: white;
+}
+.quizPathBox {
+    flex: 1;
+    margin: 100px auto;
+    margin-top: 0;
+    width: fit-content;
+    padding: 20px;
+    border: 1px white solid;
+    border-radius: 5px;
+    background-color: white;
+    float: left;
+    margin-bottom: 0px;
+}
+.quizPathBox input {
+    width: 260px;
+    height: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 0;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    font-size: 150%;
+    text-align: center;
+    letter-spacing: 10px;
+}
+.quizPathBox button {
+    width: 268px;
+    height: 50px;
+    padding: 10px;
+    margin: auto;
+    margin-top: 20px;
+    background-color: #0076D6;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 150%;
+}
+.quizPathBox button:disabled,
+button[disabled]{
+  background-color: #acacac;
+}
+.createQuizButtonSection{
+    background-color: white;
+    padding-bottom: 300px;
+}
+.createQuizButton{
+    display: inline;
+    margin: 26.5%;
+    margin-top: 10px;
+
+}
+.createQuizButton button {
+    width: 47%;
+    height: 70px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #0076D6;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 150%;
+}
