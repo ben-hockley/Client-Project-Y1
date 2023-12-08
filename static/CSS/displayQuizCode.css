@@ -1,0 +1,17 @@
+#quizName {
+    text-align: center;
+    font-size: 5vw;
+}
+#quizCode {
+    text-align: center;
+    font-size: 20vw;
+}
+#playForm {
+    display: flex;
+    justify-content: center;
+}
+#playButton {
+    background-color: #028844;
+    font-size: 150%;
+    padding: 10px;
+}
