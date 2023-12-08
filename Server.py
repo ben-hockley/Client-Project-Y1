@@ -558,8 +558,9 @@ def usernameExist():
         password = request.form.get("password")
         securityQuestion = request.form.get("securityQuestion")
         securityAnswer = request.form.get("securityAnswer")
-        # Hashing password
+        # Hashing password and security answer
         password = hashPassword(userName,password)
+        securityAnswer = hashPassword(userName, securityAnswer)
         if usernameCheck(userName) == False:
             if submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer) == True:
                 message = "Welcome to your account, " + firstName
@@ -707,27 +708,23 @@ def securityQuestionFunction():
     """
     Funtion that takes the inputs from Forgot Password form and checks to see if the user exists
     and that the security question + answer is correct for that user. If so then it redirects the user to
-    the homepage using their details.
+    the reset password page using their details.
     """
     if request.method == 'POST':
-        username = request.form.get("username")
+        user = request.form.get("username")
         securityQuestion = request.form.get("securityQuestion")
         securityAnswer = request.form.get("securityAnswer")
-
+        securityAnswer = hashPassword(user, securityAnswer)
         try:
             conn = sqlite3.connect("quizDatabase.db")
             cur = conn.cursor()
             cur.execute(\
-            "SELECT securityQuestion,securityAnswer FROM User WHERE Username = ?",([username]))
+            "SELECT securityQuestion,securityAnswer FROM User WHERE Username = ?",([user,]))
             isExist = cur.fetchall()
-
             cur.close()
             if isExist != []:
                 if isExist[0][0] == securityQuestion and isExist[0][1] == securityAnswer:
-                    global user
-                    user = username
-                    print('Signed in as', user)
-                    return redirect("/home/" + user)
+                    return redirect("/resetPassword/" + user)
                 else:
                     message = "Security Question/Answer are incorrect."
                     print(message)
@@ -743,7 +740,25 @@ def securityQuestionFunction():
         print(message)
         return redirect('/login')
 
-
+@app.route("/resetPassword/<user>", methods=['GET', 'POST'])
+def resetPassword(user):
+    if request.method == 'GET':
+        return render_template("resetPassword.html", user=user)
+    if request.method == 'POST':
+        newPassword = request.form.get("password")
+        newPassword = hashPassword(user, newPassword)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("UPDATE User SET Password = ? WHERE Username = ?", (newPassword, user))
+            conn.commit()
+            conn.close()
+            return redirect("/home/" + user)
+        except Exception as e:
+            print(e)
+            conn.rollback()
+            conn.close()
+        return redirect("/")
 
 @app.route("/home/<user>")
 def returnHome(user):
