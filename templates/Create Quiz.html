@@ -1,0 +1,22 @@
+{%extends 'mainTemplate.html'%}
+
+{% block linkBlock%}
+    <link rel="stylesheet" href="/static/CSS/Create Quiz.css">
+{% endblock%}
+{% block mainBlock%}
+{% endblock%}
+{% block mainBody%}
+    <form class="MakeQuiz" method="POST" onsubmit="return False">
+        <input name = "Key" type="text" id="Key" value="{{QuizKey}}">
+        <section>
+            <section id="CreateSect">
+                <button class="BtnAdd" onclick="AddQuestion(event)" id="Fancy" type="button">Add Question</button><br><br><span id="KeyDisplay">Your QuizKey = {{QuizKey}}</span><br><p>{{ data }}</p><input type="text" name="QuizName" id="QuizName"><br><br>
+            </section>
+            <br>
+            <section id="SubmitSect">
+                <button class="BtnSub" id="Nothing" type="submit">Submit</button>
+            </section>
+        </section>
+    </form>
+    <script src="/static/JS/Create Quiz.js"></script>
+{% endblock%}
