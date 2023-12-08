@@ -55,34 +55,6 @@ def hostEnd():
         print(DATA)
     return render_template('Host End.html', data=DATA, user=user)
 
-# @app.route("/userEnd/<user>", methods=['GET', 'POST'])
-# def userEnd(user):
-#     QuizID = request.args.get('QuizID')
-#     UserID = request.args.get('UserID')
-#     if request.method == 'GET':
-#         return render_template('User End.html', data=getQuestion(QuizID), user=user)
-#     if request.method == 'POST':
-
-#         conn = sqlite3.connect("quizDatabase.db")
-#         cur = conn.cursor()
-#         cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
-#         conn.commit()
-#         ID = cur.fetchall()[0][0]
-#         conn.close()
-
-#         Points = request.form.get("POINTS")
-#         print(Points)
-#         msg=""
-#         try:
-#             conn = sqlite3.connect('quizDatabase.db')
-#             cur = conn.cursor()
-#             cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
-#             data = cur.fetchall()
-#             conn.commit()
-#         except Exception as e:
-#             conn.rollback()
-#         return redirect("/home/"+user)
-
 def RandomKey():
     while True:
         msg = ""
@@ -432,7 +404,6 @@ def updateQuizMood(user):
             conn.close()
             return None
         
-
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
@@ -490,7 +461,6 @@ def updateInfo(user):
     conn.close()
     print(details)
     return details
-
 
 def submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer):
     """
@@ -651,9 +621,6 @@ def updateLastname(user):
             conn.close()
         return redirect("/accountDetails/" + user)
 
-
-
-
 @app.route("/")
 def redirectLogin():
     return redirect('/login')
@@ -791,7 +758,6 @@ def returnHome(user):
 def printQuiz():
     return render_template("ListQuizzes.html")
 
-
 def jls_extract_def():
     return 'quizName'
 
@@ -872,9 +838,20 @@ def checkQuizKey(user, joinKey):
         conn.close()
         print(e)
         return False
+
 @app.route("/forgotPassword")
 def forgotPassword():
     return render_template("forgotPassword.html")
+
+@app.route("/chatPage/<quizID>/<user>")
+def chatPage(quizID, user):
+    conn = sqlite3.connect("quizDatabase.db")
+    cur = conn.cursor()
+    cur.execute(f"SELECT QuizName FROM Quiz WHERE QuizID = {quizID}")
+    conn.commit()
+    quizName = cur.fetchall()
+    cur.close()
+    return render_template("chatPage.html", quizName=quizName)
 
 if __name__ == "__main__":
     app.run(debug=True)
