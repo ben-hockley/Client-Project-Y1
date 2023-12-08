@@ -38,5 +38,5 @@ button {
     margin:0;
     width:100%;
     min-height:70vh;
-    border:1px solid black;
+    padding:0;
 }
