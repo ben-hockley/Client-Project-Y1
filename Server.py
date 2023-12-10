@@ -5,7 +5,15 @@ import sqlite3
 import hashlib
 import random
 from datetime import datetime
+import psycopg2
 
+db_params = {
+    'database': 'c23054732',
+    'host': 'cspg.cs.cf.ac.uk',
+    'user': 'c23054732',
+    'password': 'Suck0nDeezNutz',
+    'port': 5432
+}
 
 app = Flask(__name__)
 
@@ -17,16 +25,16 @@ DATABASE = "quizDatabase.db"
 
 @app.route("/createGuest")
 def createGuest():
-    conn = sqlite3.connect('quizDatabase.db')
+    conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
     cur.execute('SELECT * FROM User')
     last = cur.fetchall()
     last = last[len(last)-1]
     conn.commit()
     conn.close()
-    conn = sqlite3.connect('quizDatabase.db')
+    conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'INSERT INTO User (Username, FirstName, SurName) VALUES ("{"Guest"+str(last[0]+1)}", "Guest", "{last[0]+1}")')
+    cur.execute(f'INSERT INTO "User" ("Username", "FirstName", "SurName") VALUES ("{"Guest"+str(last[0]+1)}", "Guest", "{last[0]+1}")')
     conn.commit()
     conn.close()
 
@@ -34,9 +42,9 @@ def createGuest():
 
 @app.route("/checkGuest/<user>")
 def checkGuest(user):
-    conn = sqlite3.connect('quizDatabase.db')
+    conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'SELECT password FROM User WHERE Username = "{user}"')
+    cur.execute(f'SELECT "password" FROM "User" WHERE "Username" = \'{user}\'')
     Password = cur.fetchone()[0]
     conn.commit()
     conn.close()
@@ -48,9 +56,9 @@ def checkGuest(user):
 def hostEnd():
     if request.method =='GET':
         QuizName = "Quiz"
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizName = "{QuizName}" AND Quiz.UserID = User.UserID AND User.Admin = "Y"')
+        cur.execute(f'SELECT "QuizID" FROM "Quiz", "User" WHERE "QuizName" = \'{QuizName}\' AND "Quiz"."UserID" = "User"."UserID"')
         conn.commit()
         DATA = cur.fetchall()
         print(DATA)
@@ -70,9 +78,9 @@ def RandomKey():
         for i in range(4):
             QuizKey+=str(CharList[random.randint(0, len(CharList))])
         
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT QuizName from Quiz where QuizKey = "{QuizKey}"')
+        cur.execute(f'SELECT "QuizName" FROM "Quiz" WHERE "QuizKey" = \'{QuizKey}\'')
         conn.commit()
         stuff = cur.fetchall()
         conn.close()
@@ -89,16 +97,16 @@ def createQuiz(user):
         QuizName = request.form.get('QuizName')
         QuizKey = request.form.get('Key')
         print(QuizKey)
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT UserID FROM User WHERE Username = "{user}"')
+        cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username" = \'{user}\'')
         conn.commit()
         ID = cur.fetchall()[0][0]
         conn.close()
 
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT QuizID FROM Quiz WHERE QuizName = "{QuizName}"')
+        cur.execute(f'SELECT "QuizID" FROM "Quiz" WHERE "QuizName" = \'{QuizName}\'')
         conn.commit()
         Exists = cur.fetchall()
         conn.close()
@@ -132,9 +140,9 @@ def createQuiz(user):
                 points+=1
 
             try:
-                conn = sqlite3.connect(DATABASE)
+                conn = psycopg2.connect(**db_params)
                 cur = conn.cursor()
-                cur.execute('INSERT INTO Quiz ("QuizName", "UserID", "QuizKey") VALUES (?, ?, ?)', (QuizName, ID, QuizKey))
+                cur.execute(f'INSERT INTO "Quiz" ("QuizName", "UserID", "QuizKey") VALUES (\'{QuizName}\', {ID}, \'{QuizKey}\')')
                 conn.commit()
                 Last_Quiz = cur.lastrowid
                 conn.close()
@@ -145,9 +153,9 @@ def createQuiz(user):
                 question.remove(question[0])
                 Last_Question=""
                 try:
-                    conn = sqlite3.connect(DATABASE)
+                    conn = psycopg2.connect(**db_params)
                     cur = conn.cursor()
-                    cur.execute('INSERT INTO Questions ("Question", "QuizID", Points) VALUES (?, ?, ?)', (questionName, Last_Quiz, points))
+                    cur.execute(f'INSERT INTO "Questions" ("Question", "QuizID", "Points") VALUES (\'{questionName}\', {Last_Quiz}, {points})')
                     conn.commit()
                     Last_Question = cur.lastrowid
                     conn.close()
@@ -159,18 +167,18 @@ def createQuiz(user):
                         questionay = (question[i])
                         if questionay[-3:-1] == "Is":
                             try:
-                                conn = sqlite3.connect(DATABASE)
+                                conn = psycopg2.connect(**db_params)
                                 cur = conn.cursor()
-                                cur.execute('INSERT INTO Answers ("Answer", "QuestionID", "IsTrue") VALUES (?, ?, ?)', (answerName, Last_Question, "T"))
+                                cur.execute(f'INSERT INTO "Answers" ("Answer", "QuestionID", "IsTrue") VALUES (\'{answerName}\', {Last_Question}, \'T\')')
                                 conn.commit()
                                 conn.close()
                             except Exception as e:
                                 conn.rollback()
                         else:
                             try:
-                                conn = sqlite3.connect(DATABASE)
+                                conn = psycopg2.connect(**db_params)
                                 cur = conn.cursor()
-                                cur.execute('INSERT INTO Answers ("Answer", "QuestionID", "IsTrue") VALUES (?, ?, ?)', (answerName, Last_Question, "F"))
+                                cur.execute(f'INSERT INTO "Answers" ("Answer", "QuestionID", "IsTrue") VALUES (\'{answerName}\', {Last_Question}, \'F\')')
                                 conn.commit()
                                 conn.close()
                             except Exception as e:
@@ -182,9 +190,9 @@ def createQuiz(user):
 def getQuestion(QuizID):
     data=[]
     try:
-        conn = sqlite3.connect('quizDatabase.db')
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute('SELECT Answer, question, QuizName, IsTrue, Questions.QuestionID FROM Answers, Questions, Quiz WHERE Answers.QuestionID = Questions.QuestionID AND Questions.QuizID = Quiz.QuizID AND Quiz.QuizID = ?', [QuizID,])
+        cur.execute(f'SELECT "Answer", "question", "QuizName", "IsTrue", "Questions"."QuestionID" FROM "Answers", "Questions", "Quiz" WHERE "Answers"."QuestionID" = "Questions"."QuestionID" AND "Questions"."QuizID" = "Quiz"."QuizID" AND "Quiz"."QuizID" = {QuizID}')
         data = cur.fetchall()
         conn.commit()
     except Exception as e:
@@ -232,9 +240,9 @@ def getMood(user):
     Returns the integer which represents the user's mood within the database
     """
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("SELECT Mood FROM User WHERE Username = ?", (user,))
+        cur.execute(f'SELECT "Mood" FROM "User" WHERE "Username" = \'{user}\'')
         mood = cur.fetchone()[0]
     except Exception as e:
         conn.rollback()
@@ -255,11 +263,9 @@ def updateMood(user):
     if request.method == 'POST':
         mood = int(request.form.get("moodSlider"))
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            UPDATE User SET Mood = ? WHERE Username = ?", (mood, user)\
-            )
+            cur.execute(f'UPDATE "User" SET "Mood" = {mood} WHERE "Username" = \'{user}\'')
             conn.commit()
         except Exception as e:
             print(e)
@@ -285,11 +291,9 @@ def moodBefore(joinKey, user):
     if request.method == 'POST':
         mood = int(request.form.get("moodSlider"))
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            UPDATE User SET Mood = ? WHERE Username = ?", (mood, user)\
-            )
+            cur.execute(f'UPDATE "User" SET "Mood" = {mood} WHERE "Username" = \'{user}\'')
             conn.commit()
         except Exception as e:
             print(e)
@@ -304,10 +308,9 @@ def getUserID(username):
     Returns the userID of the username passed in as a parameter
     """
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("\
-        SELECT UserID FROM User WHERE Username = ?", (username,))
+        cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username" = \'{username}\'')
         userID = cur.fetchone()[0]
         conn.close()
         return userID
@@ -323,10 +326,9 @@ def getQuizID(user):
     """
     userID = getUserID(user)
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("\
-        SELECT QuizID FROM Players WHERE UserID = ?", (userID,))
+        cur.execute(f'SELECT "QuizID" FROM "Players" WHERE "UserID" = \'{userID}\'')
         quizID = cur.fetchall()[0]
         conn.close()
         return quizID[-1]
@@ -345,22 +347,18 @@ def moodAfter(user):
         userID = getUserID(user)
         moodBefore = getMood(user)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            INSERT INTO Mood ('QuizID', 'UserID', 'MoodBefore', 'MoodAfter') VALUES (?,?,?,?)", \
-            (quizID, userID, moodBefore, moodAfter))
+            cur.execute(f'INSERT INTO "Mood" ("QuizID", "UserID", "MoodBefore", "MoodAfter") VALUES ({quizID}, {userID}, {moodBefore}, {moodAfter})')
             conn.commit()
         except Exception as e:
             print(e)
             conn.rollback()
         conn.close()
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            UPDATE User SET Mood = ? WHERE Username = ?", (moodAfter, user)\
-            )
+            cur.execute(f'UPDATE "User" SET "Mood" = {moodAfter} WHERE "Username" = \'{user}\'')
             conn.commit()
         except Exception as e:
             print(e)
@@ -383,12 +381,9 @@ def updateQuizMood(user):
     if request.method == 'GET':
         userID = getUserID(user)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            SELECT Quizname, MoodBefore, MoodAfter FROM Mood\
-            LEFT JOIN Quiz USING(QuizID)\
-            WHERE Mood.UserID = ?", [userID,])
+            cur.execute(f'SELECT "Quizname", "MoodBefore", "MoodAfter" FROM "Mood" LEFT JOIN "Quiz" USING("QuizID") WHERE "Mood"."UserID" = {userID}')
             bigList = cur.fetchall()
             conn.close()
             newDict = {}
@@ -415,9 +410,9 @@ def userEnd(QuizID, UserID, user):
         Points = request.form.get("POINTS")
         msg=""
         try:
-            conn = sqlite3.connect('quizDatabase.db')
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute('INSERT INTO Players(QuizID, UserID, Points) VALUES (?,?,?)', (QuizID, UserID, Points))
+            cur.execute(f'INSERT INTO Players("QuizID", "UserID", "Points") VALUES ({QuizID}, {UserID}, {Points})')
             data = cur.fetchall()
             conn.commit()
         except Exception as e:
@@ -445,10 +440,9 @@ def updateInfo(user):
     if user == None:
         return "None"
     try:
-        conn = sqlite3.connect('quizDatabase.db')
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("\
-        SELECT FirstName, SurName, Username, Mood FROM User WHERE Username = ?",([user]))
+        cur.execute(f'SELECT "FirstName", "SurName", "Username", "Mood" FROM "User" WHERE "Username" = \'{user}\'')
         details = cur.fetchall()[0]
         firstname, surname, username, mood = details[0], details[1], details[2], details[3]
         details = [firstname, surname, username, getMoodEmoji(mood)]
@@ -469,11 +463,9 @@ def submitNewAccount(firstName,lastName,userName,password,securityQuestion,secur
     Takes all the data as parameters, and returns True if the insert was a success
     """
     try:
-        conn = sqlite3.connect('quizDatabase.db')
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(\
-        "INSERT INTO User ('Username', 'FirstName','SurName','Password','Admin', 'SecurityQuestion', 'SecurityAnswer') \
-        VALUES (?,?,?,?,?,?,?)", (userName,firstName,lastName,password,"N",securityQuestion,securityAnswer))
+        cur.execute(f'INSERT INTO "User" ("Username", "FirstName","SurName","Password","Admin", "SecurityQuestion", "SecurityAnswer") VALUES (\'{userName}\',\'{firstName}\',\'{lastName}\',\'{password}\',\'N\',\'{securityQuestion}\',\'{securityAnswer}\')')
         message = True
         conn.commit()
     except Exception as e:
@@ -490,10 +482,9 @@ def usernameCheck(username):
     Returns True if entered username does exist, and False otherwise
     """
     try:
-        conn = sqlite3.connect('quizDatabase.db')
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(\
-        "SELECT Username FROM User WHERE Username = ?",([username]))
+        cur.execute(f'SELECT "Username" FROM "User" WHERE "Username" = \'{username}\'')
         isExist = cur.fetchall()
         conn.close()
         if isExist == []:
@@ -554,10 +545,9 @@ def updateUsername(user):
             return redirect("/accountDetails/" + user)
         if usernameCheck(username) == False:
             try:
-                conn = sqlite3.connect('quizDatabase.db')
+                conn = psycopg2.connect(**db_params)
                 cur = conn.cursor()
-                cur.execute(\
-                "UPDATE User SET ('Username') = ? WHERE Username = ?", (username,user))
+                cur.execute(f'UPDATE "User" SET ("Username") = \'{username}\' WHERE Username = \'{user}\'')
                 conn.commit()
                 message = "Successfully updated username"
                 user = username
@@ -582,10 +572,9 @@ def updateFirstname(user):
         if firstname == '':
             return redirect("/accountDetails/" + user)
         try:
-            conn = sqlite3.connect('quizDatabase.db')
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(\
-            "UPDATE User SET ('FirstName') = ? WHERE Username = ?", (firstname,user))
+            cur.execute(f'UPDATE "User" SET ("FirstName") = \'{firstname}\' WHERE "Username" = \'{user}\'')
             conn.commit()
             message = "Successfully updated first name"
         except Exception as e:
@@ -607,10 +596,9 @@ def updateLastname(user):
         if lastname == '':
             return redirect("/accountDetails/" + user)
         try:
-            conn = sqlite3.connect('quizDatabase.db')
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(\
-            "UPDATE User SET ('SurName') = ? WHERE Username = ?", (lastname,user))
+            cur.execute(f'UPDATE "User" SET ("SurName") = \'{lastname}\' WHERE "Username" = \'{user}\'')
             conn.commit()
             message = "Successfully updated last name"
         except Exception as e:
@@ -643,10 +631,9 @@ def logonFunction():
         # Hashing password
         password = hashPassword(username, password)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(\
-            "SELECT Password FROM User WHERE Username = ?",([username]))
+            cur.execute(f'SELECT "Password" FROM "User" WHERE "Username" = \'{username}\'')
             isExist = cur.fetchall()
 
             cur.close()
@@ -684,10 +671,9 @@ def securityQuestionFunction():
         securityAnswer = request.form.get("securityAnswer")
         securityAnswer = hashPassword(user, securityAnswer)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(\
-            "SELECT securityQuestion,securityAnswer FROM User WHERE Username = ?",([user,]))
+            cur.execute(F'SELECT "securityQuestion","securityAnswer" FROM "User" WHERE "Username" = \'{user}\'')
             isExist = cur.fetchall()
             cur.close()
             if isExist != []:
@@ -716,9 +702,9 @@ def resetPassword(user):
         newPassword = request.form.get("password")
         newPassword = hashPassword(user, newPassword)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("UPDATE User SET Password = ? WHERE Username = ?", (newPassword, user))
+            cur.execute(f'UPDATE "User" SET "Password" = \'{newPassword}\' WHERE "Username" = \'{user}\'')
             conn.commit()
             conn.close()
             return redirect("/home/" + user)
@@ -735,9 +721,9 @@ def returnHome(user):
     User is passed through to source the details from the database and use within the HTML. 
     """
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("SELECT FirstName, SurName FROM User WHERE Username = ?", (user,))
+        cur.execute(f'SELECT "FirstName", "SurName" FROM "User" WHERE "Username" = \'{user}\'')
         account = cur.fetchone()
         cur.close()
         print('Welcome,', account[0], account[1] )
@@ -766,13 +752,13 @@ def jls_extract_def():
 def quizSearch(user):
     try:
         quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
-        conn = sqlite3.connect(QUIZLISTDATABASE)
+        conn = sqlite3.connect(**db_params)
         cur = conn.cursor()
         print(user)
-        cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
+        cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username" = \'{user}\'')
         userID = cur.fetchone()[0]
         print(userID)
-        cur.execute("SELECT QuizName FROM Quiz WHERE UserID = ?", (userID,))
+        cur.execute(f'SELECT "QuizName" FROM "Quiz" WHERE "UserID" = {userID}')
         QuizHistory = cur.fetchall()
         QuizzesPlayed = str(len(QuizHistory))
         return render_template("Quiz History.html", user=user, QuizzesPlayed=QuizzesPlayed, QuizHistory=QuizHistory)
@@ -789,12 +775,12 @@ def findQuizKey(joinKey, user):
     if request.method == 'GET':
         print(joinKey)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("SELECT * FROM Quiz WHERE QuizKey = ?",(joinKey,))
+            cur.execute(f'SELECT * FROM "Quiz" WHERE "QuizKey" = \'{joinKey}\'')
             conn.commit()
             Quiz = cur.fetchall()
-            cur.execute("SELECT * FROM User WHERE UserName = ?",(user,))
+            cur.execute(f'SELECT * FROM "User" WHERE "UserName" = \'{user}\'')
             conn.commit()
             User = cur.fetchall()
             cur.close()
@@ -822,9 +808,9 @@ def findQuizKey(joinKey, user):
 
 def checkQuizKey(user, joinKey):
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("SELECT * FROM Quiz WHERE QuizKey = ?",(joinKey,))
+        cur.execute(f'SELECT "*" FROM "Quiz" WHERE "QuizKey" = \'{joinKey}\'')
         conn.commit()
         Quiz = cur.fetchall()
         QuizID = Quiz[0][0]
@@ -846,9 +832,9 @@ def forgotPassword():
 
 @app.route("/chatPage/<quizID>/<user>")
 def chatPage(quizID, user):
-    conn = sqlite3.connect("quizDatabase.db")
+    conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f"SELECT QuizName FROM Quiz WHERE QuizID = {quizID}")
+    cur.execute(f'SELECT "QuizName" FROM "Quiz" WHERE "QuizID" = {quizID}')
     conn.commit()
     quizName = cur.fetchall()[0][0]
     cur.close()
@@ -856,26 +842,26 @@ def chatPage(quizID, user):
 
 @app.route("/getMessages/<quizID>/<user>")
 def getMessages(quizID, user):
-    conn = sqlite3.connect("quizDatabase.db")
+    conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
     print(user)
-    cur.execute(f'SELECT Date, Time, Username, Message from Messages, User WHERE QuizID = {quizID} AND Messages.UserID=User.UserID AND Username = "{user}"')
+    cur.execute(f'SELECT "Date", "Time", "Username", "Message" from "Messages", "User" WHERE "QuizID" = {quizID} AND "Messages"."UserID"="User"."UserID"')
     conn.commit()
     Messages = cur.fetchall()
     cur.close()
+    #Messages.reverse()
     return Messages
 
 @app.route("/sendMessages/<quizID>/<user>/<message>")
 def sendMessages(quizID, user, message):
-    conn = sqlite3.connect("quizDatabase.db")
+    conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'SELECT UserID FROM User WHERE Username="{user}"')
+    cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username"=\'{user}\'')
     userID = cur.fetchone()[0]
-    cur.execute(f'INSERT INTO Messages (QuizID, UserID, Message, Time, Date) VALUES ({quizID}, {userID}, "{message}", "{datetime.now().strftime("%X")}", "{datetime.now().strftime("%d/%m/%Y")}")')
+    cur.execute(f'INSERT INTO "Messages" ("QuizID", "UserID", "Message", "Time", "Date") VALUES ({quizID}, {userID}, \'{message}\', \'{datetime.now().strftime("%X")}\',\'{datetime.now().strftime("%d/%m/%Y")}\')')
     conn.commit()
     cur.close()
     return "sent"
     
 if __name__ == "__main__":
-    print(datetime.now().strftime("%d/%m/%Y"))
     app.run(debug=True)

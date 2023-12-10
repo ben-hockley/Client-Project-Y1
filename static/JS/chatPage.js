@@ -1,9 +1,12 @@
 let isFunctionRunning = false;
 
-
+getMessages()
 setInterval(function () {
   if (!isFunctionRunning) {
+    isFunctionRunning = true;
     getMessages();
+    isFunctionRunning = false;
+
   } else {
     console.log("Function is still running, skipping this interval.");
   }
@@ -11,7 +14,6 @@ setInterval(function () {
 
 
 function getMessages(){
-    isFunctionRunning = true;
     user = window.location.pathname.split("/").pop()
     quizID = window.location.pathname.slice(0,window.location.pathname.length-user.length-1).split("/").pop()
     newRoute = "/getMessages/" + quizID + "/" + user
@@ -26,9 +28,8 @@ function getMessages(){
                 data = data.replace(/\(/g, '[').replace(/\)/g, ']');
                 data = JSON.parse(data);
                 messageArea = document.getElementById("Messages")
-                console.log(messageArea.childNodes[0])
-                while (parent.firstChild) {
-                    parent.removeChild(parent.firstChild);
+                while (messageArea.firstChild) {
+                    messageArea.removeChild(messageArea.firstChild);
                 }
                 data.forEach(messages => {
                     var date = messages[0];
@@ -36,9 +37,13 @@ function getMessages(){
                     var Username = messages[2];
                     var Message = messages[3];
                     const d = new Date();
-                    var dates = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear()
+                    var dates = String(d.getDate()) + "/" + String(d.getMonth()+1) + "/" + String(d.getFullYear())
+                    Time= Time.slice(0,5)
+                    if(date[0] == "0"){
+                        date = date.slice(1,date.length)
+                    }
                     if(date!=dates){
-                        Time = date + " at " + Time  
+                        Time = date
                     }
                     if(NoSpace(Username)==user){
                         const area = document.createElement("div");
@@ -61,7 +66,7 @@ function getMessages(){
                         area.className="left";
                         const name = document.createElement("span");
                         name.className="name";
-                        name.textContent="Username"
+                        name.textContent=Username
                         const message = document.createElement("p");
                         message.textContent = Message
                         const time = document.createElement("span");
@@ -80,7 +85,6 @@ function getMessages(){
         }
     };
     xhttp.send();
-    isFunctionRunning = false;
 }
 function sendMessage(){
     const message = document.getElementById("sendMessage").value;

@@ -1,12 +1,22 @@
+body{
+    background-image: url("/static/img/cheese.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
 .Messages {
     margin: 0 auto;
     width: 60%;
     padding: 0 20px;
+    max-height: 300px;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+    border: 2px solid black;
 }
-  
+
 .left {
     border: 2px solid #dedede;
-    background-color: #f1f1f1;
+    background-color: #fed599;
     border-radius: 5px;
     padding: 10px;
     margin: 10px 0;
@@ -15,13 +25,22 @@
 
 .right {
     border: 2px solid #dedede;
-    background-color: #f1f1f1;
+    background-color: #bae6f0;
     border-radius: 5px;
     padding: 10px;
     margin: 10px 0;
     width: fit-content;
     float: right;
+    margin-left: auto;
+
 }
+
+/* .Messages, Send{
+    background-image: url("/static/img/cheese.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+} */
 
 .name{
     font-weight: bold;
@@ -65,10 +84,12 @@
 .quizName{
     justify-content: center;
     display: flex;
+    color: white;
 }
 .Send button, input{
     border-radius: 10px;
     border-width: 1px;
     border-color: black;
     padding: 5px;
+    margin-bottom: 5%;
 }
