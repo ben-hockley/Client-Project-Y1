@@ -12,22 +12,23 @@
 
 <p id="DATA">{{data}}</p>
 <div class="quizBody">
+    <div class="quizBox">
+        <form class="Quiz" method="get" action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}">
+            <section class="QuestionSection">
+                <section>
+                    <span id="QuestionNumber">Quiz Empty</span><br>
+                    <span id="Question", name="Question"></span>
+                </section>
+                <button type="button" id="Chat" onclick=" window.open('http://127.0.0.1:5000/chatPage/{{QuizID}}/{{user}}')">View Chat</button>
+            </section>
+        </form>
+    </div>
 <div class="quizBox">
-<form class="Quiz" method="get" action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}">
-    <section class="QuestionSection">
-        <section>
-            <span id="QuestionNumber">Quiz Empty</span><br>
-            <span id="Question", name="Question"></span>
+    <form action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}" method="post" class="Quiz">
+        <section id="AnswerSection" class="AnswerSection">
         </section>
-    </section>
-</div>
-<div class="quizBox">
-</form>
-<form action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}" method="post" class="Quiz">
-    <section id="AnswerSection" class="AnswerSection">
-    </section>
-    <input id="POINTS"name="POINTS" value="5" type=""></input>
-</form>
+        <input id="POINTS"name="POINTS" value="5" type=""></input>
+    </form>
 </div>
 </div>
 <script src="/static/JS/User End.js"></script>

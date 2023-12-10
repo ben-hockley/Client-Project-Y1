@@ -34,7 +34,7 @@ def createGuest():
     conn.close()
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'INSERT INTO "User" ("Username", "FirstName", "SurName") VALUES ("{"Guest"+str(last[0]+1)}", "Guest", "{last[0]+1}")')
+    cur.execute(f'INSERT INTO "User" ("Username", "FirstName", "SurName") VALUES (\'{"Guest"+str(last[0]+1)}\', \'Guest\', \'{last[0]+1}\')')
     conn.commit()
     conn.close()
 
@@ -66,6 +66,7 @@ def hostEnd(QuizKey, user):
     cur.execute(f'SELECT "QuizID" FROM "Quiz", "User" WHERE "QuizKey" = \'{QuizKey}\' AND "Quiz"."UserID" = "User"."UserID"')
     conn.commit()
     DATA = cur.fetchall()
+    print(DATA)
     if DATA!=[]:
         cur.execute(f'SELECT "Username", "Points" FROM "Players", "User" WHERE "User"."UserID" = "Players"."UserID" AND "Players"."QuizID"= \'{DATA[0][0]}\'')
         conn.commit()
@@ -350,7 +351,7 @@ def getQuizID(user):
         cur.execute(f'SELECT "QuizID" FROM "Players" WHERE "UserID" = \'{userID}\'')
         quizID = cur.fetchall()[0]
         conn.close()
-        return quizID[-1][0]
+        return quizID[0]
     except Exception as e:
         print(e)
         conn.close()
@@ -401,7 +402,7 @@ def updateQuizMood(user):
         try:
             conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(f'SELECT "Quizname", "MoodBefore", "MoodAfter" FROM "Mood" LEFT JOIN "Quiz" USING("QuizID") WHERE "Mood"."UserID" = {userID}')
+            cur.execute(f'SELECT "QuizName", "MoodBefore", "MoodAfter" FROM "Mood" LEFT JOIN "Quiz" USING("QuizID") WHERE "Mood"."UserID" = {userID}')
             bigList = cur.fetchall()
             conn.close()
             newDict = {}
@@ -426,12 +427,12 @@ def userEnd(QuizID, UserID, user):
         return render_template('User End.html', data=getQuestion(QuizID), QuizID = QuizID, UserID = UserID, user = user)
     if request.method == 'POST':
         Points = request.form.get("POINTS")
+        print(f'INSERT INTO "Players" ("QuizID", "UserID", "Points") VALUES ({QuizID}, {UserID}, {Points})')
         msg=""
         try:
             conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(f'INSERT INTO Players("QuizID", "UserID", "Points") VALUES ({QuizID}, {UserID}, {Points})')
-            data = cur.fetchall()
+            cur.execute(f'INSERT INTO "Players" ("QuizID", "UserID", "Points") VALUES ({QuizID}, {UserID}, {Points})')
             conn.commit()
         except Exception as e:
             conn.rollback()
@@ -564,7 +565,7 @@ def updateUsername(user):
             try:
                 conn = psycopg2.connect(**db_params)
                 cur = conn.cursor()
-                cur.execute(f'UPDATE "User" SET ("Username") = \'{username}\' WHERE Username = \'{user}\'')
+                cur.execute(f'UPDATE "User" SET "Username" = \'{username}\' WHERE "Username" = \'{user}\'')
                 conn.commit()
                 message = "Successfully updated username"
                 user = username
@@ -591,7 +592,7 @@ def updateFirstname(user):
         try:
             conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(f'UPDATE "User" SET ("FirstName") = \'{firstname}\' WHERE "Username" = \'{user}\'')
+            cur.execute(f'UPDATE "User" SET "FirstName" = \'{firstname}\' WHERE "Username" = \'{user}\'')
             conn.commit()
             message = "Successfully updated first name"
         except Exception as e:
@@ -615,7 +616,7 @@ def updateLastname(user):
         try:
             conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(f'UPDATE "User" SET ("SurName") = \'{lastname}\' WHERE "Username" = \'{user}\'')
+            cur.execute(f'UPDATE "User" SET "SurName" = \'{lastname}\' WHERE "Username" = \'{user}\'')
             conn.commit()
             message = "Successfully updated last name"
         except Exception as e:
@@ -879,6 +880,10 @@ def sendMessages(quizID, user, message):
     cur.execute(f'INSERT INTO "Messages" ("QuizID", "UserID", "Message", "Time", "Date") VALUES ({quizID}, {userID}, \'{message}\', \'{datetime.now().strftime("%X")}\',\'{datetime.now().strftime("%d/%m/%Y")}\')')
     conn.commit()
     cur.close()
+    return "sent"
+
+@app.route("/JoinChat/<QuizID>/<user>")
+def JoinChat(QuizID, user):
     return "sent"
     
 if __name__ == "__main__":
