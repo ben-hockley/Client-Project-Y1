@@ -27,7 +27,7 @@ DATABASE = "quizDatabase.db"
 def createGuest():
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute('SELECT * FROM User')
+    cur.execute('SELECT * FROM "User"')
     last = cur.fetchall()
     last = last[len(last)-1]
     conn.commit()
@@ -44,7 +44,7 @@ def createGuest():
 def checkGuest(user):
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'SELECT "password" FROM "User" WHERE "Username" = \'{user}\'')
+    cur.execute(f'SELECT "User"."Password" FROM "User" WHERE "User"."Username" = \'{user}\'')
     Password = cur.fetchone()[0]
     conn.commit()
     conn.close()
@@ -99,7 +99,7 @@ def createQuiz(user):
         print(QuizKey)
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username" = \'{user}\'')
+        cur.execute(f'SELECT "UserID" FROM "User" WHERE "User"."Username" = \'{user}\'')
         conn.commit()
         ID = cur.fetchall()[0][0]
         conn.close()
@@ -112,6 +112,7 @@ def createQuiz(user):
         conn.close()
 
         if Exists == []:
+            print("#1")
             keys = request.form.keys()
             Elements = []
             for i in keys:
@@ -143,8 +144,12 @@ def createQuiz(user):
                 conn = psycopg2.connect(**db_params)
                 cur = conn.cursor()
                 cur.execute(f'INSERT INTO "Quiz" ("QuizName", "UserID", "QuizKey") VALUES (\'{QuizName}\', {ID}, \'{QuizKey}\')')
+                print("#2")
                 conn.commit()
-                Last_Quiz = cur.lastrowid
+                cur.execute(f'SELECT "QuizID" FROM "Quiz" WHERE "QuizName"=\'{QuizName}\'')
+                conn.commit()
+                Last_Quiz = cur.fetchone()[0]
+                print(Last_Quiz)
                 conn.close()
             except Exception as e:
                 conn.rollback()
@@ -155,9 +160,13 @@ def createQuiz(user):
                 try:
                     conn = psycopg2.connect(**db_params)
                     cur = conn.cursor()
+                    print("#3")
                     cur.execute(f'INSERT INTO "Questions" ("Question", "QuizID", "Points") VALUES (\'{questionName}\', {Last_Quiz}, {points})')
                     conn.commit()
-                    Last_Question = cur.lastrowid
+                    cur.execute(f'SELECT "QuestionID" FROM "Questions" WHERE "Question"=\'{questionName}\'')
+                    conn.commit()
+                    Last_Question = cur.fetchone()[0]
+                    print(Last_Question)
                     conn.close()
                 except Exception as e:
                     conn.rollback()
@@ -192,8 +201,9 @@ def getQuestion(QuizID):
     try:
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT "Answer", "question", "QuizName", "IsTrue", "Questions"."QuestionID" FROM "Answers", "Questions", "Quiz" WHERE "Answers"."QuestionID" = "Questions"."QuestionID" AND "Questions"."QuizID" = "Quiz"."QuizID" AND "Quiz"."QuizID" = {QuizID}')
+        cur.execute(f'SELECT "Answer", "Question", "QuizName", "IsTrue", "Questions"."QuestionID" FROM "Answers", "Questions", "Quiz" WHERE "Answers"."QuestionID" = "Questions"."QuestionID" AND "Questions"."QuizID" = "Quiz"."QuizID" AND "Quiz"."QuizID" = {QuizID}')
         data = cur.fetchall()
+        print(data)
         conn.commit()
     except Exception as e:
         conn.rollback()
@@ -367,7 +377,6 @@ def moodAfter(user):
             return redirect("/home/" + user)
         conn.close()
         return redirect("/home/" + user)
-
 @app.route("/viewMoods/<user>", methods=['GET', 'POST'])
 def viewMoods(user):
     if request.method == 'GET':
@@ -780,7 +789,7 @@ def findQuizKey(joinKey, user):
             cur.execute(f'SELECT * FROM "Quiz" WHERE "QuizKey" = \'{joinKey}\'')
             conn.commit()
             Quiz = cur.fetchall()
-            cur.execute(f'SELECT * FROM "User" WHERE "UserName" = \'{user}\'')
+            cur.execute(f'SELECT * FROM "User" WHERE "User"."Username" = \'{user}\'')
             conn.commit()
             User = cur.fetchall()
             cur.close()
@@ -810,7 +819,7 @@ def checkQuizKey(user, joinKey):
     try:
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT "*" FROM "Quiz" WHERE "QuizKey" = \'{joinKey}\'')
+        cur.execute(f'SELECT * FROM "Quiz" WHERE "QuizKey" = \'{joinKey}\'')
         conn.commit()
         Quiz = cur.fetchall()
         QuizID = Quiz[0][0]
@@ -856,7 +865,7 @@ def getMessages(quizID, user):
 def sendMessages(quizID, user, message):
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username"=\'{user}\'')
+    cur.execute(f'SELECT "UserID" FROM "User" WHERE "User"."Username"=\'{user}\'')
     userID = cur.fetchone()[0]
     cur.execute(f'INSERT INTO "Messages" ("QuizID", "UserID", "Message", "Time", "Date") VALUES ({quizID}, {userID}, \'{message}\', \'{datetime.now().strftime("%X")}\',\'{datetime.now().strftime("%d/%m/%Y")}\')')
     conn.commit()
