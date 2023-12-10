@@ -52,17 +52,26 @@ def checkGuest(user):
         return "T"
     return "F"
 
-@app.route("/hostEnd", methods=['GET','POST'])
-def hostEnd():
-    if request.method =='GET':
-        QuizName = "Quiz"
-        conn = psycopg2.connect(**db_params)
-        cur = conn.cursor()
-        cur.execute(f'SELECT "QuizID" FROM "Quiz", "User" WHERE "QuizName" = \'{QuizName}\' AND "Quiz"."UserID" = "User"."UserID"')
+@app.route("/goHostEnd/<user>", methods=['POST'])
+def goHostEnd(user):
+    QuizKey = request.form.get("hostCode")
+    print(QuizKey)
+    return redirect(f"/hostEnd/{QuizKey}/{user}")
+
+@app.route("/hostEnd/<QuizKey>/<user>")
+def hostEnd(QuizKey, user):
+    QuizName = request.form.get("QuizName")
+    conn = psycopg2.connect(**db_params)
+    cur = conn.cursor()
+    cur.execute(f'SELECT "QuizID" FROM "Quiz", "User" WHERE "QuizKey" = \'{QuizKey}\' AND "Quiz"."UserID" = "User"."UserID"')
+    conn.commit()
+    DATA = cur.fetchall()
+    if DATA!=[]:
+        cur.execute(f'SELECT "Username", "Points" FROM "Players", "User" WHERE "User"."UserID" = "Players"."UserID" AND "Players"."QuizID"= \'{DATA[0][0]}\'')
         conn.commit()
         DATA = cur.fetchall()
         print(DATA)
-    return render_template('Host End.html', data=DATA, user=user)
+    return render_template('Host End.html', data=DATA)
 
 def RandomKey():
     while True:
@@ -341,7 +350,7 @@ def getQuizID(user):
         cur.execute(f'SELECT "QuizID" FROM "Players" WHERE "UserID" = \'{userID}\'')
         quizID = cur.fetchall()[0]
         conn.close()
-        return quizID[-1]
+        return quizID[-1][0]
     except Exception as e:
         print(e)
         conn.close()
@@ -438,7 +447,6 @@ def returnCreateAccount():
 def returnAccountDetails(user):
     if request.method == 'GET':
         return render_template('Account_Details.html')
-
 
 @app.route("/updateInfo/<user>", methods=['GET'])
 def updateInfo(user):
@@ -816,6 +824,7 @@ def findQuizKey(joinKey, user):
             return redirect('/')
 
 def checkQuizKey(user, joinKey):
+
     try:
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
