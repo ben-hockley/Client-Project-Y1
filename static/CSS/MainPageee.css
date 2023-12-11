@@ -114,7 +114,7 @@ button[disabled]{
     font-size: 150%;
 }
 
-#displayQuizForm {
+.display-form {
     display:flex;
     align-items: center;
     justify-content: center;
