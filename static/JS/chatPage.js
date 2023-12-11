@@ -106,6 +106,8 @@ function sendMessage(){
         }
     };
     xhttp.send();
+    var input = document.getElementById("sendMessage");
+    input.value="";
     getMessages();
 }
 function NoSpace(string){
