@@ -342,6 +342,26 @@ def getQuizID(user):
         conn.close()
         return None
 
+def isAdmin(user):
+    """
+    Returns True if the user is an admin, False otherwise
+    Takes in username as a parameter
+    """
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT Admin FROM User WHERE Username = ?", (user,))
+        admin = cur.fetchone()
+        conn.close()
+        if admin[0] == 'Y':
+            return True
+    except Exception as e:
+        print(e)
+        conn.close()
+    return False
+
+
 @app.route("/moodAfter/<user>", methods=['GET', 'POST'])
 def moodAfter(user):
     if request.method == 'GET':
@@ -411,7 +431,43 @@ def updateQuizMood(user):
             print(e)
             conn.close()
             return None
-        
+
+@app.route("/updateQuizMoodAdmin/<user>", methods=['GET'])
+def updateQuizMoodAdmin(user):
+    """
+    Retrieves all quiz moods from the database, for all users, returns in a json list
+    """
+    if request.method == 'GET':
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT Quizname, User.Username, MoodBefore, MoodAfter FROM Mood\
+            LEFT JOIN User USING(UserID)\
+            LEFT JOIN Quiz USING(QuizID)")
+            bigList = cur.fetchall()
+            conn.close()
+            newDict = {}
+            for x in range(len(bigList)):
+                subList = []
+                for y in range(len(bigList[x])):
+                    subList.append(bigList[x][y])
+                newDict.update({x: subList})
+            jsonList = json.dumps(newDict)
+            return jsonList
+        except Exception as e:
+            print(e)
+            conn.close()
+            return None
+
+@app.route("/adminViewMoods/<user>", methods=['GET'])
+def adminViewMoods(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminViewMoods.html")
+    
+
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
