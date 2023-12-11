@@ -5,15 +5,13 @@ import psycopg2
 import hashlib
 import random
 from datetime import datetime
-import psycopg2
 
 db_params = {
     'database': 'c23054732',
     'host': 'cspg.cs.cf.ac.uk',
     'user': 'c23054732',
     'password': 'Suck0nDeezNutz',
-    'port': 5432
-}
+    'port': 5432}
 
 app = Flask(__name__)
 

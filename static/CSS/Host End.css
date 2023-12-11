@@ -59,3 +59,7 @@ body{
 .navbar-legal-and-general p{
   visibility: visible;
 }
+
+#myChart .x-axis-label{
+  color: green;
+}

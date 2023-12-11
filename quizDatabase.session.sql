@@ -1,1 +1,1 @@
-SELECT * from "Messages", "User" WHERE "QuizID" = 1 AND "Messages"."UserID"="User"."UserID" ORDER BY "MessageID" DESC
+SELECT * from "Quiz"
