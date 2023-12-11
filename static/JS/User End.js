@@ -6,18 +6,33 @@ data = JSON.parse(data);
 var questionNumber = 0;
 var points = 0;
 var answers = [];
-var count = '';
-var timer = document.getElementById("TIMER")
+
+function countdown(){
+    let count = 60;
+    var timer = document.getElementById("timer");
+
+    function refreshCount(){
+        timer.textContent = count;
+
+        if (count > 0){
+            count--;
+            setTimeout(refreshCount, 1000);
+        } else {
+            timer.textContent = 'X';
+        }
+    }
+    refreshCount();
+}
 Setup()
 function Setup(){
     if(questionNumber<data.length){
+        countdown();
         const answerSection = document.getElementById("AnswerSection");
         var num = 0;
         var questions = [];
         for (let i = 0; i < (data[questionNumber])[1].length; i++){
             questions.push((data[questionNumber])[1][i]);
         }
-        
         for (let i = 0; i < (data[questionNumber])[2].length; i++){
             questions.push((data[questionNumber])[2][i]);
         }
