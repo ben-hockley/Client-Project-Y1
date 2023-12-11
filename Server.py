@@ -864,7 +864,7 @@ def getMessages(quizID, user):
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
     print(user)
-    cur.execute(f'SELECT "Date", "Time", "Username", "Message" from "Messages", "User" WHERE "QuizID" = {quizID} AND "Messages"."UserID"="User"."UserID"')
+    cur.execute(f'SELECT "Date", "Time", "Username", "Message" from "Messages", "User" WHERE "QuizID" = {quizID} AND "Messages"."UserID"="User"."UserID" ORDER BY "MessageID" DESC')
     conn.commit()
     Messages = cur.fetchall()
     cur.close()
