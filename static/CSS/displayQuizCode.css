@@ -1,12 +1,12 @@
-#quizName {
+.big-text {
     text-align: center;
     font-size: 5vw;
 }
-#quizCode {
+.huge-text {
     text-align: center;
     font-size: 20vw;
 }
-#playForm {
+.center-flex-container {
     display: flex;
     justify-content: center;
 }

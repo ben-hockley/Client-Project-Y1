@@ -121,7 +121,7 @@ button[disabled]{
     padding-bottom: 10px;
 }
 
-#displayQuizButton {
+.display-quiz-button {
     text-align: center;
     background-color: #028844;
     color: white;

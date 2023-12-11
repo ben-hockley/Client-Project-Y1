@@ -6,9 +6,9 @@
 {% block mainBlock%}
 {% endblock%}
 {% block mainBody%}
-<p id="quizName">{{quizName}}</p>
-<p id="quizCode">{{quizCode}}</p>
-<form id="playForm" action="/moodBefore/{{quizCode}}/{{user}}">
+<p id="quizName" class="big-text">{{quizName}}</p>
+<p id="quizCode" class="huge-text">{{quizCode}}</p>
+<form class="center-flex-container" action="/moodBefore/{{quizCode}}/{{user}}">
     <button type="submit" id="playButton" class="btn btn-success">Play the Quiz</button>
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
