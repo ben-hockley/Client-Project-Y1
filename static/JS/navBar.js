@@ -1,8 +1,13 @@
 document.addEventListener("DOMContentLoaded", getDetails())
 document.getElementById("navbar-logo").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/home/" + user;
-    window.location = newRoute;
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/home/" + user;
+        window.location = newRoute;  
+    }
 }); //links navbar logo back to home; keeps user signed in.
 document.getElementById("account-details").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
@@ -25,10 +30,16 @@ document.getElementById("account-details").addEventListener("click", function() 
     xhttp.send();
 
 })
+// Event Listener to take you to the Create Quiz page throught the NavBar
 document.getElementById("moodChecker").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/moodChecker/" + user;
-    window.location = newRoute;
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/moodChecker/" + user;
+        window.location = newRoute;  
+    }
 })
 
 function getDetails() {
@@ -61,13 +72,23 @@ function getDetails() {
 // Event Listener to take you to the Create Quiz page throught the NavBar
 document.getElementById("create-quiz").addEventListener('click', function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/createQuiz/" + user;
-    window.location = newRoute;
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/createQuiz/" + user;
+        window.location = newRoute;  
+    }
 })
 // Event Listener to take you to the Avalible Quizzes page throught the NavBar
 document.getElementById("available-quizzes").addEventListener('click', function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/displayQuizzes/" + user;
-    window.location = newRoute;
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/displayQuizzes/" + user;
+        window.location = newRoute;  
+    }
 })
 
