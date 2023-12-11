@@ -759,9 +759,40 @@ def returnHome(user):
         print("Error accessing database")
         return redirect('/login')
 
-@app.route("/listQuizzes")
-def printQuiz():
-    return render_template("ListQuizzes.html")
+@app.route("/displayQuizzes/<user>", methods = ['GET', 'POST'])
+def displayQuizzes(user):
+    if request.method == 'GET':
+        return render_template("ListQuizzes.html")
+
+@app.route("/updateQuizDisplay", methods = ['GET'])
+def updateQuizDisplay():
+    """
+    Function which fetches each quiz's name and unique code, returning them all in a json file
+    """
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("SELECT QuizName, QuizKey FROM Quiz")
+        quizzes = cur.fetchall()
+        newDict = {}
+        i = 0
+        for quiz in quizzes:
+            newQuiz = [quiz[0], quiz[1]]
+            newDict[i] = newQuiz
+            i += 1
+        newDict = json.dumps(newDict)
+    except Exception as e:
+        print(e)
+        newDict = e
+    conn.close()
+    return newDict
+
+@app.route("/displayQuizCode/<quizName>/<quizCode>/<user>", methods=['GET'])
+def displayQuizCode(quizName, quizCode, user):
+    print(quizName)
+    print(quizCode)
+    print(user)
+    return render_template("displayQuizCode.html", quizName=quizName, quizCode=quizCode, user=user)
 
 def jls_extract_def():
     return 'quizName'
