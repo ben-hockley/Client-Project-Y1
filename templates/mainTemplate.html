@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html>
     <header>
-        <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <!-- link to bootstrap taken from https://getbootstrap.com/docs/4.4/getting-started/introduction/ -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
         {% block linkBlock%}
         {% endblock%}
-        <!-- <nav class="navbar-legal-and-general"> -->
-        <nav class="navbar navbar-inverse" id="navbar-legal-and-general">
+        <!-- navbar inspired from concepts in bootstrap https://getbootstrap.com/docs/4.0/components/navbar/ -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             {% block navBarContent%}
-            <div class="userDisplay"><p id="accountDetails"></p><p id="moodChecker"></p></div>
-            <a class="navbar-logo" id="navbar-logo">
-            
-              <img src="/static/img/L&G_Logo.svg" width="50" height="50" alt="Legal & General Logo">
-            </a>
-            <p class="logoText" id="logoText">Legal & General</p>
+            <a id=navbar-logo class="navbar-brand" href="#">
+                <img src="/static/img/L&G_Logo.svg" class="d-inline-block align-top" alt="">
+                Legal & General
+              </a>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                <a id="account-details" class="nav-item nav-link">Account Details</a>
+                <a id="available-quizzes" class="nav-item nav-link">Available Quizzes</a>
+                <a id="moodChecker" class="nav-item nav-link">Mood</a>
+                <a id="create-quiz" class="nav-item nav-link">Create Quiz</a>
+                </div>
+            </div>
+            <div class="user-display">
+                <p id="displayUser"></p>
+                <p class="mood-image" id="displayMood"></p>
+            </div>
             {% endblock%}
+            </nav>
         </nav>
     </header>
     <head>
