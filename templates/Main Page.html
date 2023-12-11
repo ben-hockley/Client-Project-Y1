@@ -8,6 +8,9 @@
 <title>L&G Quiz</title>
 <br>
 <h1 class="headerText">Welcome, <span id="nameText">{{ firstName }}!</span></h1>
+<form id="displayQuizForm" class="display-form" action="/displayQuizzes/{{user}}">
+    <button type="submit" class="display-quiz-button">See available quizzes</button>
+</form>
 {% endblock%}
 
 {% block mainBody%}
@@ -19,12 +22,6 @@
         <button id="hostButton" type="submit" disabled>HOST</button>
     </form>
 </section>
-<!-- <section class="quizPathBox">
-    <form id="joinForm" method="POST" action="/joinQuizFunction">
-        <input type="text" id="joinCode" name="joinCode" required placeholder="####">
-        <button id="joinButton" type="submit" disabled>JOIN</button>
-    </form>
-</section> -->
 <section class="quizPathBox">
     <form id="joinForm" method="POST" action="/moodBeforeSubmit/{{user}}">
         <input type="text" id="joinCode" name="joinCode" required placeholder="####">
