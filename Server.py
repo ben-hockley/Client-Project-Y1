@@ -1,7 +1,7 @@
 import os
 from flask import Flask, redirect, request, render_template, url_for
 import json
-import sqlite3
+import psycopg2
 import hashlib
 import random
 from datetime import datetime
@@ -122,7 +122,6 @@ def createQuiz(user):
         conn.close()
 
         if Exists == []:
-            print("#1")
             keys = request.form.keys()
             Elements = []
             for i in keys:
@@ -154,12 +153,10 @@ def createQuiz(user):
                 conn = psycopg2.connect(**db_params)
                 cur = conn.cursor()
                 cur.execute(f'INSERT INTO "Quiz" ("QuizName", "UserID", "QuizKey") VALUES (\'{QuizName}\', {ID}, \'{QuizKey}\')')
-                print("#2")
                 conn.commit()
                 cur.execute(f'SELECT "QuizID" FROM "Quiz" WHERE "QuizName"=\'{QuizName}\'')
                 conn.commit()
                 Last_Quiz = cur.fetchone()[0]
-                print(Last_Quiz)
                 conn.close()
             except Exception as e:
                 conn.rollback()
@@ -170,7 +167,6 @@ def createQuiz(user):
                 try:
                     conn = psycopg2.connect(**db_params)
                     cur = conn.cursor()
-                    print("#3")
                     cur.execute(f'INSERT INTO "Questions" ("Question", "QuizID", "Points") VALUES (\'{questionName}\', {Last_Quiz}, {points})')
                     conn.commit()
                     cur.execute(f'SELECT "QuestionID" FROM "Questions" WHERE "Question"=\'{questionName}\'')
@@ -770,9 +766,9 @@ def updateQuizDisplay():
     Function which fetches each quiz's name and unique code, returning them all in a json file
     """
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("SELECT QuizName, QuizKey FROM Quiz")
+        cur.execute('SELECT "QuizName", "QuizKey" FROM "Quiz"')
         quizzes = cur.fetchall()
         newDict = {}
         i = 0
@@ -801,7 +797,7 @@ def jls_extract_def():
 def quizSearch(user):
     try:
         quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
-        conn = sqlite3.connect(**db_params)
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
         print(user)
         cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username" = \'{user}\'')
