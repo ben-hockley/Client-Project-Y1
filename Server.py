@@ -496,7 +496,7 @@ def returnCreateAccount():
 @app.route("/accountDetails/<user>", methods=['GET'])
 def returnAccountDetails(user):
     if request.method == 'GET':
-        return render_template('Account_Details.html')
+        return render_template('Account_Details.html', user=user)
 
 @app.route("/updateInfo/<user>", methods=['GET'])
 def updateInfo(user):

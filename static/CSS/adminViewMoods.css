@@ -1,23 +1,33 @@
+.heading-center {   
+    text-align: center;
+    padding-bottom:20px;
+    margin:0;
+}
 .emoji {
     font-size: 40px;
 }
 .form-text {
-    font-size: 18px;
+    font-size: larger;
 }
-.heading-center {
+#quizMoods {
     text-align: center;
-    padding-bottom: 20px;
+    vertical-align: middle;
 }
 #adminQuizMoods {
-    table-layout: fixed;
-    width:100%;
-    display: inline-flex;
-    flex-direction: column;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+    margin: auto;
+    width: 80%;
+    padding: 10px;
 }
 th {
-    width: 24%;
+    text-align: center;
+    width: 25%;
 }
-tr {
-    display: inline-flex;
-    flex-direction: row;
+td {
+    text-align: center;
+    display: flex;
+    width: 25%;
+    float:inline-start;
 }
