@@ -1,8 +1,42 @@
 {%extends 'mainTemplate.html'%}
-{% block mainBlock%}
-<h1>HomePage</h1>
+
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/MainPageee.css">
 {% endblock%}
 
+{% block mainBlock%}
+<title>L&G Quiz</title>
+<br>
+<h1 class="headerText">Welcome, <span id="nameText">{{ firstName }}!</span></h1>
+<form id="displayQuizForm" class="display-form" action="/displayQuizzes/{{user}}">
+    <button type="submit" class="display-quiz-button">See available quizzes</button>
+</form>
+{% endblock%}
+
+{% block mainBody%}
+
+<div class="inputBoxs">
+<section class="quizPathBox">
+    <form id="hostForm" method="POST" action="/goHostEnd/{{user}}">
+        <input type="text" id="hostCode" name="hostCode" required placeholder="####">
+        <button id="hostButton" type="submit" disabled>HOST</button>
+    </form>
+</section>
+<section class="quizPathBox">
+    <form id="joinForm" method="POST" action="/moodBeforeSubmit/{{user}}">
+        <input type="text" id="joinCode" name="joinCode" required placeholder="####">
+        <button id="joinButton" type="submit" disabled>JOIN</button>
+    </form>
+</section>
+</div>
+<section class="createQuizButtonSection">
+<div class="createQuizButton">
+<a href="/createQuiz/{{user}}"><button type="button">CREATE QUIZ</button></a>
+</div>
+</section>
+<script src="/static/JS/Main Page.js"></script>
 <script>
-    
+
 </script>
+{% endblock%}
+

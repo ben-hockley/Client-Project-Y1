@@ -1,0 +1,61 @@
+body{
+  padding:0;
+  margin: 0;
+  background-image: url('/static/img/Quiz.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top;
+}
+.SelectSection{
+  width:100%;
+  text-align: center;
+  background-color:white;
+  border:5px solid #0076d6;
+  box-sizing: border-box;
+  font-size: x-large;
+  margin-top: 10%;
+}
+
+.Select{
+  margin: 12%;
+  margin-top: 5%;
+  margin-bottom: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.QuizList{
+  align-items: center;
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
+  margin:30%;
+  margin-bottom: 5%;
+  margin-top: 0;
+  background-color: white;
+  box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+  border-radius: 25px;
+  padding: 2%;
+} 
+
+.Inputs input, button{
+  text-align: center;
+  width: auto;
+  height: auto;
+  font-size: 20px;
+  font-family: 'Lucida Handwriting Std', sans-serif;
+  box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+  background-color: white;
+  color: black;
+  border-radius: 25px;
+}
+
+#DATA{
+  margin-top: 5%;
+  visibility: hidden;
+}
+.navbar-legal-and-general p{
+  visibility: visible;
+}

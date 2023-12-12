@@ -7,7 +7,7 @@ function updateQuizMoods() {
     $.ajax({type:'GET', url:newRoute, success: function appendInfo(result) {
         result = JSON.parse(result);
         for (let i=0; i < Object.keys(result).length; i++) {
-            row = "<tr><td id='quizTitle'>" + result[i][0] + "</td><td id='emoji'>" + emojiList[result[i][1]] + "</td><td id='emoji'>" + emojiList[result[i][2]] + "</td></tr>";
+            row = "<tr><td class='form-text'>" + result[i][0] + "</td><td class='emoji'>" + emojiList[result[i][1]] + "</td><td class='emoji'>" + emojiList[result[i][2]] + "</td></tr>";
             $("#quizMoods").append(row);
     }
     }});

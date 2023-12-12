@@ -1,21 +1,37 @@
 {%extends 'mainTemplate.html'%}
 {% block mainBlock%}
-<h1>Create Account</h1>
+<link rel="stylesheet" href="/static/CSS/Log on.css">
 {% endblock%}
 
 {% block mainBody%}
-<form name = "createAccount" action = "/usernameExist" method = "post">
-    <label for="firstName">First Name:</label></br>
-    <input type="text" id = "firstName" name = "firstName" required></br>
-    <label for="lastName">Last Name:</label></br>
-    <input type="text" id = "lastName" name = "lastName" required></br>
-    <label for="username">Create a username:</label></br>
-    <input type="text" id = "username" name = "username" required></br>
-    <label for="password">Create a password:</label></br>
-    <input type="password" id = "password" name = "password" required></br>
-    <!-- <label for="password2">Re-enter the password:</label></br>
-    <input type="password" id = "password2" name = "password2"></br> -->
-    <input type="submit">
-</form>
+<section class="loginBox">
+    <h1>CREATE ACCOUNT</h1>
+    <form name = "createAccount" action = "/usernameExist" method = "post">
+        <label for="firstName">First Name:</label></br>
+        <input type="text" id = "firstName" name = "firstName" required></br>
+        <label for="lastName">Last Name:</label></br>
+        <input type="text" id = "lastName" name = "lastName" required></br>
+        <label for="username">Create a username:</label></br>
+        <input type="text" id = "username" name = "username" required></br>
+        <label for="password">Create a password:</label></br>
+        <input type="password" id = "password" name = "password" required></br>
+        <label for="securityQuestion">Security Question:</label></br>
+        <select id="securityQuestion" name="securityQuestion" required>
+            <option>What is the name of your first pet?</option>
+            <option>In what city were you born?</option>
+            <option>What was your childhood nickname?</option>
+            <option>What is the middle name of your oldest sibling?</option>
+        </select></br>
+        <label for="securityAnswer">Answer</label></br>
+        <input type="text" id="securityAnswer" name="securityAnswer" required></br>
+        <!-- <label for="password2">Re-enter the password:</label></br>
+        <input type="password" id = "password2" name = "password2"></br> -->
+        <button type="submit">Create Account</button>
+    </form><br>
+    <label for="backToLoginButton">Already have an account? Log in here.</label>
+    <form name = "backToLogin" action = "/" method="get">
+        <button id="backToLoginButton" type="submit">Login</button>
+    </form>
+</section>
 
 {% endblock%}

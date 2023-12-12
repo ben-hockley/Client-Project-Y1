@@ -1,0 +1,19 @@
+{%extends 'mainTemplate.html'%}
+{% block linkBlock%}
+        <link rel="stylesheet" href="/static/CSS/Host End.css">
+{% endblock%}
+{% block mainBlock%}
+{% endblock%}
+{% block mainBody%}
+    <section class = "SelectSection">
+        <h2 id = "TEXT">Submissions</h2>
+        <p>View the results submitted by your staff</p>
+    </section>
+        <p id="DATA">{{data}}</p> 
+
+        <section class="QuizList">
+            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>  
+    <script src="/static/JS/Host End.js"></script>
+{% endblock%}

@@ -1,8 +1,10 @@
 import os
-from flask import Flask, redirect, request, render_template, url_for
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, user_logged_in
+
+from flask import Flask, redirect, request,render_template
 import json
 import sqlite3
+import hashlib
+import random
 import hashlib
 import random
 
@@ -441,6 +443,8 @@ def returnCreateAccount():
 
 @app.route("/accountDetails/<user>", methods=['GET'])
 def returnAccountDetails(user):
+@app.route("/accountDetails/<user>", methods=['GET'])
+def returnAccountDetails(user):
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
@@ -490,6 +494,38 @@ def submitNewAccount(firstName,lastName,userName,password,securityQuestion,secur
     finally:
         conn.close()
         return message
+
+@app.route("/usernameCheck")
+def usernameCheck(username):
+    """
+    Function to check if the entered username exists within the database.
+    Returns True if entered username does exist, and False otherwise
+    """
+    try:
+        conn = sqlite3.connect('quizDatabase.db')
+        cur = conn.cursor()
+        cur.execute(\
+        "SELECT Username FROM User WHERE Username = ?",([username]))
+        isExist = cur.fetchall()
+        conn.close()
+        if isExist == []:
+            return False
+        else:
+            return True
+    except Exception as e:
+        conn.close()
+        return e
+
+def hashPassword(username, password):
+    """
+    Function which receives username and password as a parameter and returns a hash of password
+    """
+    # Hashing the password, adding the username as salt
+    # https://www.geeksforgeeks.org/how-to-hash-passwords-in-python/
+    database_password = password + username
+    hashed = hashlib.md5(database_password.encode())
+    password = hashed.hexdigest()
+    return password
 
 @app.route("/usernameCheck")
 def usernameCheck(username):
