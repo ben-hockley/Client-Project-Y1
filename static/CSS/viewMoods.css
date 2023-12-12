@@ -9,6 +9,8 @@
 .form-text {
     padding-top: 24px;
     font-size: larger;
+    margin: 0;
+    top:50%;
 }
 #quizMoods, #quizScores {
     text-align: center;
@@ -17,4 +19,12 @@
 th {
     text-align: center;
     width: 33%;
+}
+.vertical-center {
+    margin-top: 16px;
+    vertical-align: middle;
+}
+.emoji .vertical-center {
+    margin-top: 0;
+    margin-bottom: 6px;
 }

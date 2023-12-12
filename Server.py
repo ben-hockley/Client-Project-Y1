@@ -436,14 +436,23 @@ def updateScores(user):
             LEFT JOIN Questions USING(QuizID)\
             WHERE Players.UserID = ?", (userID,))
             bigList = cur.fetchall()
-            print("Here comes the list", bigList)
-            jsonList = arrayToJSON(bigList)
+            newList = []
+            print("newlist")
+            for x in range(len(bigList)):
+                if newList == []:
+                    newList.append(bigList[x])
+                    continue
+                if newList[-1] == bigList[x]:
+                    continue
+                newList.append(bigList[x])
+            print("Here comes the list", newList)
+            jsonList = arrayToJSON(newList)
             conn.close()
             return jsonList
         except Exception as e:
             print(e)
             conn.close()
-            return None
+            return "Hi"
 
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
