@@ -40,3 +40,11 @@ td {
     float:inline-start;
     align-items: center;
 }
+.vertical-center {
+    margin-top: 16px;
+    vertical-align: middle;
+}
+.emoji .vertical-center {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
