@@ -398,20 +398,53 @@ def updateQuizMood(user):
             WHERE Mood.UserID = ?", [userID,])
             bigList = cur.fetchall()
             conn.close()
-            newDict = {}
-            for x in range(len(bigList)):
-                subList = []
-                for y in range(len(bigList[x])):
-                    subList.append(bigList[x][y])
-                newDict.update({x: subList})
-            jsonList = json.dumps(newDict)
-            print(jsonList)
+            jsonList = arrayToJSON(bigList)
             return jsonList
         except Exception as e:
             print(e)
             conn.close()
             return None
-        
+
+def arrayToJSON(bigList):
+    newDict = {}
+    for x in range(len(bigList)):
+        subList = []
+        for y in range(len(bigList[x])):
+            subList.append(bigList[x][y])
+        newDict.update({x: subList})
+    jsonList = json.dumps(newDict)
+    return jsonList
+
+@app.route("/myScores/<user>", methods=['GET','POST'])
+def myScores(user):
+    if request.method == 'GET':
+        return render_template("viewScores.html")
+
+@app.route("/updateScores/<user>", methods=['GET'])
+def updateScores(user):
+    """
+    Retrieves all quiz names and scores which a player has played and returns them in a json list
+    """
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT QuizName, Players.Points, Questions.Points FROM Players\
+            LEFT JOIN Quiz USING(QuizID)\
+            LEFT JOIN Questions USING(QuizID)\
+            WHERE Players.UserID = ?", (userID,))
+            bigList = cur.fetchall()
+            print("Here comes the list", bigList)
+            jsonList = arrayToJSON(bigList)
+            conn.close()
+            return jsonList
+        except Exception as e:
+            print(e)
+            conn.close()
+            return None
+
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)

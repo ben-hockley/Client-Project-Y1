@@ -3,14 +3,14 @@
     padding-bottom:20px;
     margin:0;
 }
-#emoji {
+.emoji {
     font-size: 40px;
 }
-#quizTitle {
+.form-text {
     padding-top: 24px;
     font-size: larger;
 }
-#quizMoods {
+#quizMoods, #quizScores {
     text-align: center;
     vertical-align: middle;
 }
