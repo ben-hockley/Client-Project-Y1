@@ -514,37 +514,6 @@ def usernameCheck(username):
         conn.close()
         return e
 
-def hashPassword(username, password):
-    """
-    Function which receives username and password as a parameter and returns a hash of password
-    """
-    # Hashing the password, adding the username as salt
-    # https://www.geeksforgeeks.org/how-to-hash-passwords-in-python/
-    database_password = password + username
-    hashed = hashlib.md5(database_password.encode())
-    password = hashed.hexdigest()
-    return password
-
-@app.route("/usernameCheck")
-def usernameCheck(username):
-    """
-    Function to check if the entered username exists within the database.
-    Returns True if entered username does exist, and False otherwise
-    """
-    try:
-        conn = sqlite3.connect('quizDatabase.db')
-        cur = conn.cursor()
-        cur.execute(\
-        "SELECT Username FROM User WHERE Username = ?",([username]))
-        isExist = cur.fetchall()
-        conn.close()
-        if isExist == []:
-            return False
-        else:
-            return True
-    except Exception as e:
-        conn.close()
-        return e
 
 def hashPassword(username, password):
     """
@@ -888,47 +857,48 @@ def forgotPassword():
 
 
 
-db_path = 'quiz_database.db'
+
 login_manager = LoginManager(app)
-login_manager.login_view = 'returnLogin'
+login_manager.login_view = 'index'
 
 @login_manager.user_loader
 def load_user(user_id):
     return user_logged_in(user_id)
 
-def get_user_quizzes(user_id):
-    connection = sqlite3.connect(db_path)
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?', (user_id,))
-    quizzes = cursor.fetchall()
-    connection.close()
-    return quizzes
+
 
 @app.route('/index/<user>')
-@login_required
-def index():
+def get_user_quizzes(user):
+    connection = sqlite3.connect('quizDatabase.db')
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?', (user,))
+    quizzes = cursor.fetchall()
+    connection.close()
+    return quizzes  
+
+def index(user):
     quizzes = get_user_quizzes(current_user.id)
     return render_template('Index.html', quizzes=quizzes)
 
 @app.route('/edit/<int:user_id>/<int:question_id>', methods=['GET', 'POST'])
 @login_required
-def edit(user_id, question_id):
-    connection = sqlite3.connect(db_path)
+def edit(user, QuestionID):
+    connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
 
     if request.method == 'POST':
         new_question = request.form['new_question']
         new_answer = request.form['new_answer']
         cursor.execute('''
-            UPDATE quiz
-            SET question = ?, answer = ?
-            WHERE user_id = ? AND id = ?
-        ''', (new_question, new_answer, user_id, question_id))
+            UPDATE Quiz
+            SET Question = ?, Answer = ?
+            WHERE UserID = ? AND QuestionID = ?
+        ''', (new_question, new_answer, user, QuestionID,))
         connection.commit()
         connection.close()
         return redirect(url_for('index'))
 
-    cursor.execute('SELECT * FROM Quiz WHERE user_id = ? AND id = ?', (user_id, question_id))
+    cursor.execute('SELECT * FROM Quiz WHERE user_id = ? AND id = ?', (user, QuestionID))
     question_data = cursor.fetchone()
     connection.close()
     return render_template('Edit_Quiz.html', question_data=question_data)
