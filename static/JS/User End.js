@@ -29,7 +29,7 @@ countdown();
 function Setup(){
     if(questionNumber<data.length){
         clearTimeout(timer);
-        count = 15
+        count = 5
         const answerSection = document.getElementById("AnswerSection");
         var num = 0;
         var questions = [];
@@ -100,19 +100,22 @@ function isItCorrect(event) {
 // Using a mutation observer to track the text content of the timer, similar idea to an event listener
 var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
-      console.log(timer.textContent);
       if (timer.textContent === '0') {
         var answerSection = document.getElementById("AnswerSection");
         var answer = answerSection.getElementsByTagName("button");
         var randomPick = Math.floor(Math.random() * answer.length);
         var randomAnswer = answer[randomPick];
-        correct = data[questionNumber][1]
-        console.log(randomAnswer.textContent)
+        var correct = data[questionNumber][1]
         // function to force the click of a random wrong answer then the timer is 0
         function attemptRandomAnswer() {
-            if (randomAnswer.textContent !== correct) {
+            if (randomAnswer.textContent != correct[0]) {
                 randomAnswer.click();
                 countdown();
+            } else {
+                // If the random  answer is correct try again with a new random answer
+                randomPick = Math.floor(Math.random() * answer.length);
+                randomAnswer = answer[randomPick];
+                attemptRandomAnswer();
             }
         }
         attemptRandomAnswer();
