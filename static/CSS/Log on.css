@@ -5,9 +5,10 @@
     border: 1px white solid;
     border-radius: 5px;
     background-color: white;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     width: fit-content;
+
 }
 .loginBox h1 {
     margin-top: 0;
@@ -19,8 +20,16 @@
     border: 1px solid #ccc;
     border-radius: 3px;
 }
+.loginBox select {
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
 .loginBox button {
     width: 100%;
+    max-width: 300px;
     padding: 10px;
     margin-top: 10px;
     background-color: #0076D6;
@@ -49,4 +58,10 @@ span {
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
+}
+.for-margin {
+    margin-bottom: 23px;
+}
+.create-account-box, .forgot-password-box {
+    margin-top: 4%;
 }
