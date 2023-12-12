@@ -125,6 +125,13 @@ function getDetails() {
     xhttp.send();
 }
 
+function redirectScore() {
+    user = window.location.pathname.split("/").pop();
+    console.log(user);
+    newRoute = "/myScores/" + user
+    window.location.href = newRoute;
+}
+
 //Ben's Code
 
 function redirectHistory() {
