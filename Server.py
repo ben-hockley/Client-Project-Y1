@@ -1,12 +1,12 @@
 import os
 
-from flask import Flask, redirect, request,render_template
+from flask import Flask, redirect, request,render_template, url_for
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, user_logged_in
 import json
 import sqlite3
 import hashlib
 import random
-import hashlib
-import random
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Frog'
@@ -443,8 +443,6 @@ def returnCreateAccount():
 
 @app.route("/accountDetails/<user>", methods=['GET'])
 def returnAccountDetails(user):
-@app.route("/accountDetails/<user>", methods=['GET'])
-def returnAccountDetails(user):
     if request.method == 'GET':
         return render_template('Account_Details.html')
 
@@ -810,7 +808,7 @@ def jls_extract_def():
 def quizSearch(user):
     try:
         quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
-        conn = sqlite3.connect(QUIZLISTDATABASE)
+        conn = sqlite3.connect('QUIZLISTDATABASE')
         cur = conn.cursor()
         print(user)
         cur.execute("SELECT UserID FROM User WHERE Username = ?", (user,))
