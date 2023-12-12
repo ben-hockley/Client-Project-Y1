@@ -1,17 +1,19 @@
 .loginBox {
-    margin: 100px auto;
-    margin-top: 5%;
-    width: 300px;
-    padding: 20px;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
     border: 1px white solid;
     border-radius: 5px;
     background-color: white;
+    display: flex;
+    align-items: center;
+    width: fit-content;
 }
 .loginBox h1 {
     margin-top: 0;
 }
 .loginBox input {
-    width: 93%;
+    width: 100%;
     padding: 10px;
     margin: 0;
     border: 1px solid #ccc;
@@ -32,4 +34,19 @@ span {
 }
 #securityQuestion{
     padding: 10px;
+}
+.log-in-half {
+    float: left;
+    width: 300px;
+    margin: 25px;
+}
+.login-logo img {
+    width: 150px;
+    height: auto;
+}
+.login-logo {
+    width: fit-content;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
 }
