@@ -21,6 +21,9 @@
     <section title="linkToQuizHistory" id="linkToQuizHistory">
         <button id="redirectHistory" class="btn btn-success" onclick="redirectHistory()">View Quiz Mood History</button>
     </section>
+    <form action="/adminViewMoods/{{user}}" method="GET">
+        <button type="submit" class="btn btn-success">Admin View</button>
+    </form>
     <form action="/">
         <button type="submit" class="btn btn-success">Log out</button>
     </form>
