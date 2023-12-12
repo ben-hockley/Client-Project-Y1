@@ -1,0 +1,23 @@
+.emoji {
+    font-size: 40px;
+}
+.form-text {
+    font-size: 18px;
+}
+.heading-center {
+    text-align: center;
+    padding-bottom: 20px;
+}
+#adminQuizMoods {
+    table-layout: fixed;
+    width:100%;
+    display: inline-flex;
+    flex-direction: column;
+}
+th {
+    width: 24%;
+}
+tr {
+    display: inline-flex;
+    flex-direction: row;
+}
