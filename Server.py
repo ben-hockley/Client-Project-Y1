@@ -882,25 +882,28 @@ def get_user_quizzes(user):
 
 @app.route('/edit/<user>', methods=['GET', 'POST'])
 
-def edit(user, QuestionID):
+def edit(user,):
     UserID = getUserID(user)
-    Question = getQuestion(QuestionID)
     connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
-
+    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (quizID))
+    QuestionID = cursor.fetchall()
     if request.method == 'POST':
         new_question = request.form['new_question']
         new_answer = request.form['new_answer']
+        cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (quizID))
+        quizID = getQuizID(user)
+#QuestionID = cursor.fetchall()
         cursor.execute('''
             UPDATE Quiz
             SET Question = ?, Answer = ?
             WHERE UserID = ? AND QuestionID = ?
-        ''', (new_question, new_answer, UserID, Question,))
+        ''', (new_question, new_answer, UserID, QuestionID,))
         connection.commit()
         connection.close()
-        return redirect('Edit_Quiz.html', user=user)
+        return redirect('Edit_Quiz.html', user=user,)
 
-    cursor.execute('SELECT * FROM Quiz WHERE UserID = ? AND QuestionID = ?', (UserID, Question))
+    cursor.execute('SELECT * FROM Quiz WHERE UserID = ? AND QuestionID = ?', (UserID, QuestionID))
     question_data = cursor.fetchone()
     connection.close()
     return render_template('Edit_Quiz.html', question_data=question_data)
