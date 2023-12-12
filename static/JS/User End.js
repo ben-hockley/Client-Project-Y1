@@ -29,7 +29,7 @@ countdown();
 function Setup(){
     if(questionNumber<data.length){
         clearTimeout(timer);
-        count = 5
+        count = 30
         const answerSection = document.getElementById("AnswerSection");
         var num = 0;
         var questions = [];
