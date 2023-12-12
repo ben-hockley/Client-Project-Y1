@@ -444,7 +444,7 @@ def returnCreateAccount():
 @app.route("/accountDetails/<user>", methods=['GET'])
 def returnAccountDetails(user):
     if request.method == 'GET':
-        return render_template('Account_Details.html')
+        return render_template('Account_Details.html', user=user)
 
 @app.route("/updateInfo/<user>", methods=['GET'])
 def updateInfo(user):
@@ -862,27 +862,29 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'index'
 
 @login_manager.user_loader
-def load_user(user_id):
-    return user_logged_in(user_id)
+def load_user(User):
+    return user_logged_in(user)
 
 
 
-@app.route('/index/<user>')
+@app.route('/index/<user>', methods=['GET'])
 def get_user_quizzes(user):
-    connection = sqlite3.connect('quizDatabase.db')
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?', (user,))
-    quizzes = cursor.fetchall()
-    connection.close()
-    return quizzes  
+        userID = getUserID(user)
+        connection =sqlite3.connect('quizDatabase.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM Quiz WHERE UserID = ?',(userID,))
+        connection.commit()
+        quizzes = cursor.fetchall()
+        connection.close()
+        return render_template('index.html', quizzes=quizzes, user=user)
 
-def index(user):
-    quizzes = get_user_quizzes(current_user.id)
-    return render_template('Index.html', quizzes=quizzes)
 
-@app.route('/edit/<int:user_id>/<int:question_id>', methods=['GET', 'POST'])
-@login_required
+
+@app.route('/edit/<user>', methods=['GET', 'POST'])
+
 def edit(user, QuestionID):
+    UserID = getUserID(user)
+    Question = getQuestion(QuestionID)
     connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
 
@@ -893,12 +895,12 @@ def edit(user, QuestionID):
             UPDATE Quiz
             SET Question = ?, Answer = ?
             WHERE UserID = ? AND QuestionID = ?
-        ''', (new_question, new_answer, user, QuestionID,))
+        ''', (new_question, new_answer, UserID, Question,))
         connection.commit()
         connection.close()
-        return redirect(url_for('index'))
+        return redirect('Edit_Quiz.html', user=user)
 
-    cursor.execute('SELECT * FROM Quiz WHERE user_id = ? AND id = ?', (user, QuestionID))
+    cursor.execute('SELECT * FROM Quiz WHERE UserID = ? AND QuestionID = ?', (UserID, Question))
     question_data = cursor.fetchone()
     connection.close()
     return render_template('Edit_Quiz.html', question_data=question_data)
