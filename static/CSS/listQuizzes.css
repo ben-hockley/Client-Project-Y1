@@ -1,0 +1,36 @@
+.quizzes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+ }
+
+ .new-box {
+    width: 30%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    font-size: larger;
+ }
+
+ .quiz-name {
+    padding-top: 10px;
+    width:100%;
+    background-color: #333;
+    color: white;
+ }
+ 
+ .quiz-code {
+    padding-top: 10px;
+    width: 100%;
+    background-color: #999;
+    color: black;
+ }
+
+ .text-center {
+   text-align: center;
+ }

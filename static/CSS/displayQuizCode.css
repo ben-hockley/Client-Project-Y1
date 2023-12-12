@@ -1,0 +1,17 @@
+.big-text {
+    text-align: center;
+    font-size: 5vw;
+}
+.huge-text {
+    text-align: center;
+    font-size: 20vw;
+}
+.center-flex-container {
+    display: flex;
+    justify-content: center;
+}
+#play-button {
+    background-color: #028844;
+    font-size: 150%;
+    padding: 10px;
+}

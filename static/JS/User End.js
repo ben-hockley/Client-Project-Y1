@@ -6,11 +6,11 @@ data = JSON.parse(data);
 var questionNumber = 0;
 var points = 0;
 var answers = [];
+let count = 1000;
+var timer = document.getElementById("timer");
 
+// basic timer function
 function countdown(){
-    let count = 60;
-    var timer = document.getElementById("timer");
-
     function refreshCount(){
         timer.textContent = count;
 
@@ -18,15 +18,18 @@ function countdown(){
             count--;
             setTimeout(refreshCount, 1000);
         } else {
-            timer.textContent = 'X';
+            timer.textContent = '0';
         }
     }
     refreshCount();
 }
+
 Setup()
+countdown();
 function Setup(){
     if(questionNumber<data.length){
-        countdown();
+        clearTimeout(timer);
+        count = 15
         const answerSection = document.getElementById("AnswerSection");
         var num = 0;
         var questions = [];
@@ -89,6 +92,34 @@ function isItCorrect(event) {
             }
         }
     });
-    questionNumber++;
+    questionNumber++; 
     Setup();
 }
+
+// reference https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+// Using a mutation observer to track the text content of the timer, similar idea to an event listener
+var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      console.log(timer.textContent);
+      if (timer.textContent === '0') {
+        var answerSection = document.getElementById("AnswerSection");
+        var answer = answerSection.getElementsByTagName("button");
+        var randomPick = Math.floor(Math.random() * answer.length);
+        var randomAnswer = answer[randomPick];
+        correct = data[questionNumber][1]
+        console.log(randomAnswer.textContent)
+        // function to force the click of a random wrong answer then the timer is 0
+        function attemptRandomAnswer() {
+            if (randomAnswer.textContent !== correct) {
+                randomAnswer.click();
+                countdown();
+            }
+        }
+        attemptRandomAnswer();
+    }
+    });
+});
+
+// What to watch for (https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver)
+var config = { childList: true, subtree: true, characterData: true };
+observer.observe(timer, config);
