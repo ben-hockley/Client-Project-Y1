@@ -11,6 +11,7 @@ body{
     display: flex;
     flex-direction: column-reverse;
     overflow-y: scroll;
+
     border: 2px solid black;
 }
 

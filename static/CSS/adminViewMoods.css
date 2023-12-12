@@ -1,0 +1,42 @@
+.heading-center {   
+    text-align: center;
+    padding-bottom:20px;
+    margin:0;
+}
+.emoji {
+    font-size: 40px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+.form-text {
+    font-size: larger;
+    display: flex;
+    float: left;
+    margin: 0;
+    align-items: center;
+}
+/* #adminQuizMoods {
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+    align-items: center;
+} */
+th {
+    text-align: center;
+    width: 25%;
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+}
+td {
+    text-align: center;
+    display: flex;
+    width: 25%;
+    float:inline-start;
+    align-items: center;
+}

@@ -24,8 +24,12 @@
         </form>
     </div>
 <div class="quizBox">
-    <form action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}" method="post" class="Quiz">
-        <section id="AnswerSection" class="AnswerSection">
+<h2 id="timer"></h2>
+<form class="Quiz" method="get" action="/userEnd/{{QuizID}}/{{UserID}}/{{user}}">
+    <section class="QuestionSection">
+        <section>
+            <span id="QuestionNumber">Quiz Empty</span><br>
+            <span id="Question", name="Question"></span>
         </section>
         <input id="POINTS"name="POINTS" value="5" type=""></input>
     </form>
