@@ -1,0 +1,32 @@
+{%extends 'mainTemplate.html'%}
+
+{% block linkBlock%}
+<link rel="stylesheet" href="static/CSS/Log on.css">
+{% endblock%}
+
+{% block mainBlock%}
+<title>Log in - L&g Quiz</title>
+{% endblock%}
+
+{% block mainBody%}
+<section class="loginBox">
+    <h1>LOG IN</h1>
+    <form id="loginForm" method="post" action="/loginFunction">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+    </form><br>
+    <a href="/forgotPassword">Forgot Password</a>
+    <span id="errorMessage"></span><br>
+    <label for="createAccount">Don't have an account? You can create one here.</label>
+    <form action="/createAccount">
+        <button id="createAccount" type="submit">Create Account</button>
+    </form>
+    <form action="/createGuest">
+        <button id="createGuest" type="submit">Log in as Guest</button>
+    </form>
+</section>
+<script src="/static/JS/Log on.js"></script>
+{% endblock%}

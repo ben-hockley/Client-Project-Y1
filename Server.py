@@ -1,11 +1,13 @@
 import os
 from flask import Flask, redirect, request, render_template, url_for
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, user_logged_in
 import json
 import sqlite3
 import hashlib
 import random
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'Frog'
 
 ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
@@ -852,36 +854,51 @@ def forgotPassword():
 
 
 
-@app.route('/index/<user>')
-def index(user):
-    connection = sqlite3.connect("quizDatabase.db")
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?',user)
-    quiz_data = cursor.fetchall()
-    connection.close()
-    return render_template('Index.html', quiz_data=quiz_data)
+db_path = 'quiz_database.db'
+login_manager = LoginManager(app)
+login_manager.login_view = 'returnLogin'
 
-@app.route('/edit', methods=['GET', 'POST'])
-def edit():
-    connection = sqlite3.connect("quizDatabase.db")
+@login_manager.user_loader
+def load_user(user_id):
+    return user_logged_in(user_id)
+
+def get_user_quizzes(user_id):
+    connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
+    cursor.execute('SELECT * FROM Quiz WHERE UserID = ?', (user_id,))
+    quizzes = cursor.fetchall()
+    connection.close()
+    return quizzes
+
+@app.route('/index/<user>')
+@login_required
+def index():
+    quizzes = get_user_quizzes(current_user.id)
+    return render_template('Index.html', quizzes=quizzes)
+
+@app.route('/edit/<int:user_id>/<int:question_id>', methods=['GET', 'POST'])
+@login_required
+def edit(user_id, question_id):
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+
     if request.method == 'POST':
         new_question = request.form['new_question']
         new_answer = request.form['new_answer']
-        
         cursor.execute('''
-            UPDATE Questions
-            SET Question = ?, Answer = ?
-            WHERE QuestionID = ?
-        ''', new_question, new_answer, QuestionID)
+            UPDATE quiz
+            SET question = ?, answer = ?
+            WHERE user_id = ? AND id = ?
+        ''', (new_question, new_answer, user_id, question_id))
         connection.commit()
         connection.close()
-        return redirect(url_for('Index'))
+        return redirect(url_for('index'))
 
-    cursor.execute('SELECT * FROM Questions WHERE QuestionID = ?')
+    cursor.execute('SELECT * FROM Quiz WHERE user_id = ? AND id = ?', (user_id, question_id))
     question_data = cursor.fetchone()
     connection.close()
     return render_template('Edit_Quiz.html', question_data=question_data)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
