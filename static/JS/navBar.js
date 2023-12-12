@@ -1,15 +1,15 @@
 document.addEventListener("DOMContentLoaded", getDetails())
-document.getElementById("logoText").addEventListener("click", function() {
-    user = window.location.pathname.split("/").pop();
-    newRoute = "/home/" + user;
-    window.location = newRoute;
-});
 document.getElementById("navbar-logo").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/home/" + user;
-    window.location = newRoute;
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/home/" + user;
+        window.location = newRoute;  
+    }
 }); //links navbar logo back to home; keeps user signed in.
-document.getElementById("accountDetails").addEventListener("click", function() {
+document.getElementById("account-details").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
     var text="";
     newRoute = "/checkGuest/" + user;
@@ -30,10 +30,16 @@ document.getElementById("accountDetails").addEventListener("click", function() {
     xhttp.send();
 
 })
+// Event Listener to take you to the Create Quiz page throught the NavBar
 document.getElementById("moodChecker").addEventListener("click", function() {
     user = window.location.pathname.split("/").pop();
-    newRoute = "/moodChecker/" + user;
-    window.location = newRoute;
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/moodChecker/" + user;
+        window.location = newRoute;  
+    }
 })
 
 function getDetails() {
@@ -48,13 +54,13 @@ function getDetails() {
             if (xhttp.status === 200) {
                 var text = xhttp.responseText;
                 if (text === "None") {
-                    document.getElementById("userDisplay").innerHTML = "";
+                    document.getElementById("user-display").innerHTML = "";
                 } else {
                     jsonTuple = JSON.parse(text);
                     let userDetails = jsonTuple[0] + " " + jsonTuple[1];
-                    document.getElementById("accountDetails").innerHTML = userDetails;
+                    document.getElementById("displayUser").innerHTML = userDetails;
                     let mood = jsonTuple[3];
-                    document.getElementById("moodChecker").innerHTML = mood;
+                    document.getElementById("displayMood").innerHTML = mood;
                 }
             } else {
                 console.error(xhttp.statusText);
@@ -63,3 +69,26 @@ function getDetails() {
     };
     xhttp.send();
 }
+// Event Listener to take you to the Create Quiz page throught the NavBar
+document.getElementById("create-quiz").addEventListener('click', function() {
+    user = window.location.pathname.split("/").pop();
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/createQuiz/" + user;
+        window.location = newRoute;  
+    }
+})
+// Event Listener to take you to the Avalible Quizzes page throught the NavBar
+document.getElementById("available-quizzes").addEventListener('click', function() {
+    user = window.location.pathname.split("/").pop();
+    if (user == "login") {
+        login = "/";
+        window.location = login;
+    } else {
+        newRoute = "/displayQuizzes/" + user;
+        window.location = newRoute;  
+    }
+})
+
