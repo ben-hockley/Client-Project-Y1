@@ -1,0 +1,1 @@
+SELECT * FROM "Quiz" WHERE "QuizKey" = '367H'

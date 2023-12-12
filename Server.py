@@ -50,19 +50,48 @@ def goHostEnd(user):
 
 @app.route("/hostEnd/<QuizKey>/<user>")
 def hostEnd(QuizKey, user):
+    print(QuizKey + " " + user)
     QuizName = request.form.get("QuizName")
     conn = sqlite3.connect("quizDatabase.db")
     cur = conn.cursor()
-    cur.execute(f'SELECT QuizID FROM Quiz, User WHERE QuizKey = "{QuizKey}" AND Quiz.UserID = User.UserID')
+    cur.execute(f'SELECT isTemplate, Username, QuizID FROM Quiz, User WHERE QuizKey = "{QuizKey}" AND Quiz.UserID = User.UserID')
     conn.commit()
-    DATA = cur.fetchall()
-    if DATA!=[]:
-        cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA[0][0]}"')
-        conn.commit()
-        DATA = cur.fetchall()
-        print(DATA)
-    return render_template('Host End.html', data=DATA)
+    fetch = cur.fetchall()
+    if fetch != []:
+        DATA1 = fetch[0]
+        print(DATA1)
+        if DATA1[0]=="F" and DATA1[1] == user:
+            cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA1[2]}"')
+            conn.commit()
+            DATA = cur.fetchall()
+            cur.execute(f'SELECT QuizKey FROM Quiz WHERE Quiz.QuizID= "{DATA1[2]}"')
+            conn.commit()
+            DATA2 = cur.fetchone()
+            conn.close()
+            return render_template('Host End.html', data=DATA, QuizKey=DATA2[0])
+        elif DATA1[0]=="T":
+            cur.execute(f'SELECT Username, Points FROM Players, User WHERE User.UserID = Players.UserID AND Players.QuizID= "{DATA1[2]}"')
+            conn.commit()
+            DATA = cur.fetchall()
+            conn.close()
+            return render_template('Host End.html', data=["T", QuizKey, user])
+    conn.close()
+    return redirect(f"/home/{user}")
 
+@app.route("/copyQuiz/<QuizKey>/<user>")
+def startQuiz(QuizKey, user):
+    UserID = getUserID(user)
+    conn = sqlite3.connect("quizDatabase.db")
+    cur = conn.cursor()
+    cur.execute(f'SELECT "QuizName", "QuizID" FROM "Quiz" WHERE "QuizKey" = \'{QuizKey}\'')
+    conn.commit()
+    DATA = cur.fetchone()
+    rand = RandomKey()
+    cur.execute(f'INSERT INTO Quiz(QuizName, UserID, QuizKey, isTemplate, parentQuizID) VALUES (\'{DATA[0]}\', \'{UserID}\', \'{rand}\', \'F\', \'{DATA[1]}\')')
+    conn.commit()
+    conn.close()
+    return redirect("/hostEnd/"+rand+"/"+user)
+    
 def RandomKey():
     while True:
         msg = ""
@@ -75,7 +104,7 @@ def RandomKey():
             for i in range(10):
                 CharList.append(str(i))
         for i in range(4):
-            QuizKey+=str(CharList[random.randint(0, len(CharList))])
+            QuizKey+=str(CharList[random.randint(0, len(CharList)-1)])
         
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
@@ -417,7 +446,13 @@ def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
     UserID = int(UserID)
     if request.method == 'GET':
-        return render_template('User End.html', data=getQuestion(QuizID), QuizID = QuizID, UserID = UserID, user = user)
+        conn = sqlite3.connect('quizDatabase.db')
+        cur = conn.cursor()
+        cur.execute(f'SELECT parentQuizID FROM Quiz WHERE QuizID=+{int(QuizID)}')
+        data = cur.fetchall()
+        parentQuizID=data[0][0]
+        conn.commit()
+        return render_template('User End.html', data=getQuestion(parentQuizID), QuizID = QuizID, UserID = UserID, user = user)
     if request.method == 'POST':
         Points = request.form.get("POINTS")
         msg=""
@@ -774,7 +809,7 @@ def updateQuizDisplay():
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
-        cur.execute("SELECT QuizName, QuizKey FROM Quiz")
+        cur.execute('SELECT QuizName, QuizKey FROM Quiz WHERE isTemplate = "F"')
         quizzes = cur.fetchall()
         newDict = {}
         i = 0
@@ -787,6 +822,7 @@ def updateQuizDisplay():
         print(e)
         newDict = e
     conn.close()
+    print(newDict)
     return newDict
 
 @app.route("/displayQuizCode/<quizName>/<quizCode>/<user>", methods=['GET'])
