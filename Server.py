@@ -231,7 +231,7 @@ def getMoodEmoji(mood):
     Returns the code to display the mood on the page
     when the mood integer is passed as a parameter
     """
-    moodlist = ["&#128549;","&#128577;","&#128528;","&#128578;","&#128512;"]
+    moodlist = ["&#128545","&#128544","&#128546","&#128577","&#128528","&#128578","&#128512","&#129321","&#129322"]
     return moodlist[mood]
 
 def getMood(user):
