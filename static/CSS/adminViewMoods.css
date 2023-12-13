@@ -1,7 +1,8 @@
 .heading-center {   
     text-align: center;
     padding-bottom:20px;
-    margin:0;
+    margin-top:3%;
+    margin-bottom:3%;
 }
 .emoji {
     font-size: 40px;
