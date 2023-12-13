@@ -134,7 +134,7 @@ function redirectScore() {
 function redirectAdmin() {
     user = window.location.pathname.split("/").pop();
     console.log(user);
-    newRoute = "/adminViewMoods/" + user;
+    newRoute = "/adminHomePage/" + user;
     window.location.href = newRoute;
 }
 function redirectLogout() {
@@ -147,10 +147,4 @@ function redirectHistory() {
     console.log(user);
     newLink = "/viewMoods/" + user;
     window.location.href = newLink;
-};
-function redirectGlobalMoods() {
-    user = window.location.pathname.split("/").pop();
-    console.log(user);
-    newRoute = "/GlobalMoodViewer/" + user;
-    window.location.href = newRoute;
 };
