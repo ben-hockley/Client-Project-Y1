@@ -50,3 +50,16 @@ footer{
 .fa-instagram{
     color:#028844
 }
+.heading-center {
+    text-align: center;
+}
+.nice-button {
+    width: 80%;
+    padding: 10px;
+    background-color: #0076D6;
+    margin-top: 12px;
+    border: none;
+}
+.nice-button:hover {
+    background-color: #028844;
+}
