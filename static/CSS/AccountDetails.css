@@ -15,9 +15,24 @@ h1 {
 .box {
     width:30%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 .heading-center {
     text-align: center;
+}
+#username, #firstName, #lastName {
+    font-size: large;
+}
+#firstName:hover, #lastName:hover, #username:hover {
+    font-size: larger;
+}
+.niceButton {
+    width: 100%;
+    padding: 10px;
+    background-color: #0076D6;
+    margin-bottom: 12px;
+    border: none;
 }
 /* #firstForm, #lastForm, #userForm, #details {
     display:flex;

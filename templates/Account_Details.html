@@ -21,14 +21,10 @@
         </section>
     </section>
     <section class="box">
-            <button id="redirectScore" class="btn btn-success" onclick="redirectScore()">View your Scores</button>
-            <button id="redirectHistory" class="btn btn-success" onclick="redirectHistory()">View Quiz Mood History</button>
-        <form action="/adminViewMoods/{{user}}" method="GET">
-            <button type="submit" class="btn btn-success">Admin View</button>
-        </form>
-        <form action="/">
-            <button type="submit" class="btn btn-success">Log out</button>
-        </form>
+            <button id="redirectScore" class="btn btn-success niceButton" onclick="redirectScore()">View your Scores</button>
+            <button id="redirectHistory" class="btn btn-success niceButton" onclick="redirectHistory()">View Quiz Mood History</button>
+            <button id="redirectAdmin" class="btn btn-success niceButton" onclick="redirectAdmin()">Admin Page</button>
+            <button id="redirectLogout" class="btn btn-success niceButton" onclick="redirectLogout()">Log out</button>
     </section>
 </section>
 

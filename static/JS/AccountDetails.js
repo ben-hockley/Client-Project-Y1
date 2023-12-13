@@ -131,7 +131,15 @@ function redirectScore() {
     newRoute = "/myScores/" + user
     window.location.href = newRoute;
 }
-
+function redirectAdmin() {
+    user = window.location.pathname.split("/").pop();
+    console.log(user);
+    newRoute = "/adminViewMoods/" + user;
+    window.location.href = newRoute;
+}
+function redirectLogout() {
+    window.location.href = "/"
+}
 //Ben's Code
 
 function redirectHistory() {
