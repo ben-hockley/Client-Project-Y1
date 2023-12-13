@@ -1,1 +1,1 @@
-SELECT * from "Quiz"
+SELECT "QuizName", "MoodBefore", "MoodAfter" FROM "Mood" LEFT JOIN "Quiz" USING("QuizID") WHERE "Mood"."UserID" = 1'

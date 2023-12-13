@@ -19,7 +19,6 @@ ALLOWED_EXTENTIONS = set(['jpg', 'txt', 'svg', 'png', 'jpeg', 'gif'])
 
 user = None
 UserID = 21
-DATABASE = "quizDatabase.db"
 
 @app.route("/createGuest")
 def createGuest():
@@ -357,16 +356,14 @@ def isAdmin(user):
     Takes in username as a parameter
     """
     try:
-        conn = sqlite3.connect("quizDatabase.db")
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute("\
-        SELECT Admin FROM User WHERE Username = ?", (user,))
+        cur.execute(f'SELECT "Admin" FROM "User" WHERE "Username" = \'{user}\'')
         admin = cur.fetchone()
         conn.close()
         if admin[0] == 'Y':
             return True
     except Exception as e:
-        print(e)
         conn.close()
     return False
 
@@ -449,13 +446,9 @@ def updateScores(user):
     if request.method == 'GET':
         userID = getUserID(user)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            SELECT QuizName, Players.Points, Questions.Points FROM Players\
-            LEFT JOIN Quiz USING(QuizID)\
-            LEFT JOIN Questions USING(QuizID)\
-            WHERE Players.UserID = ?", (userID,))
+            cur.execute(f'SELECT "QuizName", "Players"."Points", "Questions"."Points" FROM "Players" LEFT JOIN "Quiz" USING("QuizID") LEFT JOIN "Questions" USING("QuizID") WHERE "Players"."UserID" = \'{userID}\'')
             bigList = cur.fetchall()
             newList = []
             print("newlist")
@@ -483,12 +476,9 @@ def updateQuizMoodAdmin(user):
     if request.method == 'GET':
         userID = getUserID(user)
         try:
-            conn = sqlite3.connect("quizDatabase.db")
+            conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute("\
-            SELECT Quizname, Username, MoodBefore, MoodAfter FROM Mood\
-            LEFT JOIN Quiz USING(QuizID)\
-            LEFT JOIN User USING(UserID)")
+            cur.execute('SELECT "QuizName", "Username", "MoodBefore", "MoodAfter" FROM "Mood", "Quiz", "User" WHERE "Mood"."QuizID"="Quiz"."QuizID" AND "Quiz"."UserID"="User"."UserID" AND "User"."UserID"="Mood"."UserID"')
             bigList = cur.fetchall()
             newList = []
             print("newlist")
