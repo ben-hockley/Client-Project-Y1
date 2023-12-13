@@ -514,6 +514,12 @@ def adminViewMoods(user):
             return redirect("/home/" + user)
         return render_template("adminViewMoods.html")
     
+@app.route("/adminHomePage/<user>", methods=['GET'])
+def adminHomePage(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminHomePage.html")
 
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
