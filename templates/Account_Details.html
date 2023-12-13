@@ -1,35 +1,31 @@
 {% extends 'mainTemplate.html'%}
 {% block mainBlock%}
 <link rel="stylesheet" href="/static/CSS/AccountDetails.css">
-<h1>Account details</h1>
+<h1 class="heading-center">Account details</h1>
 {% endblock%}
 
 {% block mainBody%}
-<section title="details" id="details">
-    <p>First name:</p>
-    <section id="firstNameData" label="first name">
-    <p id="firstName">Undefined</p>
+<section class="container">
+    <section title="details" class="box">
+        <p>First name:</p>
+        <section id="firstNameData" label="first name">
+        <p id="firstName">Undefined</p>
+        </section>
+        <p>Last name:</p>
+        <section id="lastNameData" label="last name">
+        <p id="lastName">Undefined</p>
+        </section>
+        <p>Username:</p>
+        <section id="usernameData" label="username">
+        <p id="username">Undefined</p>
+        </section>
     </section>
-    <p>Last name:</p>
-    <section id="lastNameData" label="last name">
-    <p id="lastName">Undefined</p>
+    <section class="box">
+            <button id="redirectScore" class="btn btn-success nice-button" onclick="redirectScore()">View your Scores</button>
+            <button id="redirectHistory" class="btn btn-success nice-button" onclick="redirectHistory()">View Quiz Mood History</button>
+            <button id="redirectAdmin" class="btn btn-success nice-button" onclick="redirectAdmin()">Admin Page</button>
+            <button id="redirectLogout" class="btn btn-success nice-button" onclick="redirectLogout()">Log out</button>
     </section>
-    <p>Username:</p>
-    <section id="usernameData" label="username">
-    <p id="username">Undefined</p>
-    </section>
-    <section title="linkToScoreHistory" id="linkToScoreHistory">
-        <button id="redirectScore" class="btn btn-success" onclick="redirectScore()">View your Scores</button>
-    </section>
-    <section title="linkToQuizHistory" id="linkToQuizHistory">
-        <button id="redirectHistory" class="btn btn-success" onclick="redirectHistory()">View Quiz Mood History</button>
-    </section>
-    <form action="/adminViewMoods/{{user}}" method="GET">
-        <button type="submit" class="btn btn-success">Admin View</button>
-    </form>
-    <form action="/">
-        <button type="submit" class="btn btn-success">Log out</button>
-    </form>
 </section>
 
 <script src="/static/JS/AccountDetails.js"></script>
