@@ -28,25 +28,6 @@ td {
 tr {
     width:100%;
 }
-/* td {
-    text-align: center;
-    display: flex;
-    width: 25%;
-    float:inline-start;
-    align-items: center;
-}
-.vertical-center {
-    margin-top: 16px;
-    vertical-align: middle;
-}
-.emoji .vertical-center {
-    margin-top: 0;
-    margin-bottom: 6px;
-} */
 .table-data {
     width:100%;
 }
-/* .username {
-    width:30%;
-    flex: 1;
-} */
