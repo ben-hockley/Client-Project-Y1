@@ -490,7 +490,6 @@ def updateQuizMoodAdmin(user):
             LEFT JOIN User USING(UserID)")
             bigList = cur.fetchall()
             newList = []
-            print("newlist")
             for x in range(len(bigList)):
                 if newList == []:
                     newList.append(bigList[x])
@@ -520,6 +519,51 @@ def adminHomePage(user):
         if isAdmin(user) == False:
             return redirect("/home/" + user)
         return render_template("adminHomePage.html")
+
+@app.route("/adminViewQuizzes/<user>", methods=['GET', 'POST'])
+def adminViewQuizzes(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminViewQuizzes.html")
+
+@app.route("/adminViewScores/<quizName>/<quizCode>/<user>", methods=['GET', 'POST'])
+def adminViewScores(quizName, quizCode, user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminViewScores.html", quizName=quizName)
+
+@app.route("/updateAdminScores/<quizCode>/<user>", methods=['GET', 'POST'])
+def updateAdminScores(quizCode, user):
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT Username, Players.Points, Questions.Points FROM Players\
+            LEFT JOIN User USING(UserID)\
+            LEFT JOIN Quiz USING(QuizID)\
+            LEFT JOIN Questions USING(QuizID)\
+            WHERE QuizKey = ?",(quizCode,))
+            bigList = cur.fetchall()
+            conn.close()
+            print(bigList)
+            newList = []
+            for x in range(len(bigList)):
+                if newList == []:
+                    newList.append(bigList[x])
+                    continue
+                if newList[-1] == bigList[x]:
+                    continue
+                newList.append(bigList[x])
+            jsonList = arrayToJSON(newList)
+        except Exception as e:
+            print(e)
+            conn.close()
+            jsonList = "error"
+        return jsonList
 
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
