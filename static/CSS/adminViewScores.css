@@ -1,0 +1,52 @@
+.nice-table {
+    margin:0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-around;
+}
+.emoji {
+    font-size: 40px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+.form-text {
+    font-size: larger;
+    text-align: center;
+    margin: 0;
+    align-items: center;
+}
+th {
+    width: 30%;
+    text-align: center;
+}
+td {
+    width: 30%;
+}
+tr {
+    width:100%;
+}
+/* td {
+    text-align: center;
+    display: flex;
+    width: 25%;
+    float:inline-start;
+    align-items: center;
+}
+.vertical-center {
+    margin-top: 16px;
+    vertical-align: middle;
+}
+.emoji .vertical-center {
+    margin-top: 0;
+    margin-bottom: 6px;
+} */
+.table-data {
+    width:100%;
+}
+/* .username {
+    width:30%;
+    flex: 1;
+} */
