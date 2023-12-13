@@ -260,7 +260,7 @@ def getMoodEmoji(mood):
     Returns the code to display the mood on the page
     when the mood integer is passed as a parameter
     """
-    moodlist = ["&#128549;","&#128577;","&#128528;","&#128578;","&#128512;"]
+    moodlist = ["&#128545","&#128544","&#128546","&#128577","&#128528","&#128578","&#128512","&#129321","&#129322"]
     return moodlist[mood]
 
 def getMood(user):
@@ -371,6 +371,26 @@ def getQuizID(user):
         conn.close()
         return None
 
+def isAdmin(user):
+    """
+    Returns True if the user is an admin, False otherwise
+    Takes in username as a parameter
+    """
+    try:
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT Admin FROM User WHERE Username = ?", (user,))
+        admin = cur.fetchone()
+        conn.close()
+        if admin[0] == 'Y':
+            return True
+    except Exception as e:
+        print(e)
+        conn.close()
+    return False
+
+
 @app.route("/moodAfter/<user>", methods=['GET', 'POST'])
 def moodAfter(user):
     if request.method == 'GET':
@@ -427,20 +447,103 @@ def updateQuizMood(user):
             WHERE Mood.UserID = ?", [userID,])
             bigList = cur.fetchall()
             conn.close()
-            newDict = {}
-            for x in range(len(bigList)):
-                subList = []
-                for y in range(len(bigList[x])):
-                    subList.append(bigList[x][y])
-                newDict.update({x: subList})
-            jsonList = json.dumps(newDict)
-            print(jsonList)
+            jsonList = arrayToJSON(bigList)
             return jsonList
         except Exception as e:
             print(e)
             conn.close()
             return None
-        
+
+def arrayToJSON(bigList):
+    newDict = {}
+    for x in range(len(bigList)):
+        subList = []
+        for y in range(len(bigList[x])):
+            subList.append(bigList[x][y])
+        newDict.update({x: subList})
+    jsonList = json.dumps(newDict)
+    return jsonList
+
+@app.route("/myScores/<user>", methods=['GET','POST'])
+def myScores(user):
+    if request.method == 'GET':
+        return render_template("viewScores.html")
+
+@app.route("/updateScores/<user>", methods=['GET'])
+def updateScores(user):
+    """
+    Retrieves all quiz names and scores which a player has played and returns them in a json list
+    """
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT QuizName, Players.Points, Questions.Points FROM Players\
+            LEFT JOIN Quiz USING(QuizID)\
+            LEFT JOIN Questions USING(QuizID)\
+            WHERE Players.UserID = ?", (userID,))
+            bigList = cur.fetchall()
+            newList = []
+            print("newlist")
+            for x in range(len(bigList)):
+                if newList == []:
+                    newList.append(bigList[x])
+                    continue
+                if newList[-1] == bigList[x]:
+                    continue
+                newList.append(bigList[x])
+            print("Here comes the list", newList)
+            jsonList = arrayToJSON(newList)
+            conn.close()
+            return jsonList
+        except Exception as e:
+            print(e)
+            conn.close()
+            return "Hi"
+
+@app.route("/updateQuizMoodAdmin/<user>", methods=['GET'])
+def updateQuizMoodAdmin(user):
+    """
+    Retrieves all quiz moods from the database, for all users, returns in a json list
+    """
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = sqlite3.connect("quizDatabase.db")
+            cur = conn.cursor()
+            cur.execute("\
+            SELECT Quizname, Username, MoodBefore, MoodAfter FROM Mood\
+            LEFT JOIN Quiz USING(QuizID)\
+            LEFT JOIN User USING(UserID)")
+            bigList = cur.fetchall()
+            newList = []
+            print("newlist")
+            for x in range(len(bigList)):
+                if newList == []:
+                    newList.append(bigList[x])
+                    continue
+                if newList[-1] == bigList[x]:
+                    continue
+                newList.append(bigList[x])
+            print("Here comes the list", newList)
+            jsonList = arrayToJSON(newList)
+            conn.close()
+            return jsonList
+        except Exception as e:
+            print(e)
+            conn.close()
+            return None
+
+@app.route("/adminViewMoods/<user>", methods=['GET'])
+def adminViewMoods(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminViewMoods.html")
+    
+
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
@@ -475,7 +578,7 @@ def returnCreateAccount():
 @app.route("/accountDetails/<user>", methods=['GET'])
 def returnAccountDetails(user):
     if request.method == 'GET':
-        return render_template('Account_Details.html')
+        return render_template('Account_Details.html', user=user)
 
 @app.route("/updateInfo/<user>", methods=['GET'])
 def updateInfo(user):
