@@ -984,5 +984,29 @@ def checkQuizKey(user, joinKey):
 def forgotPassword():
     return render_template("forgotPassword.html")
 
+@app.route("/GlobalMoodViewer/<user>", methods=['GET'])
+def GlobalMoodViewer(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("globalMoodViewer.html")
+
+@app.route("/GlobalMoodData")
+def GlobalMoodData():
+    try:
+        conn = sqlite3.connect('quizDatabase.db')
+        cur = conn.cursor()
+        cur.execute("SELECT FirstName, SurName, Mood FROM User")
+        conn.commit()
+        Users = cur.fetchall()
+        conn.close()
+        print(Users)
+        return Users
+
+    except Exception as e:
+        print(e)
+        conn.close()
+        return "error"
+
 if __name__ == "__main__":
     app.run(debug=True)
