@@ -1,25 +1,13 @@
 {%extends 'generalPageStyled.html'%}
 
-
-{%block mainBlock%}
-<h2> Quiz History</h2>
-<table>
-   <thead>
-      <td>ID</td>
-      <td>quizName</td>
-      <td>genre</td>
-      <td>author</td>
-   </thead>
-
-   {% for row in data %}
-   <!-- A List of tuples so row is each item in the list
-        and then the index is the column number.-->
-      <tr>
-        <td>{{row[0]}}</td>
-        <td>{{row[1]}}</td>
-        <td>{{row[2]}}</td>
-        <td>{{row[3]}}</td>
-      </tr>
-   {% endfor %}
-</table>
-{%endblock%}
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/listQuizzes.css">
+{% endblock%}
+{% block mainBlock%}
+{% endblock%}
+{% block mainBody%}
+<h1 class="text-center">View all created quizzes</h1>
+<section title="quizzes" id="quizzes" class="quizzes"></section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/static/JS/listQuizzes.js"></script>
+{% endblock%}

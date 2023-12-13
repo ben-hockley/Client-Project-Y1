@@ -3,14 +3,20 @@
     padding-bottom:20px;
     margin:0;
 }
-#emoji {
+.emoji {
     font-size: 40px;
 }
-#quizTitle {
+.form-text {
     padding-top: 24px;
     font-size: larger;
+    margin: 0;
+    top:50%;
 }
-#quizMoods {
+#quizMoods, #quizScores {
+    text-align: center;
+    vertical-align: middle;
+}
+#adminQuizMoods {
     text-align: center;
     vertical-align: middle;
     min-height: 70vh;
@@ -18,4 +24,12 @@
 th {
     text-align: center;
     width: 33%;
+}
+.vertical-center {
+    margin-top: 16px;
+    vertical-align: middle;
+}
+.emoji .vertical-center {
+    margin-top: 0;
+    margin-bottom: 6px;
 }
