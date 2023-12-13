@@ -1,0 +1,19 @@
+{%extends 'mainTemplate.html'%}
+
+{% block linkBlock%}
+<link rel="stylesheet" href="/static/CSS/globalMoodViewer.css/">
+{% endblock%}
+
+{% block mainBlock%}
+<title>L&G Quiz</title>
+<div class="login-logo">
+    <h2>GLOBAL <img src="/static/img/Logo2.png" alt="Legal & General Logo"> MOODS</h2>
+</div>
+{% endblock%}
+
+{% block mainBody%}
+<!-- Body Content here. -->
+<div class="user-grid" id="userGrid"></div>
+
+<script src="/static/JS/globalMoodViewer.js"></script>
+{% endblock%}
