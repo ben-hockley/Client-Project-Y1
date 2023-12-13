@@ -1,5 +1,11 @@
 <!-- templates/index.html -->
+{% extends 'mainTemplate.html'%}
+{% block mainBlock%}
+<link rel="stylesheet" href="/static/CSS/Index.css">
+<h1>Select a quiz to edit</h1>
+{% endblock%}
 
+{% block mainBody%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +18,7 @@
     <ul>
         {% for quiz in quizzes %}
             <li>{{ quiz[1] }} - {{ quiz[2] }}</li>
-            <form action="/edit/{{user}}" method="GET">
+            <form action="/edit/{{user}}/{{Quiz}}" method="GET">
                 <button type = "submit" class="btn btn-success">Edit Quiz</button>
             </form>
         {% endfor %}

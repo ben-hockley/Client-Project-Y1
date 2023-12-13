@@ -855,7 +855,20 @@ def checkQuizKey(user, joinKey):
 def forgotPassword():
     return render_template("forgotPassword.html")
 
-
+def Questions(Quiz):
+    try:
+        
+        conn = sqlite3.connect("quizDatabase.db")
+        cur = conn.cursor()
+        cur.execute("\
+        SELECT * FROM Questions WHERE QuizID = ?", (Quiz,))
+        question = cur.fetchall()
+        conn.close()
+        return question
+    except Exception as e:
+        print(e)
+        conn.close()
+        return None
 
 
 login_manager = LoginManager(app)
@@ -880,22 +893,24 @@ def get_user_quizzes(user):
 
 
 
-@app.route('/edit/<user>', methods=['GET', 'POST'])
+@app.route('/edit/<user>/<Quiz>', methods=['GET', 'POST'])
 
-def edit(user,):
+def edit(user,Quiz):
     UserID = getUserID(user)
+    print(UserID)
+    quizID = Questions(Quiz)
+    print("Here it lives", quizID)
     connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (quizID))
+    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (quizID,))
     QuestionID = cursor.fetchall()
+    print('here it is', QuestionID)
     if request.method == 'POST':
         new_question = request.form['new_question']
         new_answer = request.form['new_answer']
-        cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (quizID))
-        quizID = getQuizID(user)
-#QuestionID = cursor.fetchall()
+        
         cursor.execute('''
-            UPDATE Quiz
+            UPDATE Questions , Answers
             SET Question = ?, Answer = ?
             WHERE UserID = ? AND QuestionID = ?
         ''', (new_question, new_answer, UserID, QuestionID,))
@@ -903,7 +918,7 @@ def edit(user,):
         connection.close()
         return redirect('Edit_Quiz.html', user=user,)
 
-    cursor.execute('SELECT * FROM Quiz WHERE UserID = ? AND QuestionID = ?', (UserID, QuestionID))
+    cursor.execute('SELECT * FROM Questions WHERE QuizID = ? AND QuestionID = ?', (quizID, QuestionID))
     question_data = cursor.fetchone()
     connection.close()
     return render_template('Edit_Quiz.html', question_data=question_data)
