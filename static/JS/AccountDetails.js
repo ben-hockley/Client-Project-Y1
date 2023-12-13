@@ -24,7 +24,7 @@ function editFirstName() {
     newFirst.id = "newFirstname";
     newFirst.setAttribute("name","newFirstname")
     button.setAttribute("type","submit");
-    button.setAttribute("class","btn btn-success")
+    button.setAttribute("class","btn btn-success nice-button")
     button.innerHTML = "Change first name";
     firstForm.appendChild(labelForm);
     firstForm.appendChild(newFirst);
@@ -54,7 +54,7 @@ function editUsername() {
     newFirst.id = "newUsername";
     newFirst.setAttribute("name","newUsername")
     button.setAttribute("type","submit");
-    button.setAttribute("class","btn btn-success")
+    button.setAttribute("class","btn btn-success nice-button")
     button.innerHTML = "Change username";
     firstForm.appendChild(labelForm);
     firstForm.appendChild(newFirst);
@@ -84,7 +84,7 @@ function editLastName() {
     newFirst.id = "newLastname";
     newFirst.setAttribute("name","newLastname")
     button.setAttribute("type","submit");
-    button.setAttribute("class","btn btn-success")
+    button.setAttribute("class","btn btn-success nice-button")
     button.innerHTML = "Change last name";
     firstForm.appendChild(labelForm);
     firstForm.appendChild(newFirst);

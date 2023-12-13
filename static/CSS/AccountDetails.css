@@ -1,12 +1,3 @@
-/* body {
-    margin:0;
-    padding:0;
-}
-h1 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-} */
-
 .container {
     display: flex;
     flex-direction: row;
@@ -27,59 +18,22 @@ h1 {
 #firstName:hover, #lastName:hover, #username:hover {
     font-size: larger;
 }
-.niceButton {
-    width: 100%;
+.nice-button {
+    width: 80%;
     padding: 10px;
     background-color: #0076D6;
-    margin-bottom: 12px;
+    margin-top: 12px;
     border: none;
 }
-/* #firstForm, #lastForm, #userForm, #details {
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: large;
-    padding:0;
-    margin:0;
-}
-button, input[type=text] {
-    width:30px;
-}
-#usernameData, #lastNameData, #firstNameData, #linkToQuizHistory {
-    padding:0;
-    margin-top: 0;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#firstName #lastName #username {
-    background-color: aliceblue;
-    color:black;
-    font-family:'Times New Roman', Times, serif;
-    text-align: center;
-    align-self: center;
-}
-#firstName:hover, #lastName:hover, #username:hover {
-    color: #0076d6;
+.nice-button:hover {
+    background-color: #028844;
 }
 input[type=text] {
-    width: 139.7px;
-    padding: 5px 5px;
-    background-color: #0076d6;
-    color:white;
-    border:none;
-    border-radius: 4px;
-    text-align: center;
-} */
-/* https://www.w3schools.com/css/css_form.asp */
-/* Got help from this site */
-/* .btn {
-    width:fit-content;
+    width:80%;
+    padding: 10px;
     background-color: #028844;
-    margin-top: 3px;
-    margin-bottom: 3px;
-} */
+    color: white;
+    border: none;
+    text-align: center;
+    border-radius: 4px;
+}
