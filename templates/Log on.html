@@ -9,24 +9,37 @@
 {% endblock%}
 
 {% block mainBody%}
+<div class="login-logo">
+    <img src="/static/img/alternativeLogo.png" alt="Legal & General Logo">
+</div>
+
 <section class="loginBox">
-    <h1>LOG IN</h1>
+    <div class="log-in-half">
     <form id="loginForm" method="post" action="/loginFunction">
+        <h2>Log In</h2>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         <button type="submit">Login</button>
-    </form><br>
-    <a href="/forgotPassword">Forgot Password</a>
-    <span id="errorMessage"></span><br>
-    <label for="createAccount">Don't have an account? You can create one here.</label>
+    </form>
+    <span id="errorMessage"></span>
+    </div>
+    
+    <div class="log-in-half">
     <form action="/createAccount">
+        <br>
+        <label>Forgotten your password? You can recover it here.</label>
+        <a href="/forgotPassword">Recover Password</a>
+        <label for="createAccount">Don't have an account? You can create one here.</label>
         <button id="createAccount" type="submit">Create Account</button>
     </form>
     <form action="/createGuest">
         <button id="createGuest" type="submit">Log in as Guest</button>
     </form>
+    </div>
+
 </section>
+
 <script src="/static/JS/Log on.js"></script>
 {% endblock%}

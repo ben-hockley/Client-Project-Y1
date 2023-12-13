@@ -645,7 +645,7 @@ def usernameExist():
             if submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer) == True:
                 message = "Welcome to your account, " + firstName
                 user = userName
-                return redirect("/accountDetails/" + user)
+                return redirect("/home/" + user)
             else:
                 message = "Error inserting " + firstName
         else:
