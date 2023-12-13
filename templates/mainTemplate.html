@@ -10,14 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
         {% block linkBlock%}
-        {% endblock%}
-        <!-- <nav class="navbar-legal-and-general"> -->          
-            <div class="userDisplay"><p id="accountDetails"></p><p id="moodChecker"></p></div>
-            <a class="navbar-logo" id="navbar-logo">
-            
-              <img src="/static/img/L&G_Logo.svg" width="50" height="50" alt="Legal & General Logo">
-            </a>
-                     
+        {% endblock%}                  
         <!-- navbar inspired from concepts in bootstrap https://getbootstrap.com/docs/4.0/components/navbar/ -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             {% block navBarContent%}
@@ -38,7 +31,6 @@
                 <p class="mood-image" id="displayMood"></p>
             </div>
             {% endblock%}
-            </nav>
         </nav>
             {% block mainBlock%}
             {% endblock%}
