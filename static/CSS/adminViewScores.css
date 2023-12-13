@@ -1,33 +1,28 @@
+h1 {
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
 .nice-table {
-    margin:0;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    justify-content: space-around;
+    width: fit-content;
 }
-.emoji {
-    font-size: 40px;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    align-items: center;
+.username {
+    width: 400px;
 }
 .form-text {
     font-size: larger;
-    text-align: center;
     margin: 0;
     align-items: center;
 }
-th {
-    width: 30%;
+.score {
+    width: 150px;
     text-align: center;
 }
-td {
-    width: 30%;
-}
-tr {
-    width:100%;
-}
-.table-data {
-    width:100%;
+.max-points {
+    width: 150px;
+    text-align: center;
 }

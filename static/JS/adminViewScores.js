@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", updateQuizScores())
-const interval = setInterval(updateQuizScores, 5000);
+// const interval = setInterval(updateQuizScores, 5000);
 function updateQuizScores() {
     user = window.location.pathname.split("/").pop();
     quizCode = window.location.pathname.split("/").slice(-2)[0];
