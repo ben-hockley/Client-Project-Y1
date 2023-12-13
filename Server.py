@@ -801,15 +801,15 @@ def displayQuizzes(user):
     if request.method == 'GET':
         return render_template("ListQuizzes.html")
 
-@app.route("/updateQuizDisplay", methods = ['GET'])
-def updateQuizDisplay():
+@app.route("/updateQuizDisplay/<isTemplate>", methods = ['GET'])
+def updateQuizDisplay(isTemplate):
     """
     Function which fetches each quiz's name and unique code, returning them all in a json file
     """
     try:
         conn = sqlite3.connect("quizDatabase.db")
         cur = conn.cursor()
-        cur.execute('SELECT QuizName, QuizKey FROM Quiz WHERE isTemplate = "F"')
+        cur.execute(f'SELECT QuizName, QuizKey FROM Quiz WHERE isTemplate = "{isTemplate}"')
         quizzes = cur.fetchall()
         newDict = {}
         i = 0
