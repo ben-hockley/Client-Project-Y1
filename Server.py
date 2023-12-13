@@ -863,6 +863,7 @@ def Questions(Quiz):
         cur.execute("\
         SELECT * FROM Questions WHERE QuizID = ?", (Quiz,))
         question = cur.fetchall()
+        print(question)
         conn.close()
         return question
     except Exception as e:
@@ -894,34 +895,15 @@ def get_user_quizzes(user):
 
 
 @app.route('/edit/<user>/<Quiz>', methods=['GET', 'POST'])
-
 def edit(user,Quiz):
     UserID = getUserID(user)
     print(UserID)
-    quizID = Questions(Quiz)
-    print("Here it lives", quizID)
     connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (quizID,))
-    QuestionID = cursor.fetchall()
-    print('here it is', QuestionID)
-    if request.method == 'POST':
-        new_question = request.form['new_question']
-        new_answer = request.form['new_answer']
-        
-        cursor.execute('''
-            UPDATE Questions , Answers
-            SET Question = ?, Answer = ?
-            WHERE UserID = ? AND QuestionID = ?
-        ''', (new_question, new_answer, UserID, QuestionID,))
-        connection.commit()
-        connection.close()
-        return redirect('Edit_Quiz.html', user=user,)
-
-    cursor.execute('SELECT * FROM Questions WHERE QuizID = ? AND QuestionID = ?', (quizID, QuestionID))
-    question_data = cursor.fetchone()
+    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (Quiz,))
+    Questions = cursor.fetchall()
     connection.close()
-    return render_template('Edit_Quiz.html', question_data=question_data)
+    return render_template('Edit_Quiz.html', userID=UserID,data=Questions)
 
 
 if __name__ == "__main__":

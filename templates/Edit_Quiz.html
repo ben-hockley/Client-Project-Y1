@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<header>
+    <link rel="stylesheet" href="/static/CSS/Edit_Quiz.css">
+</header>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Quiz</title>
 
 <body>
+    <p id="data">{{data}}</p>
     <h1>Edit Question and Answer</h1>
     <form method="POST">
         <label for="new_question">New Question:</label>
@@ -13,11 +17,10 @@
         <label for="new_answer">New Answer:</label>
         <input type="text" name="new_answer" value="" required><br>
         <input type="submit" value="Save Changes">
+        <section id="Questions">
+            
+        </section>
     </form>
+    <script src="/static/JS/Edit_Quiz.js"></script>
 </body>
-</html>
-
-        
-    
-</html>
 
