@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, redirect, request,render_template, url_for
+from flask import Flask, jsonify, redirect, request,render_template, url_for
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user, user_logged_in
 import json
 import sqlite3
@@ -889,6 +889,7 @@ def get_user_quizzes(user):
         cursor.execute('SELECT * FROM Quiz WHERE UserID = ?',(userID,))
         connection.commit()
         quizzes = cursor.fetchall()
+        print(quizzes)
         connection.close()
         return render_template('index.html', quizzes=quizzes, user=user)
 
@@ -902,7 +903,22 @@ def edit(user,Quiz):
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (Quiz,))
     Questions = cursor.fetchall()
+    new_question = request.form.get('new_question')
+    new_answer = request.form.get('new_answer')
+
+    cursor.execute('''
+        UPDATE Questions
+        SET Question = ?
+        WHERE QuizID = ?
+    ''', (new_question, Quiz))
+    cursor.execute('''
+        UPDATE Answers
+        SET Answer = ? 
+        WHERE QuestionID = ?
+    ''', (new_answer,Questions)           )
+    connection.commit()
     connection.close()
+
     return render_template('Edit_Quiz.html', userID=UserID,data=Questions)
 
 

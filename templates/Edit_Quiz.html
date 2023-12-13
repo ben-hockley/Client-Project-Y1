@@ -8,19 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Quiz</title>
 
-<body>
-    <p id="data">{{data}}</p>
-    <h1>Edit Question and Answer</h1>
-    <form method="POST">
+{% block mainBody%}
+    <form method="POST" action="Index.html">
         <label for="new_question">New Question:</label>
-        <input type="text" name="new_question" value="" required><br>
+        <input type="text" name="new_question" value="{{ quiz_data[1] }}" required><br>
         <label for="new_answer">New Answer:</label>
-        <input type="text" name="new_answer" value="" required><br>
+        <input type="text" name="new_answer" value="{{ quiz_data[2] }}" required><br>
         <input type="submit" value="Save Changes">
-        <section id="Questions">
-            
-        </section>
-    </form>
+</form>
+    
+{% endblock%}
+    
+
+    
     <script src="/static/JS/Edit_Quiz.js"></script>
 </body>
 
