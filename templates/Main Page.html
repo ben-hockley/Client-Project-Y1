@@ -6,31 +6,33 @@
 
 {% block mainBlock%}
 <title>L&G Quiz</title>
-<br>
-<h1 class="headerText">Welcome, <span id="nameText">{{ firstName }}!</span></h1>
-<form id="displayQuizForm" class="display-form" action="/displayQuizzes/{{user}}">
+<div class="login-logo">
+    <img src="/static/img/Logo2.png" alt="Legal & General Logo">
+</div>
+<h1 class="header-text">Welcome, {{ firstName }}!</h1>
+<!-- <form id="displayQuizForm" class="display-form" action="/displayQuizzes/{{user}}">
     <button type="submit" class="display-quiz-button">See available quizzes</button>
-</form>
+</form> -->
 {% endblock%}
 
 {% block mainBody%}
 
-<div class="inputBoxs">
-<section class="quizPathBox">
+<div class="input-boxs">
+<section class="quiz-path-box">
     <form id="hostForm" method="POST" action="/goHostEnd/{{user}}">
-        <input type="text" id="hostCode" name="hostCode" required placeholder="####">
+        <input type="text" id="hostCode" name="hostCode" required placeholder="Host Key">
         <button id="hostButton" type="submit" disabled>HOST</button>
     </form>
 </section>
-<section class="quizPathBox">
+<section class="quiz-path-box">
     <form id="joinForm" method="POST" action="/moodBeforeSubmit/{{user}}">
-        <input type="text" id="joinCode" name="joinCode" required placeholder="####">
+        <input type="text" id="joinCode" name="joinCode" required placeholder="Join Key">
         <button id="joinButton" type="submit" disabled>JOIN</button>
     </form>
 </section>
 </div>
-<section class="createQuizButtonSection">
-<div class="createQuizButton">
+<section class="create-quiz-button-section">
+<div class="create-quiz-button">
 <a href="/createQuiz/{{user}}"><button type="button">CREATE QUIZ</button></a>
 </div>
 </section>

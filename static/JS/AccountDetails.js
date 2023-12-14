@@ -148,3 +148,9 @@ function redirectHistory() {
     newLink = "/viewMoods/" + user;
     window.location.href = newLink;
 };
+function redirectGlobalMoods() {
+    user = window.location.pathname.split("/").pop();
+    console.log(user);
+    newRoute = "/GlobalMoodViewer/" + user;
+    window.location.href = newRoute;
+};
