@@ -1,8 +1,13 @@
 /*CSS for navbar at top of mainTemplate.html */
+head {
+    position: fixed;
+    top: 0;
+}
 body{
     background-size: cover;
     margin: 0;
     padding: 0;
+
 }
 .user-display p{
     float:left;
@@ -31,8 +36,9 @@ nav a img {
 /* CSS for footer at bottom of mainTemplate.html */
 footer{
     width:100%;
-    height:min-content;
-    background-color: #333;
+    height:fit-content;
+    position: fixed;
+    bottom: 0;
 }
 /*Font awesome social media icons in legal and general color scheme*/
 .fa-facebook{
