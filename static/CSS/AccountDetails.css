@@ -17,6 +17,7 @@ h1 {
     justify-content: center;
 }
 .box {
+    align-items: center;
     width:30%;
     text-align: center;
     display: flex;
@@ -47,4 +48,20 @@ input[type=text] {
     border: none;
     text-align: center;
     border-radius: 4px;
+}
+.login-logo img {
+    width: 100px;
+    height: auto;
+    background: transparent !important;
+    opacity: 1 !important;
+}
+.login-logo {
+    width: fit-content;
+    margin-top: 10px;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+h2 {
+    word-spacing: 50px;
 }
