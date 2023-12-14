@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <header>
+    <head>
+        <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
+
+        <!--Icon library for social media logo's in footer source:https://www.w3schools.com/howto/howto_css_social_media_buttons.asp-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- link to bootstrap taken from https://getbootstrap.com/docs/4.4/getting-started/introduction/ -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/CSS/nav__Bar.css">
         {% block linkBlock%}
-        {% endblock%}
+        {% endblock%}                  
         <!-- navbar inspired from concepts in bootstrap https://getbootstrap.com/docs/4.0/components/navbar/ -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             {% block navBarContent%}
@@ -27,12 +31,8 @@
                 <p class="mood-image" id="displayMood"></p>
             </div>
             {% endblock%}
-            </nav>
         </nav>
-    </header>
-    <head>
             {% block mainBlock%}
-            <h1>Template page</h1>
             {% endblock%}
     </head>
     <body>
@@ -41,8 +41,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/static/JS/navBar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    </body>
-    <footer>
-
-    </footer>
+    <!-- Footer w/ social media links-->
+    {% block footer%}
+    <footer class="text-center bg-body-tertiary bg-dark">
+        <div class="container">
+          <section>
+            <a class="btn btn-link btn-floating btn-sm text-body m-1" href="https://www.facebook.com/legalandgeneral/" target="_blank"><i class="fa fa-facebook fa-2x"></i></a>     
+            <a class="btn btn-link btn-floating btn-sm text-body m-1" href="https://twitter.com/landg_uk" target="_blank"><i class="fa fa-twitter fa-2x"></i></a>
+            <a class="btn btn-link btn-floating btn-sm text-body m-1" href="https://www.linkedin.com/company/legal-&-general" target="_blank"><i class="fa fa-linkedin fa-2x"></i></a>
+            <a class="btn btn-link btn-floating btn-sm text-body m-1" href="https://www.youtube.com/legalandgeneral" target="_blank"><i class="fa fa-youtube-play fa-2x"></i></a>
+            <a class="btn btn-link btn-floating btn-sm text-body m-1" href="https://www.instagram.com/legalandgeneral/" target="_blank"><i class="fa fa-instagram fa-2x"></i></a>
+          </section>
+        </div>
+      </footer>
+      {% endblock%}
+      </body>
 </html>

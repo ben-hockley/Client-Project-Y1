@@ -52,7 +52,6 @@ def checkGuest(user):
 @app.route("/goHostEnd/<user>", methods=['POST'])
 def goHostEnd(user):
     QuizKey = request.form.get("hostCode")
-    print(QuizKey)
     return redirect(f"/hostEnd/{QuizKey}/{user}")
 
 @app.route("/hostEnd/<QuizKey>/<user>")
@@ -60,17 +59,43 @@ def hostEnd(QuizKey, user):
     QuizName = request.form.get("QuizName")
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    cur.execute(f'SELECT "QuizID" FROM "Quiz", "User" WHERE "QuizKey" = \'{QuizKey}\' AND "Quiz"."UserID" = "User"."UserID"')
+    cur.execute(f'SELECT "isTemplate", "Username", "QuizID" FROM "Quiz", "User" WHERE "QuizKey" = \'{QuizKey}\' AND "Quiz"."UserID" = "User"."UserID"')
     conn.commit()
-    DATA = cur.fetchall()
-    print(DATA)
-    if DATA!=[]:
-        cur.execute(f'SELECT "Username", "Points" FROM "Players", "User" WHERE "User"."UserID" = "Players"."UserID" AND "Players"."QuizID"= \'{DATA[0][0]}\'')
-        conn.commit()
-        DATA = cur.fetchall()
-        print(DATA)
-    return render_template('Host End.html', data=DATA)
+    fetch = cur.fetchall()
+    if fetch != []:
+        DATA1 = fetch[0]
+        if DATA1[0]=="F" and DATA1[1] == user:
+            cur.execute(f'SELECT "Username", "Points" FROM "Players", "User" WHERE "User"."UserID" = "Players"."UserID" AND "Players"."QuizID"= \'{DATA1[2]}\'')
+            conn.commit()
+            DATA = cur.fetchall()
+            cur.execute(f'SELECT "QuizKey" FROM "Quiz" WHERE "Quiz"."QuizID"= \'{DATA1[2]}\'')
+            conn.commit()
+            DATA2 = cur.fetchone()
+            conn.close()
+            return render_template('Host End.html', data=DATA, QuizKey=DATA2[0])
+        elif DATA1[0]=="T":
+            cur.execute(f'SELECT "Username", "Points" FROM "Players", "User" WHERE "User"."UserID" = "Players"."UserID" AND "Players"."QuizID"= \'{DATA1[2]}\'')
+            conn.commit()
+            DATA = cur.fetchall()
+            conn.close()
+            return render_template('Host End.html', data=["T", QuizKey, user])
+    conn.close()
+    return redirect(f"/home/{user}")
 
+@app.route("/copyQuiz/<QuizKey>/<user>")
+def startQuiz(QuizKey, user):
+    UserID = getUserID(user)
+    conn = psycopg2.connect(**db_params)
+    cur = conn.cursor()
+    cur.execute(f'SELECT "QuizName", "QuizID" FROM "Quiz" WHERE "QuizKey" = \'{QuizKey}\'')
+    conn.commit()
+    DATA = cur.fetchone()
+    rand = RandomKey()
+    cur.execute(f'INSERT INTO "Quiz"("QuizName", "UserID", "QuizKey", "isTemplate", "parentQuizID") VALUES (\'{DATA[0]}\', \'{UserID}\', \'{rand}\', \'F\', \'{DATA[1]}\')')
+    conn.commit()
+    conn.close()
+    return redirect("/hostEnd/"+rand+"/"+user)
+    
 def RandomKey():
     while True:
         msg = ""
@@ -83,7 +108,7 @@ def RandomKey():
             for i in range(10):
                 CharList.append(str(i))
         for i in range(4):
-            QuizKey+=str(CharList[random.randint(0, len(CharList))])
+            QuizKey+=str(CharList[random.randint(0, len(CharList)-1)])
         
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
@@ -91,7 +116,6 @@ def RandomKey():
         conn.commit()
         stuff = cur.fetchall()
         conn.close()
-        print(stuff)
         if stuff == []:
             break
     return QuizKey
@@ -103,7 +127,6 @@ def createQuiz(user):
     if request.method =='POST':
         QuizName = request.form.get('QuizName')
         QuizKey = request.form.get('Key')
-        print(QuizKey)
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
         cur.execute(f'SELECT "UserID" FROM "User" WHERE "User"."Username" = \'{user}\'')
@@ -169,7 +192,6 @@ def createQuiz(user):
                     cur.execute(f'SELECT "QuestionID" FROM "Questions" WHERE "Question"=\'{questionName}\'')
                     conn.commit()
                     Last_Question = cur.fetchone()[0]
-                    print(Last_Question)
                     conn.close()
                 except Exception as e:
                     conn.rollback()
@@ -199,14 +221,13 @@ def createQuiz(user):
         else:
             return render_template('Create Quiz.html',QuizKey=RandomKey() , data = "A quiz already has that name. Please try another.")
 
-def getQuestion(QuizID):
+def getQuestion(parentQuizID):
     data=[]
     try:
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute(f'SELECT "Answer", "Question", "QuizName", "IsTrue", "Questions"."QuestionID" FROM "Answers", "Questions", "Quiz" WHERE "Answers"."QuestionID" = "Questions"."QuestionID" AND "Questions"."QuizID" = "Quiz"."QuizID" AND "Quiz"."QuizID" = {QuizID}')
+        cur.execute(f'SELECT "Answer", "Question", "QuizName", "IsTrue", "Questions"."QuestionID" FROM "Answers", "Questions", "Quiz" WHERE "Answers"."QuestionID" = "Questions"."QuestionID" AND "Questions"."QuizID" = "Quiz"."QuizID" AND "Quiz"."QuizID" = {parentQuizID}')
         data = cur.fetchall()
-        print(data)
         conn.commit()
     except Exception as e:
         conn.rollback()
@@ -238,6 +259,7 @@ def getQuestion(QuizID):
                 falseAnswer.append(i[0])
             question=(questionName, trueAnswer, falseAnswer, i[4], i[2])
             questions.append(question)
+    print(questions)
     return questions
 
 def getMoodEmoji(mood):
@@ -448,15 +470,14 @@ def updateScores(user):
         try:
             conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
-            cur.execute(f'SELECT "QuizName", "Players"."Points", "Questions"."Points" FROM "Players" LEFT JOIN "Quiz" USING("QuizID") LEFT JOIN "Questions" USING("QuizID") WHERE "Players"."UserID" = \'{userID}\'')
+            cur.execute(f'SELECT "QuizName", "Players"."Points", "Questions"."Points" FROM "Players", "Questions", "Quiz" WHERE "Quiz"."QuizID"="Questions"."QuizID" AND "Players"."QuizID"="Quiz"."QuizID" AND "Players"."UserID" = {userID}')
             bigList = cur.fetchall()
+            print(bigList)
             newList = []
             print("newlist")
             for x in range(len(bigList)):
                 if newList == []:
                     newList.append(bigList[x])
-                    continue
-                if newList[-1] == bigList[x]:
                     continue
                 newList.append(bigList[x])
             print("Here comes the list", newList)
@@ -481,7 +502,6 @@ def updateQuizMoodAdmin(user):
             cur.execute('SELECT "QuizName", "Username", "MoodBefore", "MoodAfter" FROM "Mood", "Quiz", "User" WHERE "Mood"."QuizID"="Quiz"."QuizID" AND "Quiz"."UserID"="User"."UserID" AND "User"."UserID"="Mood"."UserID"')
             bigList = cur.fetchall()
             newList = []
-            print("newlist")
             for x in range(len(bigList)):
                 if newList == []:
                     newList.append(bigList[x])
@@ -505,16 +525,66 @@ def adminViewMoods(user):
             return redirect("/home/" + user)
         return render_template("adminViewMoods.html")
     
+@app.route("/adminHomePage/<user>", methods=['GET'])
+def adminHomePage(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminHomePage.html")
+
+@app.route("/adminViewQuizzes/<user>", methods=['GET', 'POST'])
+def adminViewQuizzes(user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminViewQuizzes.html")
+
+@app.route("/adminViewScores/<quizName>/<quizCode>/<user>", methods=['GET', 'POST'])
+def adminViewScores(quizName, quizCode, user):
+    if request.method == 'GET':
+        if isAdmin(user) == False:
+            return redirect("/home/" + user)
+        return render_template("adminViewScores.html", quizName=quizName)
+
+@app.route("/updateAdminScores/<quizCode>/<user>", methods=['GET', 'POST'])
+def updateAdminScores(quizCode, user):
+    if request.method == 'GET':
+        userID = getUserID(user)
+        try:
+            conn = psycopg2.connect(**db_params)
+            cur = conn.cursor()
+            cur.execute(f'SELECT "Username", "Players"."Points", "Questions"."Points" FROM "Players" LEFT JOIN "User" USING("UserID") LEFT JOIN "Quiz" USING("QuizID") LEFT JOIN "Questions" USING("QuizID") WHERE "QuizKey" = \'{quizCode}\'')
+            bigList = cur.fetchall()
+            conn.close()
+            newList = []
+            for x in range(len(bigList)):
+                if newList == []:
+                    newList.append(bigList[x])
+                    continue
+                if newList[-1] == bigList[x]:
+                    continue
+                newList.append(bigList[x])
+            jsonList = arrayToJSON(newList)
+        except Exception as e:
+            print(e)
+            conn.close()
+            jsonList = "error"
+        return jsonList
 
 @app.route("/userEnd/<QuizID>/<UserID>/<user>", methods=['GET', 'POST'])
 def userEnd(QuizID, UserID, user):
     QuizID = int(QuizID)
     UserID = int(UserID)
     if request.method == 'GET':
-        return render_template('User End.html', data=getQuestion(QuizID), QuizID = QuizID, UserID = UserID, user = user)
+        conn = psycopg2.connect(**db_params)
+        cur = conn.cursor()
+        cur.execute(f'SELECT "parentQuizID" FROM "Quiz" WHERE "QuizID"={int(QuizID)}')
+        data = cur.fetchall()
+        parentQuizID=data[0][0]
+        conn.commit()
+        return render_template('User End.html', data=getQuestion(parentQuizID), QuizID = QuizID, UserID = UserID, user = user)
     if request.method == 'POST':
         Points = request.form.get("POINTS")
-        print(f'INSERT INTO "Players" ("QuizID", "UserID", "Points") VALUES ({QuizID}, {UserID}, {Points})')
         msg=""
         try:
             conn = psycopg2.connect(**db_params)
@@ -559,7 +629,6 @@ def updateInfo(user):
         details = "None"
         print(e)
     conn.close()
-    print(details)
     return details
 
 def submitNewAccount(firstName,lastName,userName,password,securityQuestion,securityAnswer):
@@ -851,15 +920,15 @@ def displayQuizzes(user):
     if request.method == 'GET':
         return render_template("ListQuizzes.html")
 
-@app.route("/updateQuizDisplay", methods = ['GET'])
-def updateQuizDisplay():
+@app.route("/updateQuizDisplay/<isTemplate>", methods = ['GET'])
+def updateQuizDisplay(isTemplate):
     """
     Function which fetches each quiz's name and unique code, returning them all in a json file
     """
     try:
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        cur.execute('SELECT "QuizName", "QuizKey" FROM "Quiz"')
+        cur.execute(f'SELECT "QuizName", "QuizKey" FROM "Quiz" WHERE "isTemplate" = \'{isTemplate}\'')
         quizzes = cur.fetchall()
         newDict = {}
         i = 0
@@ -876,9 +945,6 @@ def updateQuizDisplay():
 
 @app.route("/displayQuizCode/<quizName>/<quizCode>/<user>", methods=['GET'])
 def displayQuizCode(quizName, quizCode, user):
-    print(quizName)
-    print(quizCode)
-    print(user)
     return render_template("displayQuizCode.html", quizName=quizName, quizCode=quizCode, user=user)
 
 def jls_extract_def():
@@ -890,10 +956,8 @@ def quizSearch(user):
         quizName = request.form.get('QuizName', default="Error") #rem: args for get form for post
         conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
-        print(user)
         cur.execute(f'SELECT "UserID" FROM "User" WHERE "Username" = \'{user}\'')
         userID = cur.fetchone()[0]
-        print(userID)
         cur.execute(f'SELECT "QuizName" FROM "Quiz" WHERE "UserID" = {userID}')
         QuizHistory = cur.fetchall()
         QuizzesPlayed = str(len(QuizHistory))
@@ -909,7 +973,6 @@ def findQuizKey(joinKey, user):
     Function that gets the Key from the input and checks to see if it relates to a Quiz Table
     """
     if request.method == 'GET':
-        print(joinKey)
         try:
             conn = psycopg2.connect(**db_params)
             cur = conn.cursor()
@@ -924,9 +987,6 @@ def findQuizKey(joinKey, user):
             QuizID = Quiz[0][0]
             QuizName = Quiz[0][1]
             UserID = User[0][0]
-            print(QuizID)
-            print(QuizName)
-            print(UserID)
             
             if QuizID:
                 # return redirect('userEnd/' + user, QuizID=QuizID, UserID=UserID)
@@ -981,7 +1041,6 @@ def chatPage(quizID, user):
 def getMessages(quizID, user):
     conn = psycopg2.connect(**db_params)
     cur = conn.cursor()
-    print(user)
     cur.execute(f'SELECT "Date", "Time", "Username", "Message" from "Messages", "User" WHERE "QuizID" = {quizID} AND "Messages"."UserID"="User"."UserID" ORDER BY "MessageID" DESC')
     conn.commit()
     Messages = cur.fetchall()
@@ -1014,13 +1073,12 @@ def GlobalMoodViewer(user):
 @app.route("/GlobalMoodData")
 def GlobalMoodData():
     try:
-        conn = sqlite3.connect('quizDatabase.db')
+        conn = psycopg2.connect(**db_params)
         cur = conn.cursor()
         cur.execute('SELECT "FirstName", "SurName", "Mood" FROM "User"')
         conn.commit()
         Users = cur.fetchall()
         conn.close()
-        print(Users)
         return Users
 
     except Exception as e:

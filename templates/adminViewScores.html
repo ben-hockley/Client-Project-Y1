@@ -1,0 +1,18 @@
+{% extends 'mainTemplate.html'%}
+{% block mainBlock%}
+<link rel="stylesheet" href="/static/CSS/adminViewScores.css">
+<h1 class="heading-center">{{quizName}}</h1>
+{% endblock%}
+
+{% block mainBody%}
+<table class="table table-striped nice-table" id="score-table">
+        <tr>
+            <th class="username">Username</th>
+            <th class="score">Score</th>
+            <th class="max-points">Max Points</th>
+        </tr>
+    <section class="table-data" id="table-data"></section>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/static/JS/adminViewScores.js"></script>
+{% endblock%}

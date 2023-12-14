@@ -1,7 +1,13 @@
+/*CSS for navbar at top of mainTemplate.html */
+head {
+    position: fixed;
+    top: 0;
+}
 body{
     background-size: cover;
     margin: 0;
     padding: 0;
+
 }
 .user-display p{
     float:left;
@@ -15,6 +21,7 @@ body{
     white-space: nowrap;
     align-items: center;
 }
+
 .mood-image {
     padding:0;
     font-size: 30px;
@@ -25,4 +32,40 @@ nav a img {
     height: 35px;
     margin: 0;
     align-items: center;
+}
+/* CSS for footer at bottom of mainTemplate.html */
+footer{
+    width:100%;
+    height:fit-content;
+    position: fixed;
+    bottom: 0;
+}
+/*Font awesome social media icons in legal and general color scheme*/
+.fa-facebook{
+    color:#e22922
+}
+.fa-twitter{
+    color:#0076d6
+}
+.fa-linkedin{
+    color:white
+}
+.fa-youtube-play{
+    color:#ffd500
+}
+.fa-instagram{
+    color:#028844
+}
+.heading-center {
+    text-align: center;
+}
+.nice-button {
+    width: 80%;
+    padding: 10px;
+    background-color: #0076D6;
+    margin-top: 12px;
+    border: none;
+}
+.nice-button:hover {
+    background-color: #028844;
 }

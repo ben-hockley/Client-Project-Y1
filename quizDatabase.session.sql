@@ -1,1 +1,1 @@
-SELECT "QuizName", "MoodBefore", "MoodAfter" FROM "Mood" LEFT JOIN "Quiz" USING("QuizID") WHERE "Mood"."UserID" = 1'
+SELECT "Username", "Players"."Points", "Questions"."Points" FROM "Players" LEFT JOIN "User" USING("UserID") LEFT JOIN "Quiz" USING("QuizID") LEFT JOIN "Questions" USING("QuizID") WHERE "QuizKey" = 367H
