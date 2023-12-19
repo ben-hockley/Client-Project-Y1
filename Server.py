@@ -895,14 +895,16 @@ def get_user_quizzes(user):
 
 
 
-@app.route('/edit/<user>/<Quiz>', methods=['GET', 'POST'])
-def edit(user,Quiz):
+@app.route('/edit/<user>/<QuizID>', methods=['GET', 'POST'])
+def edit(user,QuizID):
+    print(QuizID)
     UserID = getUserID(user)
     print(UserID)
     connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (Quiz,))
+    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (QuizID,))
     Questions = cursor.fetchall()
+    print(Questions)
     new_question = request.form.get('new_question')
     new_answer = request.form.get('new_answer')
 
@@ -910,7 +912,7 @@ def edit(user,Quiz):
         UPDATE Questions
         SET Question = ?
         WHERE QuizID = ?
-    ''', (new_question, Quiz))
+    ''', (new_question, QuizID))
     cursor.execute('''
         UPDATE Answers
         SET Answer = ? 
