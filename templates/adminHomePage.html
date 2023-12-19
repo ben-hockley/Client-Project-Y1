@@ -1,0 +1,15 @@
+{% extends 'mainTemplate.html'%}
+{% block mainBlock%}
+<link rel="stylesheet" href="/static/CSS/AccountDetails.css">
+<div class="login-logo">
+    <h2>ADMIN <img src="/static/img/Logo2.png" alt="Legal & General Logo"> PAGE</h2>
+</div>
+{% endblock%}
+{% block mainBody%}
+<section class="container"><section class="box">
+<button id="redirectCurrentMoods" class="btn btn-success nice-button" onclick="redirectCurrentMoods()">View User's Current Moods</button>
+<button id="redirectQuizMoods" class="btn btn-success nice-button" onclick="redirectQuizMoods()">View User's Quiz Moods</button>
+<button id="redirectQuizScores" class="btn btn-success nice-button" onclick="redirectQuizScores()">View User's Quiz Scores</button>
+</section></section>
+<script src="/static/JS/adminHomePage.js"></script>
+{% endblock%}

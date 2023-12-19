@@ -891,11 +891,11 @@ def get_user_quizzes(user):
         quizzes = cursor.fetchall()
         print(quizzes)
         connection.close()
-        return render_template('index.html', quizzes=quizzes, user=user)
+        return render_template('index.html', quizzes=quizzes, user=user,)
 
 
 
-@app.route('/edit/<user>/<QuizID>', methods=['GET', 'POST'])
+@app.route('/edit/<user>/<quiz>', methods=['GET', 'POST'])
 def edit(user,QuizID):
     print(QuizID)
     UserID = getUserID(user)

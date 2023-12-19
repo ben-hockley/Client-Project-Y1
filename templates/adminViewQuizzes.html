@@ -1,0 +1,11 @@
+{% extends 'mainTemplate.html'%}
+{% block mainBlock%}
+<link rel="stylesheet" href="/static/CSS/listQuizzes.css">
+<h1 class="heading-center">Choose a Quiz to view its scores</h1>
+{% endblock%}
+
+{% block mainBody%}
+<section title="quizzes" id="quizzes" class="quizzes"></section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/static/JS/adminListQuizzes.js"></script>
+{% endblock%}
