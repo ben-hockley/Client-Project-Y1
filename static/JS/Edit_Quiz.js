@@ -2,7 +2,7 @@ var number = -1;
 const thingy = document.getElementById("Fancy");
 thingy.click();
 
-
+//adapted from create quiz for same layout and similar functionality
 const DATA = document.getElementById("data");
 var data = DATA.textContent;
 
