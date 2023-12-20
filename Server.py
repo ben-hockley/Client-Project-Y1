@@ -891,39 +891,63 @@ def get_user_quizzes(user):
         quizzes = cursor.fetchall()
         print(quizzes)
         connection.close()
-        return render_template('index.html', quizzes=quizzes, user=user,)
+        return render_template('Index.html', quizzes=quizzes, user=user,)
 
 
-
-@app.route('/edit/<user>/<quiz>', methods=['GET', 'POST'])
-def edit(user,QuizID):
-    print(QuizID)
+@app.route('/edit/<user>/<Quiz>', methods=['GET', 'POST'])
+def edit(user, Quiz):
+    print(Quiz)
     UserID = getUserID(user)
     print(UserID)
     connection = sqlite3.connect('quizDatabase.db')
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (QuizID,))
+    cursor.execute('SELECT * FROM Questions WHERE QuizID = ?', (Quiz,))
     Questions = cursor.fetchall()
+    
+    if not Questions:
+        # Handle the case when no questions are found
+        return "No questions found for the given Quiz ID"
+    
     print(Questions)
-    new_question = request.form.get('new_question')
-    new_answer = request.form.get('new_answer')
 
-    cursor.execute('''
-        UPDATE Questions
-        SET Question = ?
-        WHERE QuizID = ?
-    ''', (new_question, QuizID))
-    cursor.execute('''
-        UPDATE Answers
-        SET Answer = ? 
-        WHERE QuestionID = ?
-    ''', (new_answer,Questions)           )
-    connection.commit()
-    connection.close()
+    for question in Questions:
+        questionName = request.form.get(str(question[0]))  # Fix: Convert question[0] to string
+         
+        print(question)
+        print(questionName)
 
-    return render_template('Edit_Quiz.html', userID=UserID,data=Questions)
+        try:
+            conn = sqlite3.connect(DATABASE)
+            cur = conn.cursor()
+            cur.execute('UPDATE Questions SET Question=? WHERE QuestionID=?', (questionName, question[0],))
+            conn.commit()
+            Last_Question = str(cur.lastrowid()) # Fix: Remove parentheses
+        except Exception as e:
+            
+            print(f"Error updating Question: {e}")
+            continue  # Skip to the next question
 
+        for i, answer in enumerate(question[1:], start=1):
+            answerName = request.form.get(answer)
+            
+            # Check if the answer is an 'Is' flag
+            if answer[-3:] == "Is":
+                try:
+                    cur.execute('UPDATE Answers SET Answer=?, IsTrue=? WHERE QuestionID=?', (answerName, "T", question[0],))
+                except Exception as e:
+                    conn.rollback()
+                    print(f"Error updating Answer: {e}")
+            else:
+                try:
+                    cur.execute('UPDATE Answers SET Answer=?, IsTrue=? WHERE AnswerID=?', (answerName, "F", Last_Question,))
+                except Exception as e:
+                    conn.rollback()
+                    print(f"Error updating Answer: {e}")
+
+        conn.commit()  # Commit changes after updating all answers
+        conn.close()
+
+    return render_template('Edit_Quiz.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
-

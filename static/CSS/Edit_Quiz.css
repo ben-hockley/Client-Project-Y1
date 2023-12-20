@@ -1,124 +1,124 @@
+body {
+  background-image: url("/static/img/CreateQuizBanner.png");
+  padding: 0;
+  margin: 0;  
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top;
+}
 
-body {   
-    padding: 0;
-    margin: 0;  
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: top;
+body h1{
+  display: flex;
+  visibility: hidden;
 }
-  
-  body h1{
-    display: flex;
+
+.banner {
+  width:100%;
+  text-align: center;
+  background-color:white;
+  border:5px solid #0076d6;
+  box-sizing: border-box;
+}
+
+
+#CreateSect {
+    margin: 20px;
+    margin-bottom: 0;
+}
+
+#SubmitSect {
+    margin-left: 20px;
+}
+
+.Hide {
     visibility: hidden;
+    position:absolute;
 }
-  
-  .banner {
-    width:100%;
+.Answer {
+    width: 60%;
+}
+.Answers {
+  width: 77%;
+}
+
+.BtnAdd {
+    margin-top: 10px;
+}
+.BtnSub {
+    margin-bottom: 10px;
+}
+.AddTake {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+#bland {
+    background: #0076d6;
+    color:white;
+    border: 2px;
+    width: 33px;
+    font-weight: bold;
     text-align: center;
-    background-color:white;
-    border:5px solid #0076d6;
-    box-sizing: border-box;
+    height: 21px;
 }
-  
-  
-  #CreateSect {
-      margin: 20px;
-      margin-bottom: 0;
+.MakeQuiz {
+    background-color: white;
+    margin: 25%;
+    margin-bottom: 5%;
+    margin-top: 20%;
+    border-radius: 25px;
+    box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
 }
-  
-  #SubmitSect {
-      margin-left: 20px;
-}
-  
-  .Hide {
-      visibility: hidden;
-      position:absolute;
-}
-  .Answer {
-      width: 60%;
-}
-  .Answers {
-    width: 77%;
-}
-  
-  .BtnAdd {
-      margin-top: 10px;
-}
-  .BtnSub {
-      margin-bottom: 10px;
-}
-  .AddTake {
+.Question {
+    background-color: #cdcdcd;
+    box-shadow: 1px 2px 3px 1px rgba(0,0,0,.8);
+    margin-bottom: 10px;
+    padding: 10px;
     align-items: center;
-    justify-content: center;
     display: flex;
+    flex-direction: column;
 }
-  #bland {
-      background: #0076d6;
-      color:white;
-      border: 2px;
-      width: 33px;
-      font-weight: bold;
-      text-align: center;
-      height: 21px;
+.Not {
+    background: #838383;
+    color:white;
+    border: 0px;
+    font-weight: bold;
+    color:#838383;
+    margin:0.1em;
 }
-  .MakeQuiz {
-      background-color: white;
-      margin: 25%;
-      margin-bottom: 5%;
-      margin-top: 20%;
-      border-radius: 25px;
-      box-shadow: 5px 8px 10px 5px rgba(0,0,0,.8);
+.is {
+    background: #0076d6;
+    color:white;
+    border: 0px;
+    font-weight: bold;
+    color:#0076d6;
+    margin:0.1em;
 }
-  .Question {
-      background-color: #cdcdcd;
-      box-shadow: 1px 2px 3px 1px rgba(0,0,0,.8);
-      margin-bottom: 10px;
-      padding: 10px;
-      align-items: center;
-      display: flex;
-      flex-direction: column;
+#bland:hover{
+    background:#0066b9;
 }
-  .Not {
-      background: #838383;
-      color:white;
-      border: 0px;
-      font-weight: bold;
-      color:#838383;
-      margin:0.1em;
+#Key{
+  visibility: hidden;
 }
-  .is {
-      background: #0076d6;
-      color:white;
-      border: 0px;
-      font-weight: bold;
-      color:#0076d6;
-      margin:0.1em;
+#Fancy{
+  background-color: #028844;
+  padding: 5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
-  #bland:hover{
-      background:#0066b9;
+#Fancy:hover{
+  background-color: #005f2f;
 }
-  #Key{
-    visibility: hidden;
-}
-  #Fancy{
-    background-color: #028844;
-    padding: 5px;
-    height: 40px;
-    width: 120px;
-    border: none;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-}
-  #Fancy:hover{
-    background-color: #005f2f;
-}
-  
-  #Nothing{
-    background-color: #999999;
-    padding: 5px;
-    height: 40px;
-    width: 120px;
-    border: none;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+
+#Nothing{
+  background-color: #999999;
+  padding: 5px;
+  height: 40px;
+  width: 120px;
+  border: none;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }

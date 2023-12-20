@@ -18,7 +18,7 @@
     <ul>
         {% for quiz in quizzes %}
             <li>{{ quiz[1] }}</li>
-            <form action="/edit/{{user}}/{{quiz[3]}}" method="GET">
+            <form action="/edit/{{user}}/{{quiz[0]}}" method="GET">
                 <button type = "submit" class="btn btn-success">Edit Quiz</button>
             </form>
         {% endfor %}
