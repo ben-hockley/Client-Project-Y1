@@ -913,18 +913,19 @@ def edit(user, Quiz):
     for question in Questions:
         questionName = request.form.get(str(question[0]))  # Fix: Convert question[0] to string
          
-        print(question)
+        print(question[0])
         print(questionName)
-
-        try:
-            conn = sqlite3.connect(DATABASE)
-            cur = conn.cursor()
-            cur.execute('UPDATE Questions SET Question=? WHERE QuestionID=?', (questionName, question[0],))
-            conn.commit()
-            Last_Question = str(cur.lastrowid()) # Fix: Remove parentheses
-        except Exception as e:
+    
+        if questionName is not None:
+            try:
+                conn = sqlite3.connect(DATABASE)
+                cur = conn.cursor()
+                cur.execute('UPDATE Questions SET Question=? WHERE QuestionID=?', (questionName, question[0],))
+                conn.commit()
+                Last_Question = str(cur.lastrowid) # Fix: Remove parentheses
+            except Exception as e:
             
-            print(f"Error updating Question: {e}")
+                print(f"Error updating Question: {e}")
             continue  # Skip to the next question
 
         for i, answer in enumerate(question[1:], start=1):
