@@ -918,13 +918,12 @@ def edit(user, Quiz):
     
         if questionName is not None:
             try:
-                conn = sqlite3.connect(DATABASE)
-                cur = conn.cursor()
+                connection = sqlite3.connect(DATABASE)
+                cur = connection.cursor()
                 cur.execute('UPDATE Questions SET Question=? WHERE QuestionID=?', (questionName, question[0],))
-                conn.commit()
+                connection.commit()
                 Last_Question = str(cur.lastrowid) # Fix: Remove parentheses
             except Exception as e:
-            
                 print(f"Error updating Question: {e}")
             continue  # Skip to the next question
 
@@ -936,17 +935,17 @@ def edit(user, Quiz):
                 try:
                     cur.execute('UPDATE Answers SET Answer=?, IsTrue=? WHERE QuestionID=?', (answerName, "T", question[0],))
                 except Exception as e:
-                    conn.rollback()
+                    connection.rollback()
                     print(f"Error updating Answer: {e}")
             else:
                 try:
                     cur.execute('UPDATE Answers SET Answer=?, IsTrue=? WHERE AnswerID=?', (answerName, "F", Last_Question,))
                 except Exception as e:
-                    conn.rollback()
+                    connection.rollback()
                     print(f"Error updating Answer: {e}")
 
-        conn.commit()  # Commit changes after updating all answers
-        conn.close()
+        connection.commit()  # Commit changes after updating all answers
+        connection.close()
 
     return render_template('Edit_Quiz.html')
 
