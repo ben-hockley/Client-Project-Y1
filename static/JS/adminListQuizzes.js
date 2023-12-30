@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", updateQuizDisplay())
 
 function updateQuizDisplay() {
-    newRoute = "/updateQuizDisplay"
+    newRoute = "/updateQuizDisplay/F"
     $.ajax({type:'GET', url:newRoute, success: function appendInfo(result) {
         result = JSON.parse(result);
         for (let i=0; i < Object.keys(result).length; i++) {

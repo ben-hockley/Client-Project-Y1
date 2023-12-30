@@ -1,0 +1,21 @@
+{%extends 'mainTemplate.html'%}
+{% block linkBlock%}
+        <link rel="stylesheet" href="/static/CSS/chatPage.css">
+{% endblock%}
+{% block mainBlock%}
+{% endblock%}
+{% block mainBody%}
+    <section class="quizName">
+        <h1>{{quizName}}</h1>
+    </section>
+    <section class="Interface" id="Interface">
+        <section id="Messages" class="Messages">
+
+        </section>
+        <section class="Send" id="Send">
+            <input type="text" name="sendMessage" id="sendMessage">
+            <button onclick="sendMessage()" type="button" name="sendMessageBtn" id="sendMessageBtn">&#8679;</button>
+        </section>
+    </section>
+    <script src="/static/JS/chatPage.js"></script>
+{% endblock%}
